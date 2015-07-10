@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.biit</groupId>
 	<artifactId>gitgamesh</artifactId>
-	<version>0.0.0-SNAPSHOT</version>
+	<version>0.0.2-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>Gitgamesh</name>
 	<description>3D Object Printing Free Portal</description>
