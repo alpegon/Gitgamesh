@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app id="Gitgamesh_ID" version="3.0"
+	xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
+
+	<display-name>Gitgamesh</display-name>
+
+	<context-param>
+		<description>Gitgamesh</description>
+		<param-name>heartbeatInterval</param-name>
+		<!-- 20 minutes that means full expiration time is 60 minutes -->
+		<param-value>1200</param-value>
+	</context-param>
+
+	<context-param>
+		<description>Gitgamesh 3D Printer Gallery</description>
+		<param-name>productionMode</param-name>
+		<param-value>false</param-value>
+	</context-param>
+
+	<!-- Using Vaadin GUI -->
+	<servlet>
+		<servlet-name>Vaadin Application Servlet</servlet-name>
+		<servlet-class>com.biit.gitgamesh.gui.ApplicationServlet</servlet-class>
+		<init-param>
+			<param-name>closeIdleSessions</param-name>
+			<param-value>false</param-value>
+		</init-param>
+		<!-- Enable server push -->
+		<init-param>
+			<param-name>pushmode</param-name>
+			<param-value>automatic</param-value>
+		</init-param>
+		<async-supported>true</async-supported>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>Vaadin Application Servlet</servlet-name>
+		<url-pattern>/*</url-pattern>
+	</servlet-mapping>
+
+	<mime-mapping>
+		<extension>manifest</extension>
+		<mime-type>text/cache-manifest</mime-type>
+	</mime-mapping>
+
+	<!-- Spring -->
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>classpath*:applicationContext.xml</param-value>
+	</context-param>
+
+	<!-- Apache Tomcat session expire -->
+	<session-config>
+		<session-timeout>31</session-timeout>
+	</session-config>
+
+</web-app>

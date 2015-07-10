@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">	
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>gitgamesh-release</artifactId>
+	<packaging>jar</packaging>
+	<name>Gitgamesh (Release)</name>
+	
+	<parent>
+		<groupId>com.biit</groupId>
+		<artifactId>gitgamesh</artifactId>
+		<version>0.0.0-SNAPSHOT</version>
+	</parent>
+		
+	<properties>
+		<root.directory>${project.basedir}/..</root.directory>
+		<destination-file>${project.parent.artifactId}</destination-file>
+		<temporal-folder>tmp</temporal-folder>
+		<war-file.source>../${project.parent.artifactId}-gui/target/</war-file.source>
+		<documentation.source>./documentation</documentation.source>
+		<documentation.destination>./${temporal-folder}/documentation</documentation.destination>
+	</properties>
+	
+	<build>
+		<plugins>
+			<!-- Do not deploy this module in artifact -->
+			<plugin>
+			    <groupId>org.apache.maven.plugins</groupId>
+			    <artifactId>maven-deploy-plugin</artifactId>
+			    <version>${maven-deploy-plugin.version}</version>
+			    <configuration>
+				<skip>true</skip>
+			    </configuration>
+			</plugin>
+		</plugins>
+	</build>
+	
+	<!-- 'mvn install -Prelease' generates a ZIP file ready to distribute to 
+		the client. -->
+	<profiles>
+		<profile>
+			<id>release</id>
+			<activation>
+				<property>
+					<name>release</name>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<artifactId>maven-antrun-plugin</artifactId>
+						<version>${maven-antrun-plugin.version}</version>
+						<executions>
+							<execution>
+								<phase>install</phase>
+								<configuration>
+									<target>
+										<!-- delete old tmp folder -->
+										<delete dir="${temporal-folder}" failonerror="false" includeemptydirs="true" />
+										<!-- create tmp folder -->
+										<mkdir dir="${temporal-folder}" />
+										<!-- ZIP project -->
+										<copy file="${war-file.source}/${project.parent.artifactId}-${project.parent.version}.war" tofile="${temporal-folder}/${project.parent.artifactId}-${project.parent.version}.war" overwrite="true" />
+										<!-- copy database scripts -->
+										<copy todir="${temporal-folder}/database/" overwrite="true">
+											<fileset dir="./database" includes="**/*" />
+										</copy>
+										<!-- create the final file -->
+										<zip basedir="${temporal-folder}/" destfile="../${destination-file}-${project.version}.zip" />
+									</target>
+								</configuration>
+								<goals>
+									<goal>run</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+</project>

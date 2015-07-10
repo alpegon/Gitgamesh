@@ -1,0 +1,802 @@
+/* Import the reindeer theme. */
+/* This only allows us to use the mixins defined in it and does not add any styles by itself. */
+@import "../reindeer/reindeer.scss";
+
+/* This contains all of your theme. */
+
+$buttonColor: #00a3e8;
+$blueShadowColor: #52A5C5;
+
+@mixin animation($animations) {
+    -webkit-animation: $animations;
+    -moz-animation:    $animations;
+    -o-animation:      $animations;
+    animation:         $animations;
+}
+
+@mixin keyframes($animationName) {
+    @-webkit-keyframes #{$animationName} {
+        @content;
+    }
+    @-moz-keyframes #{$animationName} {
+        @content;
+    }
+    @-o-keyframes #{$animationName} {
+        @content;
+    }
+    @keyframes #{$animationName} {
+        @content;
+    }
+}
+
+@include keyframes(horizontal-collapse) {
+  	0%   {background-color:red;}
+	25%  {background-color:yellow;}
+	50%  {background-color:blue;}
+	75%  {background-color:green;}
+	100% {background-color:red;}
+}
+
+@font-face {
+	font-family: "TkIcons";
+	/* woff by default (smallest size), android needs a fallback as otf  */
+	src: fontAwesome format("woff"), fontAwesomeOtf format("opentype");
+	font-weight: normal;
+	font-style: normal;
+}
+
+$open-sans-pathPrefix: "./fonts/";
+
+@font-face {
+	font-family: 'Open Sans';
+	src: url('#{$open-sans-pathPrefix}OpenSans-Regular-webfont.eot');
+	src: url('#{$open-sans-pathPrefix}OpenSans-Regular-webfont.eot?#iefix') format('embedded-opentype'),
+	     url('#{$open-sans-pathPrefix}OpenSans-Regular-webfont.woff') format('woff'),
+	     url('#{$open-sans-pathPrefix}OpenSans-Regular-webfont.ttf') format('truetype');
+	font-weight: 400;
+	font-style: normal;
+}
+@font-face {
+	font-family: 'Open Sans';
+	src: url('#{$open-sans-pathPrefix}OpenSans-Italic-webfont.eot');
+	src: url('#{$open-sans-pathPrefix}OpenSans-Italic-webfont.eot?#iefix') format('embedded-opentype'),
+	     url('#{$open-sans-pathPrefix}OpenSans-Italic-webfont.woff') format('woff'),
+	     url('#{$open-sans-pathPrefix}OpenSans-Italic-webfont.ttf') format('truetype');
+	font-weight: 400;
+	font-style: italic;
+}
+@font-face {
+    font-family: 'Open Sans';
+    src: url('#{$open-sans-pathPrefix}OpenSans-Light-webfont.eot');
+    src: url('#{$open-sans-pathPrefix}OpenSans-Light-webfont.eot?#iefix') format('embedded-opentype'),
+         url('#{$open-sans-pathPrefix}OpenSans-Light-webfont.woff') format('woff'),
+         url('#{$open-sans-pathPrefix}OpenSans-Light-webfont.ttf') format('truetype');
+    font-weight: 300;
+    font-style: normal;
+  }
+@font-face {
+	font-family: 'Open Sans';
+	src: url('#{$open-sans-pathPrefix}OpenSans-LightItalic-webfont.eot');
+	src: url('#{$open-sans-pathPrefix}OpenSans-LightItalic-webfont.eot?#iefix') format('embedded-opentype'),
+	     url('#{$open-sans-pathPrefix}OpenSans-LightItalic-webfont.woff') format('woff'),
+	     url('#{$open-sans-pathPrefix}OpenSans-LightItalic-webfont.ttf') format('truetype');
+	font-weight: 300;
+	font-style: italic;
+}
+@font-face {
+    font-family: 'Open Sans';
+    src: url('#{$open-sans-pathPrefix}OpenSans-Semibold-webfont.eot');
+    src: url('#{$open-sans-pathPrefix}OpenSans-Semibold-webfont.eot?#iefix') format('embedded-opentype'),
+         url('#{$open-sans-pathPrefix}OpenSans-Semibold-webfont.woff') format('woff'),
+         url('#{$open-sans-pathPrefix}OpenSans-Semibold-webfont.ttf') format('truetype');
+    font-weight: 600;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Open Sans';
+    src: url('#{$open-sans-pathPrefix}OpenSans-SemiboldItalic-webfont.eot');
+    src: url('#{$open-sans-pathPrefix}OpenSans-SemiboldItalic-webfont.eot?#iefix') format('embedded-opentype'),
+         url('#{$open-sans-pathPrefix}OpenSans-SemiboldItalic-webfont.woff') format('woff'),
+         url('#{$open-sans-pathPrefix}OpenSans-SemiboldItalic-webfont.ttf') format('truetype');
+    font-weight: 600;
+    font-style: italic;
+}
+@font-face {
+    font-family: 'Open Sans';
+    src: url('#{$open-sans-pathPrefix}OpenSans-Bold-webfont.eot');
+    src: url('#{$open-sans-pathPrefix}OpenSans-Bold-webfont.eot?#iefix') format('embedded-opentype'),
+         url('#{$open-sans-pathPrefix}OpenSans-Bold-webfont.woff') format('woff'),
+         url('#{$open-sans-pathPrefix}OpenSans-Bold-webfont.ttf') format('truetype');
+    font-weight: 700;
+    font-style: normal;
+}
+@font-face {
+	font-family: 'Open Sans';
+	src: url('#{$open-sans-pathPrefix}OpenSans-BoldItalic-webfont.eot');
+	src: url('#{$open-sans-pathPrefix}OpenSans-BoldItalic-webfont.eot?#iefix') format('embedded-opentype'),
+	     url('#{$open-sans-pathPrefix}OpenSans-BoldItalic-webfont.woff') format('woff'),
+	     url('#{$open-sans-pathPrefix}OpenSans-BoldItalic-webfont.ttf') format('truetype');
+	font-weight: 700;
+	font-style: italic;
+}
+@font-face {
+    font-family: 'Open Sans';
+    src: url('#{$open-sans-pathPrefix}OpenSans-Bold-webfont.eot');
+    src: url('#{$open-sans-pathPrefix}OpenSans-Bold-webfont.eot?#iefix') format('embedded-opentype'),
+         url('#{$open-sans-pathPrefix}OpenSans-Bold-webfont.woff') format('woff'),
+         url('#{$open-sans-pathPrefix}OpenSans-Bold-webfont.ttf') format('truetype');
+    font-weight: 800;
+    font-style: normal;
+}
+@font-face {
+	font-family: 'Open Sans';
+	src: url('#{$open-sans-pathPrefix}OpenSans-BoldItalic-webfont.eot');
+	src: url('#{$open-sans-pathPrefix}OpenSans-BoldItalic-webfont.eot?#iefix') format('embedded-opentype'),
+	     url('#{$open-sans-pathPrefix}OpenSans-BoldItalic-webfont.woff') format('woff'),
+	     url('#{$open-sans-pathPrefix}OpenSans-BoldItalic-webfont.ttf') format('truetype');
+	font-weight: 800;
+	font-style: italic;
+}
+@font-face {
+    font-family: 'Open Sans';
+    src: url('#{$open-sans-pathPrefix}OpenSans-ExtraBold-webfont.eot');
+    src: url('#{$open-sans-pathPrefix}OpenSans-ExtraBold-webfont.eot?#iefix') format('embedded-opentype'),
+         url('#{$open-sans-pathPrefix}OpenSans-ExtraBold-webfont.woff') format('woff'),
+         url('#{$open-sans-pathPrefix}OpenSans-ExtraBold-webfont.ttf') format('truetype');
+    font-weight: 900;
+    font-style: normal;
+  }
+@font-face {
+	font-family: 'Open Sans';
+	src: url('#{$open-sans-pathPrefix}OpenSans-ExtraBoldItalic-webfont.eot');
+	src: url('#{$open-sans-pathPrefix}OpenSans-ExtraBoldItalic-webfont.eot?#iefix') format('embedded-opentype'),
+	     url('#{$open-sans-pathPrefix}OpenSans-ExtraBoldItalic-webfont.woff') format('woff'),
+	     url('#{$open-sans-pathPrefix}OpenSans-ExtraBoldItalic-webfont.ttf') format('truetype');
+	font-weight: 900;
+	font-style: italic;
+}
+
+/* If somebody wants to extend the theme she will include this mixin. */
+@mixin biitTheme {
+  /* Include all the styles from the reindeer theme */
+  @include reindeer;
+
+  /* Insert your theme rules here */
+  
+  	/* Fix for diagram building style until further notice */
+  	.v-Notification h1 {
+	  	position: static;
+		z-index: inherit;
+		top: 0;
+		left: 0;
+		margin: inherit;
+		padding: inherit;
+  	}
+  	
+  	.v-Notification h1, .v-Notification p, .v-Notification-error h1, .v-Notification-error p, .v-Notification-warning h1, .v-Notification-warning p {
+		display: block;
+		margin: 0 0.5em 0 0;
+	}
+  	
+  	.v-Notification-warning {
+		background: #fdf3b5;
+		border: 3px solid #fee3af;
+	}
+	
+	.v-Notification.v-Notification-error h1 {
+	  	color: #FFFFFF !important;
+	  	font-size: 24px;
+  	}
+  	.v-Notification.v-Notification-error p {
+	  	color: #FFFFFF !important;
+	  	font-size: 14px;
+	  	padding-top: 14px;
+  	}
+	.v-Notification.v-Notification-warning h1 {
+	  	color: #ca9a61 !important;
+	  	font-size: 24px;
+  	}
+  	.v-Notification.v-Notification-warning p {
+	  	color: #ca9a61 !important;
+	  	font-size: 14px;
+	  	padding-top: 14px;
+  	}
+  	.v-Notification h1 {
+	  	color: #FFFFFF !important;
+	  	font-size: 24px;
+  	}
+  	.v-Notification p {
+	  	color: #FFFFFF !important;
+	  	font-size: 14px;
+	  	padding-top: 14px;
+  	}
+	
+  
+  	.v-horizontal-button-group {
+		background-color: white;
+	}
+  
+  	.v-horizontal-button-group .v-button-wrap {
+		height: inherit;
+	}
+  	.v-horizontal-button-group .v-icon {
+		margin-left: auto;
+		margin-right: auto;
+		height: 50px !important;
+		width: 50px !important;
+		display: block;
+	}
+	
+	.v-horizontal-button-group-wrapper {
+		overflow-x: auto;
+		overflow-y: hidden;
+	}
+	
+	.upper-menu.v-horizontal-button-group .v-icon {
+		width: 32px !important;
+		height: 32px !important;
+	}
+	
+	.upper-menu.v-horizontal-button-group .v-button-caption {
+		font-size: 14px;
+	}
+	
+	.v-button-iconbutton-size-small .v-icon {
+		width: 16px;
+		height: 16px;
+	}
+	
+	.v-button-iconbutton-size-medium .v-icon {
+		width: 32px;
+		height: 32px;
+	}
+	
+	.v-button-iconbutton-size-big .v-icon {
+		width: 64px;
+		height: 64px;
+	}
+	
+	.v-horizontal-button-group .v-button:active, .v-horizontal-button-group .v-button:focus{
+		box-shadow: inset 0px 0px 8px 1px $blueShadowColor;
+	}
+
+	.v-button:focus {
+		background-image: none;
+		outline: none;
+		box-shadow: 0px 0px 3px 2px $blueShadowColor;
+	}
+	
+	.v-button:focus .v-button-wrap {
+		background-image: none;
+		outline: none;
+	}
+	
+	.v-button:active, .v-button.v-pressed {
+		background-image: none;
+		outline: none;
+		background-image: none;
+		background-color: rgba(247, 247, 247, 1);
+		box-shadow: 0px 0px 3px 2px $blueShadowColor;
+	}
+	
+	.v-button:active .v-button-wrap, .v-button.v-pressed .v-button-wrap {
+		background-image: none;
+		outline: none;
+	}
+	
+	.v-button, .v-disabled.v-button {
+		height: 32px;
+		/*padding: 0 0 0 6px;*/
+		padding: 0 0 0 0px;
+		background-image: none;
+		background-repeat: no-repeat;
+		background-color: rgba(255, 255, 255, 1);
+		cursor: default;
+		color: $buttonColor;
+		border: rgb(212, 201, 191);
+		border-width: 1px;
+		border-style: solid;
+		box-shadow: 0px 2px 2px -1px #777777;
+	}
+	
+	.v-button.v-button-link{
+		border-width: 0px;
+	}
+	
+	.v-button-wrap, .v-button-caption {
+		vertical-align: middle;
+		white-space: nowrap;
+		font: inherit;
+		color: inherit;
+		line-height: normal;
+	}
+	
+	.v-disabled.v-button {
+		box-shadow: 0px 2px 2px -1px #777777 !important;
+	}
+	
+	.v-button-wrap, .v-disabled.v-button .v-button-wrap {
+		height: 26px;
+		padding: 5px 9px 0 9px;
+		background-color: transparent;
+		background-repeat: no-repeat;
+		background-position: right top;
+		background-image: none;
+		color: #00a3e8;
+	}
+	
+	.v-button-caption {
+		color: #1C86C2;
+		text-shadow: #fff 0 1px 0;
+		font-weight: 600;
+		font-size: 16px;
+		line-height: 16px;
+	}
+	
+	/* Table tree colours */
+	.v-table-row:not(.v-selected) .v-table-cell-content-tree-cell-form, .v-table-row-odd:not(.v-selected) .v-table-cell-content-tree-cell-form {
+	}
+	.v-table-row:not(.v-selected) .v-table-cell-content-tree-cell-category, .v-table-row-odd:not(.v-selected) .v-table-cell-content-tree-cell-category {
+		color: rgb(111, 79, 69);
+	}
+	.v-table-row:not(.v-selected) .v-table-cell-content-tree-cell-group, .v-table-row-odd:not(.v-selected) .v-table-cell-content-tree-cell-group {
+		color:  rgb(91, 134, 57);
+	}
+	.v-table-row:not(.v-selected) .v-table-cell-content-tree-cell-question, .v-table-row-odd:not(.v-selected) .v-table-cell-content-tree-cell-question {
+		color: rgb(90, 112, 151);
+	}
+	.v-table-row:not(.v-selected) .v-table-cell-content-tree-cell-answer, .v-table-row-odd:not(.v-selected) .v-table-cell-content-tree-cell-answer {
+		color: rgb(165, 107, 124);
+	}
+	/* Element filter */
+	.filtered.v-table-row.v-selected, .filtered.v-table-row-odd.v-selected {
+		background: #95A8BD;
+	}
+	
+	&.v-app,
+	.v-caption,
+	.v-window,
+	.v-popupview-popup,
+	.v-tooltip,
+	&.v-app input,
+	&.v-app select,
+	&.v-app button,
+	&.v-app textarea,
+	.v-widget,
+	.v-window input,
+	.v-window select,
+	.v-window button,
+	.v-window textarea,
+	.v-popupview-popup input,
+	.v-popupview-popup select,
+	.v-popupview-popup button,
+	.v-popupview-popup textarea,
+	.v-filterselect-suggestpopup,
+	.v-datefield-popup,
+	.v-contextmenu,
+	.v-Notification,
+	.v-menubar-submenu,
+	.v-drag-element,
+	.v-table-header-drag,
+	.v-table-table {
+	    font-family: "Open Sans" !important;
+	    font-size: 14px !important;
+	}
+	
+	.v-table-row, .v-table-row-odd {
+		background: #fff;
+		border: 0;
+		margin: 0;
+		padding: 0;
+		cursor: pointer;
+		color: #464646;
+	}		
+	
+	.v-table-row-odd {
+		background: #eff0f1;
+	}	
+	
+	.v-table .v-selected, .black .v-table .v-selected {
+		background: #6C94C0;
+		color: #fff;
+		text-shadow: #3b5a7a 0 1px 0;
+	}
+	
+	.v-table-header-cell-desc .v-table-sort-indicator {
+		opacity: 0.7;
+		width: 16px;
+		height: 16px;
+		background: url(table.header.alphabetical.descending.svg);
+		background-size: contain;
+		display: block;
+	}
+	
+	.v-table-header-cell-asc .v-table-sort-indicator {
+		opacity: 0.7;
+		width: 16px;
+		height: 16px;
+		background: url(table.header.alphabetical.ascending.svg);
+		background-size: contain;
+		display: block;
+	}	
+	
+	.v-table-caption-container, .v-table-header-drag {
+		padding-top: 6px;
+		padding-right: 4px;
+	}
+	
+	.v-table-header, .v-table-footer, .v-table-footer table {
+		height: 32px;
+	}
+	
+	.v-table-header-wrap, .white .v-table-header-wrap, .v-table-footer-wrap, .white .v-table-footer-wrap, .v-table-header-drag {
+		border-color: #c2c3c4;
+		background: transparent repeat-x;
+		background-image: linear-gradient(to bottom, #fefefe 0%, #efefef 51%, #e0e0e0 80%);
+		height: 32px;
+		text-transform: uppercase;
+		font-size: 14px;
+		font-weight: 600;
+		color: #464646;
+		text-shadow: #f3f5f8 0 1px 0;
+		line-height: normal;
+	}
+	
+	//Scrollable hack
+	#main-table .v-scrollable {
+		overflow-y: hidden !important;
+	}
+		
+	.v-table .v-selected, .black .v-table .v-selected {
+		background: #4d749f url(../reindeer/common/img/sel-bg.png) repeat-x;
+		color: #fff;
+		text-shadow: #3b5a7a 0 1px 0;
+	}
+	
+	.v-table-resizer {
+		height: 32px;
+		width: 2px;
+		background: transparent;
+		border-right: 1px solid #c2c3c4;
+	}
+	
+	/* Property container */
+	
+	.v-customcomponent.v-properties-container {
+		border: #c2c3c4;
+		border-style: solid;
+		border-width: 1px;
+	}
+	
+	.v-tab-bar {
+		border-color: #c2c3c4;
+		border-style: solid;
+		border-width: 0px;
+		border-bottom-width: 1px;
+		background: transparent repeat-x;
+		background-image: linear-gradient(to bottom, #fefefe 0%, #efefef 51%, #e0e0e0 80%);
+		text-transform: uppercase;
+	}
+	
+	.v-accordion-multiple-tab {
+		border-color: #c2c3c4;
+		border-style: solid;
+		border-width: 0px;
+		border-bottom-width: 1px;
+	}
+	
+	.v-accordion-multiple-tab > .v-verticallayout {
+		overflow-x: auto;
+	}
+	
+	.v-accordion-multiple-tab .v-label {
+		font-size: 14px !important;
+		font-weight: 600;
+		color: #464646;
+		padding: 6px 0px 0px 0px;
+	}
+	
+	.v-accordion-multiple-tab .v-image {
+		margin: 10px 5px 0px 5px;
+		opacity: 0.72;
+	}
+	
+	.v-properties-container {
+		overflow: auto;
+	}
+	
+	.v-treetable-node-closed {
+		opacity: 0.7;
+		height: 11px;
+		margin: 2px 0px 0px 0px;
+		background: url(element.expand.svg) right top no-repeat;
+		background-size: contain;
+		display: block;
+		left: -2px;
+	}
+	
+	.v-treetable-node-open {
+		opacity: 0.7;
+		height: 11px;
+		margin: 2px 0px 0px 0px;
+		background: url(element.collapse.svg) right top no-repeat;
+		background-size: contain;
+		display: block;
+		left: -2px;
+	}
+	
+	.v-caption.v-disabled {
+		opacity: 1.0;
+		cursor: default;
+	}
+	
+	.v-textfield.v-disabled {
+		opacity: 1.0;
+		cursor: default;
+		background-color: #f5f5f5;
+	}
+	
+	/* Collapsible menu */
+	.v-horizontal-collapsible-panel-opened{
+		border-color: #c2c3c4;
+		border-style: solid;
+		border-width: 1px;
+	}
+	
+	.v-horizontal-collapsible-panel-closed{
+	}
+	
+	div.v-csslayout {
+		display: flex;
+		padding: 17px;
+	}
+	
+	.v-horizontal-collapsible-panel-button-layout.v-verticallayout-v-horizontal-collapsible-panel-button-layout {
+		padding: 10px 10px 0px 2px;
+	}
+	
+	div#stencil-caption {
+		border-color: #c2c3c4;
+		background: transparent repeat-x;
+		background-image: linear-gradient(to bottom, #fefefe 0%, #efefef 51%, #e0e0e0 80%);
+		height: 32px;
+		text-transform: uppercase;
+		font-size: 14px;
+		font-weight: 600;
+		color: #464646;
+		text-shadow: #f3f5f8 0 1px 0;
+		line-height: normal;
+		text-align: center;
+		padding-top: 5px;
+	}
+	
+	.stencil {
+		top: 32px;
+	}
+	
+	.stencil-container {
+		border-color: #c2c3c4;
+		border-style: solid;
+		border-width: 1px;
+		border-right-width: 0px;
+		bottom: 0px;
+	}
+	
+	.paper-container {
+		left: 151px;
+		border-color: #c2c3c4;
+		border-style: solid;
+		border-width: 1px;
+		bottom: 0px;
+	}
+	
+	/* Question-table */
+	.v-table-row-cell-disabled {
+		color: rgba(0, 0, 0, 0.21) !important;
+	}
+	
+	.v-edit-cell-component.v-customcomponent-v-edit-cell-component .v-csslayout {
+		padding: 0px;
+	}
+	
+	.v-table-cell-content-rowheader {
+		border-color: #c2c3c4;
+		background: transparent repeat-x;
+		background-image: linear-gradient(to bottom, #fefefe 0%, #efefef 51%, #e0e0e0 80%);
+	}
+	
+	/* Cell/Row selector */
+	.v-table-cell-content-selected {
+		background: #6C94C0;
+		color: #fff;
+		text-shadow: #3b5a7a 0 1px 0;
+	}
+	
+	.v-table-cell-content-cursor-cell {
+		box-shadow: inset 0px 0px 5px #000000;
+		background: #6C94C0;
+		color: #fff;
+	}
+
+	/* Formula editor*/
+	.v-formula-layout {
+		background-color: #f1f2f3;
+		border: #B4B4B4;
+		border-style: solid;
+		border-width: 2px;
+	}
+	
+	.v-formula-port .v-formula-port-layout {
+		border: black;
+		border-style: dashed;
+		border-width: 1px;
+	}
+	
+	.v-formula-port.v-selected .v-formula-port-layout {
+		background-color: #FEFEEE;
+	}
+	
+	.v-formula-port-layout, .v-formulaExpressionComponent-layout {
+		padding: 0px 0px 0px 0px !important;
+	}
+	
+	div.v-csslayout.v-formulaExpressionComponentRoot-layout {
+		padding: 0px 0px 0px 0px;
+		display: block;
+	}
+	
+	div.v-csslayout.v-second-line {
+		margin-top: 8px;
+	}
+
+	/* tabsheet */
+	.v-tabsheet-tabitem .v-caption.v-disabled {
+		opacity: 0.5;
+	}
+
+	.v-expression-viewer {
+		border: #c2c3c4;
+		border-style: solid;
+		border-width: 1px;
+		overflow-x: auto;
+	}
+	
+	.v-button.expression{
+		border-width: 1px;
+		box-shadow: 0px 0px 0px 0px #fff;
+	}
+	
+	.v-button.expression-selected{
+		background-color: White;
+	}
+	
+	.v-button.expression-unselected{
+		background-color: #ededed;
+	}
+
+	.v-button-IconOnlyButton img.v-icon {
+		height: 20px;
+	}	
+	
+	.v-label.expression-valid{
+		background-color:#77b55a;
+		border-top-left-radius:0px;
+		border-top-right-radius:0px;
+		border-bottom-right-radius:0px;
+		border-bottom-left-radius:0px;
+		border:2px solid #4b8f29;
+		display:inline-block;
+		cursor:pointer;
+		color:#ffffff;
+		font-weight:bold;
+		padding:10px 20px;
+		text-decoration:none;
+	}
+
+	
+	.v-label.expression-invalid{
+		background-color:#d0451b;
+		border-top-left-radius:0px;
+		border-top-right-radius:0px;
+		border-bottom-right-radius:0px;
+		border-bottom-left-radius:0px;
+		border:2px solid #942911;
+		display:inline-block;
+		cursor:pointer;
+		color:#ffffff;
+		font-weight:bold;
+		padding:10px 20px;
+		text-decoration:none;
+	}
+	
+	.v-tree-designer-icon.v-button-v-tree-designer-icon{
+		padding-left: 8px;
+	}
+	
+	.v-csslayout.v-expression-element.v-csslayout-v-expression-element {
+		padding: 0px 5px 0px 5px;
+		background-color: #ededed;
+		border: 1px solid #222;
+		border-color: #aaa;
+		display:inline-block;
+		font-weight:bold;
+		color:#1C86C2;
+	}
+	
+	.v-expression-element .v-label.v-widget.v-has-width {
+		font-size: 16px !important;
+		font-weight: 600 !important;
+	}
+	
+	.v-csslayout.v-expression-element.v-csslayout-v-expression-element.expression-selected {
+		background-color: White;
+	}
+	
+	.v-csslayout.v-expression-element.v-csslayout-v-expression-element.expression-disabled {
+		background-color: gray;
+		background-image: linear-gradient(45deg, #ccc 0%, #ccc 25%, #bbb 25%, #bbb 50%, #ccc 50%, #ccc 75%, #bbb 75%);
+		background-size: 20px 20px;
+	}
+	
+	.v-menu-separator.v-csslayout-v-menu-separator {
+		padding: 0px;
+		background-image: linear-gradient(to right, #f2f2f2 0%, #efefef 33%, #e0e0e0 80%);
+	}
+	
+	div.v-button.v-widget.v-expression-button-selector.v-button-v-expression-button-selector {
+		overflow:hidden;
+		white-space: nowrap;
+		text-overflow: ellipsis;
+	}
+	
+	.v-csslayout.expression-unselected{
+		background-color: #ededed;
+	}
+	
+	.v-form-tree-table-rule-component.v-customcomponent-v-form-tree-table-rule-component > .v-csslayout {
+		padding: 0px;
+		display: inline-flex;
+	}
+	
+	.v-table-column-selector {
+	    background: url("table.header.opendown.svg") repeat scroll 0 0 / contain rgba(0, 0, 0, 0);
+	    display: block;
+	    height: 16px;
+	    opacity: 0.7;
+	    width: 16px;
+	}
+	
+	.v-table-column-selector:active {
+	    background: url("table.header.opendown.over.svg") repeat scroll 0 0 / contain rgba(0, 0, 0, 0);
+	    display: block;
+	    height: 16px;
+	    opacity: 0.7;
+	    width: 16px;
+	}
+	
+	.v-test-scenario-group-editor{
+		border: 1px;
+		border-color: #c2c3c4;
+		border-style:  solid;
+	}
+	
+	.v-test-scenario-group-header-editor{
+		margin-top: 10px;	
+		margin-left: 10px;	
+		font-weight: bold;
+	}
+	
+	.v-test-scenario-category-header-editor{
+		margin-top: 10px;	
+		margin-left: 10px;	
+		font-weight: bold;
+	}
+	
+	.v-button-wrap, .v-button-caption {
+		vertical-align: middle;
+		white-space: normal;
+		font: inherit;
+		color: inherit;
+		line-height: normal;
+	}
+}
