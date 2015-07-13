@@ -29,7 +29,12 @@ public enum LanguageCodes implements ILanguageCode{
 	LOGIN_SCREEN_SYSTEM_NAME("login.screen.system.name"),
 	
 	// Error messages
-	ERROR_UNEXPECTED_ERROR("error.unexpectedError"),
+	ERROR_UNEXPECTED_ERROR("error.unexpectedError"), 
+	
+	// Error pages
+	PAGE_ERROR("page.error"), 
+	PAGE_NOT_FOUND("page.not.found"), 
+	AUTHORIZATION_ERROR("authorization.error"),
 	;
 
 	private String value;

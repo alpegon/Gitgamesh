@@ -1,0 +1,166 @@
+// Global variable overrides. Must be declared before importing Valo.
+
+// Defines the plaintext font size, weight and family. Font size affects general component sizing.
+//$v-font-size: 16px;
+//$v-font-weight: 300;
+//$v-font-family: "Open Sans", sans-serif;
+
+// Defines the border used by all components.
+//$v-border: 1px solid (v-shade 0.7);
+//$v-border-radius: 4px;
+
+// Affects the color of some component elements, e.g Button, Panel title, etc
+//$v-background-color: hsl(210, 0%, 98%);
+// Affects the color of content areas, e.g  Panel and Window content, TextField input etc
+//$v-app-background-color: $v-background-color;
+
+// Affects the visual appearance of all components
+//$v-gradient: v-linear 8%;
+//$v-bevel-depth: 30%;
+//$v-shadow-opacity: 5%;
+
+// Defines colors for indicating status (focus, success, failure)
+//$v-focus-color: valo-focus-color(); // Calculates a suitable color automatically
+//$v-friendly-color: #2c9720;
+//$v-error-indicator-color: #ed473b;
+
+// For more information, see: https://vaadin.com/book/-/page/themes.valo.html
+// Example variants can be copy/pasted from https://vaadin.com/wiki/-/wiki/Main/Valo+Examples
+
+@import "../valo/valo.scss";
+
+@mixin gitgameshTheme {
+  @include valo;
+
+  // Insert your own theme rules here
+  
+	.gallery-element.v-customcomponent-gallery-element {
+		background: #fff;
+		cursor: pointer;
+		width: 32.19%;
+		max-height: 181px;
+		font-size: 12px;
+		border: 1px solid #eee;
+		margin-right: 1.7%;
+		margin-bottom: 1%;
+		position: relative;
+		overflow: hidden;
+		-webkit-transition: all 100ms;
+		-moz-transition: all 100ms;
+		transition: all 100ms;
+	}
+  
+  	.v-label-gallery-element-title.v-has-width {
+  		font-size: 14px;
+	    font-weight: 600;
+	    padding: 5px 10px;
+	    background-color: lightsteelblue;
+	}
+	
+	.gallery-element:hover .gallery-element-update.v-label-gallery-element-update {
+	    opacity: 1;
+	}
+	
+	.gallery-element-update.v-label-gallery-element-update {
+		bottom: 0;
+		padding: 3px 10px;
+		width: 100%;
+		background: #f3f3f3;
+		opacity: 0;
+		-moz-box-sizing: border-box;
+		-webkit-box-sizing: border-box;
+		box-sizing: border-box;
+		-webkit-transition: opacity 300ms;
+		-moz-transition: opacity 300ms;
+		transition: opacity 300ms;
+	}
+	
+	.gallery-element-left-content img {
+	    background-color: cornflowerblue;
+	    margin: 10px 10px;
+	}
+	
+	.gallery-element-left-content.v-csslayout-gallery-element-left-content {
+	    float: left;
+	}
+	
+	.v-widget.gallery-element-right-content.v-csslayout-gallery-element-right-content {
+	    float: left;
+	}
+	
+	.gallery-element-content.v-csslayout-gallery-element-content {
+	    display: inline-flex;
+	    max-height: 115px;
+	}
+	
+	.v-label.v-widget.gallery-element-author.v-label-gallery-element-author.v-has-width {
+	    padding-top: 8px;
+	    padding-bottom: 5px;
+	}
+	
+	.gallery-element-description.v-label-gallery-element-description {
+	    padding-bottom: 5px;
+	}
+	
+	.gallery-element.v-customcomponent-gallery-element:hover {
+	    -moz-box-shadow: 0px 10px 5px -9px rgba(0, 0, 0, 0.4);
+	    -webkit-box-shadow: 0px 10px 5px -9px rgba(0, 0, 0, 0.4);
+	    box-shadow: 0px 10px 5px -9px rgba(0, 0, 0, 0.4);
+	    -moz-transform: translateY(-3px);
+	    -webkit-transform: translateY(-3px);
+	    transform: translateY(-3px);
+	}
+	
+	.v-widget.order-layout.v-csslayout-order-layout {
+	    padding-bottom: 15px;
+	    display: inline-block;
+	}
+	
+	.grouped-controls.v-csslayout-grouped-controls {
+	    float: left;
+	}
+	
+	.v-csslayout-order-layout .v-label.v-widget {
+	    float: right;
+	    padding-right: 10px;
+	    padding-top: 10px;
+	}
+	
+	.grouped-controls.v-csslayout-grouped-controls .v-button.v-widget.selected-button.v-button-selected-button {
+	    font-weight: 900;
+	    color: #000000;
+	    -webkit-box-shadow: none;
+	    box-shadow: none;
+	    background-image: none;
+	    background-image: none;
+	    -webkit-box-shadow: none;
+	    text-shadow: none;
+	}
+	
+	.grouped-controls.v-csslayout-grouped-controls .v-button.v-widget {
+	    border-radius: 0px;
+	    color: #8A8A8A;
+	}
+	
+	.v-button:focus:after {
+	    border-color: #c5c5c5;
+	    -webkit-box-shadow: none;
+	    box-shadow: none;
+	}
+	
+	.galleryLayout[width-range~="761px-900px"] .gallery-element.v-customcomponent-gallery-element.v-has-width {
+	    width: 49.15% !important;
+	}
+	
+	.galleryLayout[width-range~="761px-900px"] .gallery-element:nth-child(2n) {
+	    margin-right: 0px;
+	}
+	
+	.galleryLayout[width-range~="901px-"] .gallery-element.v-customcomponent-gallery-element.v-has-width {
+	    width: 32.19% !important;
+	}
+	
+	.galleryLayout[width-range~="901px-"] .gallery-element:nth-child(3n) {
+	    margin-right: 0px;
+	}
+}

@@ -6,6 +6,7 @@ import java.util.jar.Manifest;
 
 import javax.servlet.ServletContext;
 
+import com.biit.gitgamesh.GitgameshLogger;
 import com.biit.gitgamesh.gui.webpages.common.VerticalWebPage;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.event.ShortcutListener;

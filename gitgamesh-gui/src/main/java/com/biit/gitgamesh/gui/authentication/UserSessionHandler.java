@@ -1,6 +1,7 @@
 package com.biit.gitgamesh.gui.authentication;
 
 import com.biit.gitgamesh.gui.GitgameshUi;
+import com.biit.gitgamesh.gui.webpages.GalleryPage;
 import com.vaadin.ui.UI;
 
 public class UserSessionHandler {
@@ -42,7 +43,7 @@ public class UserSessionHandler {
 	}
 
 	public static String getUserMainViewName() {
-		return PersonalTasksPage.NAME;
+		return GalleryPage.NAME;
 	}
 	
 }

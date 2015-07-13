@@ -3,6 +3,7 @@ package com.biit.gitgamesh.gui.webpages.common;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
+import com.biit.gitgamesh.GitgameshLogger;
 import com.biit.gitgamesh.gui.mvp.IMVPPresenter;
 import com.biit.gitgamesh.gui.mvp.IMVPView;
 import com.biit.gitgamesh.gui.mvp.MVPView;

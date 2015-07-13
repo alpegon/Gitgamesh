@@ -7,6 +7,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import com.biit.gitgamesh.GitgameshLogger;
 import com.biit.gitgamesh.gui.authentication.UserSessionHandler;
 import com.biit.gitgamesh.gui.utils.MessageManager;
 import com.vaadin.server.Page;
