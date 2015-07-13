@@ -24,7 +24,7 @@ public abstract class GitgameshCommonView<IV extends IMVPView<IP>, IP extends IM
 	
 	private final CssLayout menuLayout;
 	private final CssLayout contentLayout;
-	
+
 	private CssLayout buttonLayout;
 	private Button userProfile;
 	private Button gallery;
@@ -128,5 +128,9 @@ public abstract class GitgameshCommonView<IV extends IMVPView<IP>, IP extends IM
 
 	public Button getUpload() {
 		return upload;
+	}
+	
+	public CssLayout getContentLayout() {
+		return contentLayout;
 	}
 }

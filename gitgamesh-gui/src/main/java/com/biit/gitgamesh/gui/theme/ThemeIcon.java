@@ -12,6 +12,8 @@ public enum ThemeIcon implements IThemeResource {
 	USER_PROFILE("alert.svg"), 
 	GALLERY("alert.svg"),
 	UPLOAD("alert.svg"), 
+	
+	CANCEL("button.cancel.svg"), 
 
 	;
 

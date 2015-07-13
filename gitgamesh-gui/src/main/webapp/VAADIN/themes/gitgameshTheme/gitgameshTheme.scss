@@ -32,6 +32,43 @@
 @mixin gitgameshTheme {
   	@include valo;
   
+	 .inserted-gallery.v-customcomponent-inserted-gallery {
+	    padding-left: 40px;
+	    padding-right: 40px;
+	    padding-top: 40px;
+	}
+	
+	input.v-textfield.v-widget.gallery-filter-name-field.v-textfield-gallery-filter-name-field.v-has-width.v-textfield-prompt {
+	    height: 40px;
+	    font-size: 20px;
+	    border-width: 2px;
+	}
+	
+	// filter text button
+	.v-button.v-widget.gallery-cancel-name-filter.v-button-gallery-cancel-name-filter {
+	    width: 28px;
+	    height: 27px;
+	    padding-left: 3px;
+	    padding-top: 0px;
+	    top: 6px;
+	    right: 7px;
+	    position: absolute;
+	    z-index: 3;
+	}
+	.v-button.v-widget.gallery-cancel-name-filter.v-button-gallery-cancel-name-filter img {
+	    width: 13px;
+	    height: 13px;
+	    padding-left: 4px;
+	    padding-top: 0px;
+	}
+	
+	.v-csslayout.v-layout.v-widget.gallery-filter-layout.v-csslayout-gallery-filter-layout.v-has-width {
+	    display: inline-block;
+	    box-sizing: border-box;
+	    position: relative;
+	    padding-bottom: 40px;
+	}
+  
 	.gallery-element.v-customcomponent-gallery-element {
 		background: #fff;
 		cursor: pointer;
