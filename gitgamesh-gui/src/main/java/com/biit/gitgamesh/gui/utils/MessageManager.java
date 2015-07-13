@@ -1,9 +1,9 @@
 package com.biit.gitgamesh.gui.utils;
 
-import com.biit.gitgamesh.GitgameshLogger;
 import com.biit.gitgamesh.gui.authentication.IUser;
 import com.biit.gitgamesh.gui.authentication.UserSessionHandler;
 import com.biit.gitgamesh.gui.localization.ILanguageCode;
+import com.biit.gitgamesh.logger.GitgameshLogger;
 import com.vaadin.shared.Position;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.UI;

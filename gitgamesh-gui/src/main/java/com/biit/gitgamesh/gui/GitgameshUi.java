@@ -2,7 +2,6 @@ package com.biit.gitgamesh.gui;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.biit.gitgamesh.GitgameshLogger;
 import com.biit.gitgamesh.gui.authentication.UserSessionHandler;
 import com.biit.gitgamesh.gui.localization.ILanguageCode;
 import com.biit.gitgamesh.gui.localization.LanguageCodes;
@@ -12,6 +11,7 @@ import com.biit.gitgamesh.gui.utils.CustomNavigator;
 import com.biit.gitgamesh.gui.webpages.LoginPage;
 import com.biit.gitgamesh.gui.webpages.error.AuthorizationError;
 import com.biit.gitgamesh.gui.webpages.error.PageNotFound;
+import com.biit.gitgamesh.logger.GitgameshLogger;
 import com.vaadin.annotations.PreserveOnRefresh;
 import com.vaadin.annotations.Push;
 import com.vaadin.annotations.Theme;

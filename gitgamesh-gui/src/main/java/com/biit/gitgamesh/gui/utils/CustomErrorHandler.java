@@ -1,7 +1,7 @@
 package com.biit.gitgamesh.gui.utils;
 
-import com.biit.gitgamesh.GitgameshLogger;
 import com.biit.gitgamesh.gui.localization.ILanguageCode;
+import com.biit.gitgamesh.logger.GitgameshLogger;
 import com.vaadin.server.DefaultErrorHandler;
 
 /**
