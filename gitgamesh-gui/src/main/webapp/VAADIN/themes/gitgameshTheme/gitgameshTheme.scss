@@ -162,11 +162,11 @@
 	    margin-right: 0px;
 	}
 	
-	.root-layout-gitgamesh[width-range~="901px-"] .v-widget.menu-fixed-left.v-csslayout-menu-fixed-left {
+/*	.root-layout-gitgamesh[width-range~="901px-"] .v-widget.menu-fixed-left.v-csslayout-menu-fixed-left {
 		-webkit-animation: valo-animate-in-slide-right 700ms 700ms backwards;
 	    -moz-animation: valo-animate-in-slide-right 700ms 700ms backwards;
 	    animation: valo-animate-in-slide-right 700ms 700ms backwards;
-	}
+	}*/
 	
 	.v-widget.menu-fixed-left.v-csslayout-menu-fixed-left {
 	    width: 150px;
@@ -187,7 +187,7 @@
 	    vertical-align: middle;
 	}
 	
-	.biitGalleryPage .gitgamesh-button-layout .v-button.v-widget {
+	.root-layout-gitgamesh .gitgamesh-button-layout .v-button.v-widget {
 	    width: 100%;
 	    height: 80px;
 	    border-radius: 0px;
@@ -200,7 +200,7 @@
 	    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.05);
 	}
 	
-	.biitGalleryPage .gitgamesh-button-layout .v-button.v-widget.menu-button-selected.v-button-menu-button-selected {
+	.root-layout-gitgamesh .gitgamesh-button-layout .v-button.v-widget.menu-button-selected.v-button-menu-button-selected {
 	    color: white !important;
 	    background-image: linear-gradient(to bottom,rgba(86, 97, 109, 0.75) 2%, rgba(60, 73, 86, 0.75) 98%);
 	    background-image: -webkit-linear-gradient(top, rgba(86, 97, 109, 0.75) 2%, rgba(60, 73, 86, 0.75) 98%);
@@ -213,41 +213,41 @@
 	    min-height:100%;
 	}
 	
-	.biitGalleryPage .gitgamesh-button-layout .v-button:before {
+	.root-layout-gitgamesh .gitgamesh-button-layout .v-button:before {
 	    vertical-align: top;
 	}
 	
-	.biitGalleryPage .gitgamesh-button-layout .v-button.v-widget span.v-button-wrap {
+	.root-layout-gitgamesh .gitgamesh-button-layout .v-button.v-widget span.v-button-wrap {
 	    display: inline-block;
 	    padding-top: 13px;
 	}
 	
-	.biitGalleryPage .gitgamesh-button-layout .v-button.v-widget img.v-icon {
+	.root-layout-gitgamesh .gitgamesh-button-layout .v-button.v-widget img.v-icon {
 	    width: 100%;
 	    height: 32px;
 	    vertical-align: middle;
 	}
 	
-	.biitGalleryPage .gitgamesh-button-layout .v-button.v-widget span.v-button-caption {
+	.root-layout-gitgamesh .gitgamesh-button-layout .v-button.v-widget span.v-button-caption {
 	    float: left;
 	    margin: auto;
 	    width: 100%;
 	}
 	
-	.biitGalleryPage .gitgamesh-button-layout .v-button.v-widget:hover {
+	.root-layout-gitgamesh .gitgamesh-button-layout .v-button.v-widget:hover {
 	    color: #E7EBEF;
 	}
 	
-	.biitGalleryPage .gitgamesh-button-layout .v-button:hover img.v-icon {
+	.root-layout-gitgamesh .gitgamesh-button-layout .v-button:hover img.v-icon {
     	opacity: 0.8;
 	}
 	
-	.biitGalleryPage .gitgamesh-button-layout .v-button img.v-icon {
+	.root-layout-gitgamesh .gitgamesh-button-layout .v-button img.v-icon {
 	    -webkit-filter: invert(1.0);
 	    opacity: 0.7;
 	}
 	
-	.biitGalleryPage .gitgamesh-button-layout .v-button.v-widget.menu-button-selected.v-button-menu-button-selected img.v-icon {
+	.root-layout-gitgamesh .gitgamesh-button-layout .v-button.v-widget.menu-button-selected.v-button-menu-button-selected img.v-icon {
 	    opacity: 0.9 !important;
 	}
 }

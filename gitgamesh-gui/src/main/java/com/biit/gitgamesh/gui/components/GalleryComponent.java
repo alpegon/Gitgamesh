@@ -142,7 +142,7 @@ public class GalleryComponent extends CustomComponent {
 
 	protected void actionLoad(int startElement) {
 		// We ask to load one element more than needed
-		List<Component> elements = provider.getElements(startElement, numberOfElementsToLoad + 1,getOrderType());
+		List<Component> elements = provider.getElements(startElement, numberOfElementsToLoad + 1,getOrderType(),null,null);
 		for (int i = 0; i < elements.size() && i < numberOfElementsToLoad; i++) {
 			galleryLayout.addComponent(elements.get(i));
 		}

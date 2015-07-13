@@ -117,4 +117,16 @@ public abstract class GitgameshCommonView<IV extends IMVPView<IP>, IP extends IM
 			getCompositionRoot().setHeightUndefined();
 		}
 	}
+
+	public Button getUserProfile() {
+		return userProfile;
+	}
+
+	public Button getGallery() {
+		return gallery;
+	}
+
+	public Button getUpload() {
+		return upload;
+	}
 }

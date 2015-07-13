@@ -10,16 +10,18 @@ import com.vaadin.spring.annotation.UIScope;
 public class GalleryView extends GitgameshCommonView<IGalleryView,IGalleryPresenter> implements IGalleryView {
 	private static final long serialVersionUID = -3493109786988382122L;
 	
+	public GalleryView() {
+		super();
+	}
+	
 	@Override
 	public void init() {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void enter(ViewChangeEvent event) {
-		// TODO Auto-generated method stub
-		
+		selectButton(getGallery());
 	}
 
 }

@@ -9,17 +9,19 @@ import com.vaadin.spring.annotation.UIScope;
 @SpringComponent
 public class UploadView extends GitgameshCommonView<IUploadView, IUploadPresenter> implements IUploadView {
 	private static final long serialVersionUID = -3493109786988382122L;
-
+	
+	public UploadView() {
+		super();
+	}
+	
 	@Override
 	public void init() {
-		// TODO Auto-generated method stub
-
+		
 	}
 
 	@Override
 	public void enter(ViewChangeEvent event) {
-		// TODO Auto-generated method stub
-
+		selectButton(getUpload());
 	}
 
 }

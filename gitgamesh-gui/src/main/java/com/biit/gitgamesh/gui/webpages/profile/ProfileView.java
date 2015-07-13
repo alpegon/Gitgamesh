@@ -10,16 +10,18 @@ import com.vaadin.spring.annotation.UIScope;
 public class ProfileView extends GitgameshCommonView<IProfileView, IProfilePresenter> implements IProfileView {
 	private static final long serialVersionUID = -2538329776726592610L;
 
+	public ProfileView() {
+		super();
+	}
+	
 	@Override
 	public void init() {
-		// TODO Auto-generated method stub
-
+		
 	}
 
 	@Override
 	public void enter(ViewChangeEvent event) {
-		// TODO Auto-generated method stub
-
+		selectButton(getUserProfile());
 	}
 
 }
