@@ -171,7 +171,7 @@
 		<!-- Project dependencies -->
 		<dependency>
 			<groupId>com.biit</groupId>
-			<artifactId>${project.parent.artifactId}-log</artifactId>
+			<artifactId>${project.parent.artifactId}-core</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<!-- aspectj -->
