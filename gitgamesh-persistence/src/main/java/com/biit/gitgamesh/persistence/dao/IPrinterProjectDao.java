@@ -9,14 +9,20 @@ public interface IPrinterProjectDao extends IJpaGenericDao<PrinterProject, Long>
 
 	/**
 	 * Get a list of projects that matches some parameters
-	 * @param startElement only retrieve elements from this starting position.
-	 * @param numberOfElements only retrieve elements until hits position.
-	 * @param galleryOrder defines the order of the elements.
-	 * @param filterByName only get elements that the name is like this.
-	 * @param tags NOT IMPLEMENTED YET:
+	 * 
+	 * @param startElement
+	 *            only retrieve elements from this starting position.
+	 * @param numberOfElements
+	 *            only retrieve elements until hits position.
+	 * @param galleryOrder
+	 *            defines the order of the elements.
+	 * @param filterByName
+	 *            only get elements that the name is like this.
+	 * @param tags
+	 *            NOT IMPLEMENTED YET:
 	 * @return
 	 */
 	List<PrinterProject> get(int startElement, int numberOfElements, GalleryOrder galleryOrder, String filterByName,
-			List<String> tags);
+			String tag, String category, String userName);
 
 }

@@ -29,7 +29,7 @@ public class PrinterProjectDao extends AnnotatedGenericDao<PrinterProject, Long>
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = true)
 	public List<PrinterProject> get(int startElement, int numberOfElements, GalleryOrder galleryOrder,
-			String filterByName, List<String> tags) {
+			String filterByName, String tag, String category, String userName) {
 		// Get the criteria builder instance from entity manager
 		CriteriaBuilder criteriaBuilder = getEntityManager().getCriteriaBuilder();
 		EntityType<PrinterProject> type = getEntityManager().getMetamodel().entity(PrinterProject.class);
@@ -40,17 +40,31 @@ public class PrinterProjectDao extends AnnotatedGenericDao<PrinterProject, Long>
 
 		// Apply a filter to the sql.
 		List<Predicate> predicates = new ArrayList<Predicate>();
-		// Search criteria
-		if (filterByName != null) {
+		// Search name criteria
+		if (filterByName != null && filterByName.length() > 0) {
 			predicates.add(criteriaBuilder.like(criteriaBuilder.lower(printerProjectRoot.get(type
 					.getDeclaredSingularAttribute("name", String.class))), "%" + filterByName.toLowerCase() + "%"));
 		}
-		if (tags != null && !tags.isEmpty()) {
-			// TODO Tags not done yet.
+		// Search by user.
+		if (userName != null && userName.length() > 0) {
+			predicates.add(criteriaBuilder.like(criteriaBuilder.lower(printerProjectRoot.get(type
+					.getDeclaredSingularAttribute("createdBy", String.class))), "%" + userName.toLowerCase() + "%"));
 		}
 
-		//
-		criteriaQuery.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})));
+		// Select tags.
+		if (tag != null) {
+			// LIKE TAG!!
+			// predicates.add(printerProjectRoot.join("tags").in(tag));
+		}
+
+		// Select categories.
+		if (category != null) {
+			predicates.add(printerProjectRoot.join("categories").in(category));
+		}
+
+		if (!predicates.isEmpty()) {
+			criteriaQuery.where(criteriaBuilder.or(predicates.toArray(new Predicate[] {})));
+		}
 
 		// Sort results.
 		if (galleryOrder != null) {
@@ -66,7 +80,6 @@ public class PrinterProjectDao extends AnnotatedGenericDao<PrinterProject, Long>
 				criteriaQuery.orderBy(criteriaBuilder.asc(printerProjectRoot.get("updateTime")));
 				break;
 			}
-
 		}
 
 		try {
@@ -78,5 +91,4 @@ public class PrinterProjectDao extends AnnotatedGenericDao<PrinterProject, Long>
 			return null;
 		}
 	}
-
 }

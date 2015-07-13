@@ -32,6 +32,9 @@ public class PrinterProject extends BaseStorableObject {
 	@ElementCollection
 	private Set<String> tags;
 
+	@ElementCollection
+	private Set<String> categories;
+
 	@Lob
 	@Column(length = MAX_PREVIEW_FILE_SIZE, nullable = false)
 	@Basic(fetch = FetchType.LAZY)
@@ -40,6 +43,7 @@ public class PrinterProject extends BaseStorableObject {
 	public PrinterProject() {
 		super();
 		tags = new HashSet<>();
+		categories = new HashSet<>();
 		preview = null;
 	}
 
@@ -83,6 +87,15 @@ public class PrinterProject extends BaseStorableObject {
 	@Override
 	public String toString() {
 		return name;
+	}
+
+	public Set<String> getCategories() {
+		return categories;
+	}
+
+	public void setCategories(Set<String> categories) {
+		this.categories.clear();
+		this.categories.addAll(categories);
 	}
 
 }
