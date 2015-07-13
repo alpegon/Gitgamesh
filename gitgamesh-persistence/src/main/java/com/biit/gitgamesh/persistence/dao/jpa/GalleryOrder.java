@@ -1,4 +1,4 @@
-package com.biit.gitgamesh.utils;
+package com.biit.gitgamesh.persistence.dao.jpa;
 
 public enum GalleryOrder {
 

@@ -80,4 +80,9 @@ public class PrinterProject extends BaseStorableObject {
 		this.preview = preview;
 	}
 
+	@Override
+	public String toString() {
+		return name;
+	}
+
 }

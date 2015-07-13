@@ -1,8 +1,10 @@
 package com.biit.gitgamesh.persistence.dao.jpa;
 
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.transaction.Transactional;
@@ -20,7 +22,7 @@ import org.testng.annotations.Test;
 import com.biit.gitgamesh.persistence.dao.IPrinterProjectDao;
 import com.biit.gitgamesh.persistence.entity.PrinterProject;
 import com.biit.gitgamesh.persistence.entity.exceptions.PreviewTooLongException;
-import com.biit.gitgamesh.utils.ImageUtils;
+import com.biit.gitgamesh.utils.ImageTools;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:applicationContextTest.xml" })
@@ -32,9 +34,16 @@ public class PrinterProjectDaoTest extends AbstractTransactionalTestNGSpringCont
 	private final static Set<String> PROJECT_1_DESCRIPTION_TAGS = new HashSet<>();
 	private final static String PROJECT_1_PREVIEW_FILE = "ProjectPreview.png";
 
+	private final static String PROJECT_2_NAME = "project2";
+	private final static String PROJECT_2_DESCRIPTION = "This is another description.";
+	private final static Set<String> PROJECT_2_DESCRIPTION_TAGS = new HashSet<>();
+	private final static String PROJECT_2_PREVIEW_FILE = "ProjectPreview.png";
+
 	static {
 		PROJECT_1_DESCRIPTION_TAGS.add("Testing");
 	}
+
+	private PrinterProject project1, project2;
 
 	@Autowired
 	private IPrinterProjectDao printerProjectDao;
@@ -88,15 +97,58 @@ public class PrinterProjectDaoTest extends AbstractTransactionalTestNGSpringCont
 	@Transactional(value = TxType.NEVER)
 	public void storeEntity() throws IOException, PreviewTooLongException {
 		Assert.assertEquals(printerProjectDao.getRowCount(), 0);
-		PrinterProject project = createPrinterProject(PROJECT_1_NAME, PROJECT_1_DESCRIPTION,
-				PROJECT_1_DESCRIPTION_TAGS, ImageUtils.getImageFromResource(PROJECT_1_PREVIEW_FILE));
-		printerProjectDao.makePersistent(project);
-		Assert.assertNotNull(project.getId());
+		project1 = createPrinterProject(PROJECT_1_NAME, PROJECT_1_DESCRIPTION, PROJECT_1_DESCRIPTION_TAGS,
+				ImageTools.loadImageFromResource(PROJECT_1_PREVIEW_FILE));
+		printerProjectDao.makePersistent(project1);
+		Assert.assertNotNull(project1.getId());
 		Assert.assertEquals(printerProjectDao.getRowCount(), 1);
 
 		// Retrieve from database
-		PrinterProject projectRetrieved = printerProjectDao.get(project.getId());
+		PrinterProject projectRetrieved = printerProjectDao.get(project1.getId());
 		// Check new object.
-		Assert.assertTrue(comparePrinterProjects(project, projectRetrieved));
+		Assert.assertTrue(comparePrinterProjects(project1, projectRetrieved));
+
+		// Add new Project
+		project2 = createPrinterProject(PROJECT_2_NAME, PROJECT_2_DESCRIPTION, PROJECT_2_DESCRIPTION_TAGS,
+				ImageTools.loadImageFromResource(PROJECT_2_PREVIEW_FILE));
+		printerProjectDao.makePersistent(project2);
+		Assert.assertNotNull(project2.getId());
+		Assert.assertEquals(printerProjectDao.getRowCount(), 2);
 	}
+
+	@Test(dependsOnMethods = { "storeEntity" })
+	@Rollback(value = false)
+	@Transactional(value = TxType.NEVER)
+	public void getPagination() throws IOException, PreviewTooLongException {
+		Assert.assertEquals(printerProjectDao.getRowCount(), 2);
+		List<PrinterProject> projects = printerProjectDao.get(0, 1, GalleryOrder.ALPHABETIC, null, null);
+		Assert.assertEquals(projects.size(), 1);
+
+		projects = printerProjectDao.get(100, 1, GalleryOrder.ALPHABETIC, null, null);
+		Assert.assertEquals(projects.size(), 0);
+	}
+
+	@Test(dependsOnMethods = { "storeEntity" })
+	@Rollback(value = false)
+	@Transactional(value = TxType.NEVER)
+	public void getByName() throws IOException, PreviewTooLongException {
+		Assert.assertEquals(printerProjectDao.getRowCount(), 2);
+		List<PrinterProject> projects = printerProjectDao.get(0, 100, GalleryOrder.ALPHABETIC, PROJECT_1_NAME, null);
+		Assert.assertEquals(projects.size(), 1);
+
+		projects = printerProjectDao.get(0, 100, GalleryOrder.ALPHABETIC, "Not Valid Name", null);
+		Assert.assertEquals(projects.size(), 0);
+	}
+
+	@Test(dependsOnMethods = { "storeEntity" })
+	@Rollback(value = false)
+	@Transactional(value = TxType.NEVER)
+	public void getByDate() throws IOException, PreviewTooLongException {
+		Assert.assertEquals(printerProjectDao.getRowCount(), 2);
+		List<PrinterProject> projects = printerProjectDao.get(0, 100, GalleryOrder.RECENT, null, null);
+		Assert.assertEquals(projects.size(), 2);
+		// First project must be the obtained.
+		Assert.assertTrue(comparePrinterProjects(projects.get(0), project1));
+	}
+
 }
