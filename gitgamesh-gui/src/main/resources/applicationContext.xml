@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:util="http://www.springframework.org/schema/util" xmlns:sws="http://www.springframework.org/schema/web-services"
+	xmlns:task="http://www.springframework.org/schema/task"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.1.xsd      
+                        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.1.xsd
+                        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.1.xsd 
+                        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.1.xsd 
+                        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.1.xsd 
+                        http://www.springframework.org/schema/web-services http://www.springframework.org/schema/web-services/web-services-4.1.xsd
+                        http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-4.1.xsd"
+	default-autowire="byName">
+
+
+	<!-- Scans the classpath for annotated components that will be auto-registered 
+		as Spring beans. For example @Component, @Controller and @Service. Make sure 
+		to set the correct base-package -->
+	<context:component-scan
+		base-package="com.biit.gitgamesh.persistence" />
+
+	<!-- Read any *.properties file -->
+	<context:property-placeholder location="classpath*:*.properties" />
+	
+	<!-- Transaction Manager -->
+	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+		<property name="entityManagerFactory" ref="gitgameshProjectManagerFactory" />
+		<property name="jpaDialect" ref="jpaDialect" />
+	</bean>
+
+	<!-- Default Entity Manager defined in @Qualifier(value = "gitgameshProjectManagerFactory") 
+		of GenericDao -->
+	<bean id="gitgameshProjectManagerFactory"
+		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="persistenceUnitName" value="defaultPersistenceUnit" />
+		<property name="packagesToScan">
+			<list>
+				<value>com.biit.gitgamesh.persistence.**.*</value>
+			</list>
+		</property>
+		<property name="jpaVendorAdapter" ref="hibernateVendor" />
+		<property name="jpaProperties" ref="gitgameshJpaProperties" />
+	</bean>
+
+	<bean id="jpaDialect" class="org.springframework.orm.jpa.vendor.HibernateJpaDialect" />
+
+	<!-- Data Source -->
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
+		destroy-method="close">
+		<property name="driverClass" value="${hibernate.connection.driver_class}" />
+		<property name="jdbcUrl" value="${hibernate.connection.url}" />
+		<property name="user" value="${hibernate.connection.username}" />
+		<property name="password" value="${hibernate.connection.password}" />
+		<!-- C3p0 -->
+		<property name="minPoolSize" value="${c3p0.min_size}" />
+		<property name="maxPoolSize" value="${c3p0.max_size}" />
+		<property name="maxStatements" value="${c3p0.max_statements}" />
+		<property name="idleConnectionTestPeriod" value="${c3p0.idle_test_period}" />
+		<property name="loginTimeout" value="${c3p0.timeout}" />
+		<property name="acquireIncrement" value="${c3p0.acquire_increment}" />
+	</bean>
+
+	<!-- Common JPA properties for Gitgamesh  -->
+	<bean id="commonJpaProperties" parent="hibernateJpaProperties">
+		<property name="sourceMap">
+			<map merge="true" />
+		</property>
+	</bean>
+	
+	<!-- Specific properties for Gitgamesh -->
+	<bean id="gitgameshJpaProperties" parent="commonJpaProperties">
+		<property name="sourceMap">
+			<map merge="true">
+				<entry key="hibernate.hbm2ddl.import_files" value="${hibernate.hbm2ddl.import_files}" />
+			</map>
+		</property>
+	</bean>		
+
+	<util:map id="hibernateJpaProperties">
+		<entry key="hibernate.dialect" value="${hibernate.dialect}" />
+		<entry key="hibernate.show_sql" value="${hibernate.show_sql}" />
+		<entry key="hibernate.use_sql_comments" value="${hibernate.use_sql_comments}" />
+		<entry key="hibernate.format_sql" value="${hibernate.format_sql}" />
+		<!-- New ID creator -->
+		<entry key="hibernate.id.new_generator_mappings" value="${hibernate.id.new_generator_mappings}" />
+		<!-- Create table if not exists -->
+		<entry key="hibernate.hbm2ddl.auto" value="${hibernate.hbm2ddl.auto}" />
+		<!-- Create patients view -->
+		<entry key="hibernate.hbm2ddl.import_files" value="${hibernate.hbm2ddl.import_files}" />
+		<!-- Unnecessary to open and close sessions -->
+		<entry key="hibernate.current_session_context_class" value="${hibernate.current_session_context_class}" />
+		<!-- When deleting an object, set ID to null -->
+		<entry key="hibernate.use_identifier_rollback" value="${hibernate.use_identifier_rollback}" />
+		<entry key="hibernate.order_inserts" value="${hibernate.order_inserts}" />
+		<entry key="hibernate.order_updates" value="${hibernate.order_updates}" />
+		<entry key="hibernate.jdbc.batch_versioned_data" value="${hibernate.jdbc.batch_versioned_data}" />
+		<entry key="hibernate.jdbc.use_streams_for_binary" value="${hibernate.jdbc.use_streams_for_binary}" />
+		<entry key="hibernate.max_fetch_depth" value="${hibernate.max_fetch_depth}" />
+		<!-- Second Level Cache -->
+		<entry key="hibernate.cache.use_second_level_cache" value="${hibernate.cache.use_second_level_cache}" />
+		<entry key="hibernate.cache.region.factory_class" value="${hibernate.cache.region.factory_class}" />
+		<entry key="hibernate.cache.use_query_cache" value="${hibernate.cache.use_query_cache}" />
+		<entry key="hibernate.cache.provider_class" value="${hibernate.cache.provider_class}" />
+		<entry key="hibernate.cache.use_structured_entries" value="${hibernate.cache.use_structured_entries}" />
+		<entry key="hibernate.generate_statistics" value="${hibernate.generate_statistics}" />
+		<entry key="hibernate.cache.provider_configuration_file_resource_path"
+			value="${hibernate.cache.provider_configuration_file_resource_path}" />
+		<entry key="hibernate.cache.provider_class" value="${hibernate.cache.provider_class}" />
+		<entry key="hibernate.cache.use_query_cache" value="${hibernate.cache.use_query_cache}" />
+		<entry key="javax.persistence.sharedCache.mode" value="ENABLE_SELECTIVE" />
+	</util:map>
+
+
+	<bean id="hibernateVendor"
+		class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+	</bean>
+
+
+	<tx:annotation-driven />
+
+	<!-- Enables Interceptors -->
+	<aop:aspectj-autoproxy proxy-target-class="true" />
+	<!-- Define a bean with the logger, if not is ignored. -->
+	<bean id="logAspect" class="com.biit.gitgamesh.logger.BasicLogging" />
+
+</beans>
