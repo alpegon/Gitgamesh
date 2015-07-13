@@ -11,6 +11,8 @@ import javax.persistence.FetchType;
 import javax.persistence.Lob;
 import javax.persistence.Table;
 
+import com.biit.gitgamesh.persistence.entity.exceptions.PreviewTooLongException;
+
 /**
  * This is a project definition. Here a user defines tags for classifying and will be shown with the photos on the
  * gallery.
@@ -38,6 +40,7 @@ public class PrinterProject extends BaseStorableObject {
 	public PrinterProject() {
 		super();
 		tags = new HashSet<>();
+		preview = null;
 	}
 
 	public String getName() {
@@ -69,7 +72,11 @@ public class PrinterProject extends BaseStorableObject {
 		return preview;
 	}
 
-	public void setPreview(byte[] preview) {
+	public void setPreview(byte[] preview) throws PreviewTooLongException {
+		if (preview.length > MAX_PREVIEW_FILE_SIZE) {
+			throw new PreviewTooLongException("Image size is '" + preview.length
+					+ "' and max allowed size for a preview is '" + MAX_PREVIEW_FILE_SIZE + "'.");
+		}
 		this.preview = preview;
 	}
 
