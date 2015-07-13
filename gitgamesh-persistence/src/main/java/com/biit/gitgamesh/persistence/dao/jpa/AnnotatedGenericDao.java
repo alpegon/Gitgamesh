@@ -61,7 +61,7 @@ public class AnnotatedGenericDao<EntityClass extends BaseStorableObject, Primary
 	}
 
 	@Override
-	@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
+	@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = true)
 	public List<EntityClass> getAll() {
 		return super.getAll();
 	}
