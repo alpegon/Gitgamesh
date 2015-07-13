@@ -1,12 +1,14 @@
 package com.biit.gitgamesh.gui.components;
 
+import java.sql.Timestamp;
+
 import com.vaadin.server.ThemeResource;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
 
-public class GalleryElement<T extends IGalleryElementData> extends CustomComponent {
+public abstract class GalleryElement<T> extends CustomComponent {
 	private static final long serialVersionUID = -4466018678230579243L;
 
 	private static final String CSS_GALLERY_ELEMENT = "gallery-element";
@@ -46,7 +48,7 @@ public class GalleryElement<T extends IGalleryElementData> extends CustomCompone
 		
 		title = new Label();
 		title.setStyleName(CSS_GALLERY_ELEMENT_TITLE);
-		title.setValue(element.getName());
+		title.setValue(getName());
 		title.setWidth(FULL);
 		
 		rootLayout.addComponent(title);
@@ -72,13 +74,13 @@ public class GalleryElement<T extends IGalleryElementData> extends CustomCompone
 		rightContent.setWidth(FULL);
 		
 		author = new Label();
-		author.setValue("by "+element.getUserName());
+		author.setValue("by "+getUserName());
 		author.setStyleName(CSS_GALLERY_ELEMENT_AUTHOR);
 		
 		rightContent.addComponent(author);
 		
 		description = new Label();
-		description.setValue(element.getDescription());
+		description.setValue(getElementDescription());
 		description.setStyleName(CSS_GALLERY_ELEMENT_DESCRIPTION);
 		rightContent.addComponent(description);
 		
@@ -89,13 +91,21 @@ public class GalleryElement<T extends IGalleryElementData> extends CustomCompone
 		
 		update = new Label();
 		update.setStyleName(CSS_GALLERY_ELEMENT_UPDATE);
-		update.setValue("Updated: "+element.getUpdateTime());
+		update.setValue("Updated: "+getUpdateTime());
 		update.setWidth(FULL);
 		
 		rootLayout.addComponent(update);		
 		
 		setCompositionRoot(rootLayout);
 	}
+
+	protected abstract String getElementDescription();
+
+	protected abstract Timestamp getUpdateTime();
+
+	protected abstract String getUserName();
+
+	protected abstract String getName();
 
 	public T getElement() {
 		return element;

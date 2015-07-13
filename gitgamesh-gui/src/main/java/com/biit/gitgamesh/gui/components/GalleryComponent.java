@@ -2,7 +2,12 @@ package com.biit.gitgamesh.gui.components;
 
 import java.util.List;
 
+import com.biit.gitgamesh.gui.theme.ThemeIcon;
+import com.biit.gitgamesh.persistence.dao.jpa.GalleryOrder;
+import com.vaadin.event.FieldEvents.TextChangeEvent;
+import com.vaadin.event.FieldEvents.TextChangeListener;
 import com.vaadin.server.Responsive;
+import com.vaadin.ui.AbstractTextField.TextChangeEventMode;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
@@ -10,6 +15,7 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
 public class GalleryComponent extends CustomComponent {
@@ -25,16 +31,25 @@ public class GalleryComponent extends CustomComponent {
 
 	private static final String CSS_BUTTON_SELECTED = "selected-button";
 
+	private static final String CSS_GALLERY_FILTER_LAYOUT = "gallery-filter-layout";
+	private static final String CSS_GALLERY_FILTER_NAME_FIELD = "gallery-filter-name-field";
+	private static final String CSS_GALLERY_CANCEL_NAME_FILTER = "gallery-cancel-name-filter";
+
 	private final VerticalLayout rootLayout;
+	private final CssLayout filterLayout;
 	private final CssLayout orderLayout;
 	private final CssLayout galleryLayout;
 	private final Button loadMore;
+	
+	private final TextField filterField;
+	private final Button cancelFilter;
 	
 	private final Label resultMessage;
 
 	private final int numberOfElementsToLoad;
 	private final IGalleryProvider provider;
 	private GalleryOrder orderType;
+	private String nameFilter;
 	
 	private Button alphabetical, valoration, recent;
 	 
@@ -56,6 +71,34 @@ public class GalleryComponent extends CustomComponent {
 		setHeightUndefined();
 
 		setCompositionRoot(rootLayout);
+		
+		filterLayout = generateCssLayout(CSS_GALLERY_FILTER_LAYOUT, FULL, null);
+		
+		filterField = new TextField();
+		filterField.setWidth("100%");
+		filterField.setInputPrompt("Search for projects...");
+		filterField.setStyleName(CSS_GALLERY_FILTER_NAME_FIELD);
+		filterField.setTextChangeTimeout(300);
+		filterField.setTextChangeEventMode(TextChangeEventMode.TIMEOUT);
+		filterField.addTextChangeListener(new TextChangeListener() {
+			private static final long serialVersionUID = -5737194866974599387L;
+
+			@Override
+			public void textChange(TextChangeEvent event) {
+				nameFilter = event.getText();
+				if(nameFilter.isEmpty()){
+					nameFilter = null;
+				}
+				clear();
+				actionLoad();
+			}
+		});
+		
+		cancelFilter = new Button(ThemeIcon.CANCEL.getThemeResource());
+		cancelFilter.setStyleName(CSS_GALLERY_CANCEL_NAME_FILTER);
+		
+		filterLayout.addComponent(filterField);
+		filterLayout.addComponent(cancelFilter);		
 
 		orderLayout = generateCssLayout(CSS_ORDER_LAYOUT, FULL, null);
 		resultMessage = new Label();
@@ -65,6 +108,7 @@ public class GalleryComponent extends CustomComponent {
 		galleryLayout = generateCssLayout(CSS_GALLERY_LAYOUT, FULL, null);
 		Responsive.makeResponsive(galleryLayout);
 
+		rootLayout.addComponent(filterLayout);
 		rootLayout.addComponent(orderLayout);
 		rootLayout.addComponent(galleryLayout);
 
@@ -142,7 +186,7 @@ public class GalleryComponent extends CustomComponent {
 
 	protected void actionLoad(int startElement) {
 		// We ask to load one element more than needed
-		List<Component> elements = provider.getElements(startElement, numberOfElementsToLoad + 1,getOrderType(),null,null);
+		List<Component> elements = provider.getElements(startElement, numberOfElementsToLoad + 1,getOrderType(),nameFilter,null);
 		for (int i = 0; i < elements.size() && i < numberOfElementsToLoad; i++) {
 			galleryLayout.addComponent(elements.get(i));
 		}
