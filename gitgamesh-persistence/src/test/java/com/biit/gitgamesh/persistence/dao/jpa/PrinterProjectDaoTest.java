@@ -1,5 +1,6 @@
 package com.biit.gitgamesh.persistence.dao.jpa;
 
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -21,7 +22,7 @@ import org.testng.annotations.Test;
 import com.biit.gitgamesh.persistence.dao.IPrinterProjectDao;
 import com.biit.gitgamesh.persistence.entity.PrinterProject;
 import com.biit.gitgamesh.persistence.entity.exceptions.PreviewTooLongException;
-import com.biit.gitgamesh.utils.ImageUtils;
+import com.biit.gitgamesh.utils.ImageTools;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:applicationContextTest.xml" })
@@ -97,7 +98,7 @@ public class PrinterProjectDaoTest extends AbstractTransactionalTestNGSpringCont
 	public void storeEntity() throws IOException, PreviewTooLongException {
 		Assert.assertEquals(printerProjectDao.getRowCount(), 0);
 		project1 = createPrinterProject(PROJECT_1_NAME, PROJECT_1_DESCRIPTION, PROJECT_1_DESCRIPTION_TAGS,
-				ImageUtils.getImageFromResource(PROJECT_1_PREVIEW_FILE));
+				ImageTools.loadImageFromResource(PROJECT_1_PREVIEW_FILE));
 		printerProjectDao.makePersistent(project1);
 		Assert.assertNotNull(project1.getId());
 		Assert.assertEquals(printerProjectDao.getRowCount(), 1);
@@ -109,7 +110,7 @@ public class PrinterProjectDaoTest extends AbstractTransactionalTestNGSpringCont
 
 		// Add new Project
 		project2 = createPrinterProject(PROJECT_2_NAME, PROJECT_2_DESCRIPTION, PROJECT_2_DESCRIPTION_TAGS,
-				ImageUtils.getImageFromResource(PROJECT_2_PREVIEW_FILE));
+				ImageTools.loadImageFromResource(PROJECT_2_PREVIEW_FILE));
 		printerProjectDao.makePersistent(project2);
 		Assert.assertNotNull(project2.getId());
 		Assert.assertEquals(printerProjectDao.getRowCount(), 2);
@@ -149,4 +150,5 @@ public class PrinterProjectDaoTest extends AbstractTransactionalTestNGSpringCont
 		// First project must be the obtained.
 		Assert.assertTrue(comparePrinterProjects(projects.get(0), project1));
 	}
+
 }
