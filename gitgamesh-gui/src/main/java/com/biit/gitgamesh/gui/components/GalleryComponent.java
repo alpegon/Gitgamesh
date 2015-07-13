@@ -76,7 +76,7 @@ public class GalleryComponent extends CustomComponent {
 		
 		filterField = new TextField();
 		filterField.setWidth("100%");
-		filterField.setInputPrompt("Filter by name...");
+		filterField.setInputPrompt("Search for projects...");
 		filterField.setStyleName(CSS_GALLERY_FILTER_NAME_FIELD);
 		filterField.setTextChangeTimeout(300);
 		filterField.setTextChangeEventMode(TextChangeEventMode.TIMEOUT);
