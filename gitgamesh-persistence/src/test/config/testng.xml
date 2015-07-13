@@ -3,11 +3,11 @@
 	<test name="GitgameshTest" enabled="true" preserve-order="true">
 		<groups>
 			<run>
-			<!-- <include name="" /> -->
+				<include name="printerProjectDao" />
 			</run>
 		</groups>
 		<classes>
-			<!-- <class name="" /> -->
+			<class name="com.biit.gitgamesh.persistence.dao.jpa.PrinterProjectDaoTest" />
 		</classes>
 	</test>
 </suite>
