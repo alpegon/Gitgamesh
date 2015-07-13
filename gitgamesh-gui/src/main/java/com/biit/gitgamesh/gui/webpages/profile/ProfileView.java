@@ -1,4 +1,4 @@
-package com.biit.gitgamesh.gui.webpages.gallery;
+package com.biit.gitgamesh.gui.webpages.profile;
 
 import com.biit.gitgamesh.gui.webpages.common.GitgameshCommonView;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
@@ -7,19 +7,19 @@ import com.vaadin.spring.annotation.UIScope;
 
 @UIScope
 @SpringComponent
-public class GalleryView extends GitgameshCommonView<IGalleryView,IGalleryPresenter> implements IGalleryView {
-	private static final long serialVersionUID = -3493109786988382122L;
-	
+public class ProfileView extends GitgameshCommonView<IProfileView, IProfilePresenter> implements IProfileView {
+	private static final long serialVersionUID = -2538329776726592610L;
+
 	@Override
 	public void init() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void enter(ViewChangeEvent event) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

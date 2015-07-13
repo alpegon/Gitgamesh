@@ -34,7 +34,15 @@ public enum LanguageCodes implements ILanguageCode{
 	// Error pages
 	PAGE_ERROR("page.error"), 
 	PAGE_NOT_FOUND("page.not.found"), 
-	AUTHORIZATION_ERROR("authorization.error"),
+	AUTHORIZATION_ERROR("authorization.error"), 
+	
+	// Left buttons
+	USER_PROFILE_CAPTION("user.profile.caption"), 
+	USER_PROFILE_TOOLTIP("user.profile.tooltip"), 
+	GALLERY_CAPTION("gallery.caption"), 
+	GALLERY_TOOLTIP("gallery.tooltip"), 
+	UPLOAD_CAPTION("upload.caption"), 
+	UPLOAD_TOOLTIP("upload.tooltip"),
 	;
 
 	private String value;

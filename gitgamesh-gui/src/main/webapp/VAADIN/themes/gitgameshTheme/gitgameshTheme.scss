@@ -30,9 +30,7 @@
 @import "../valo/valo.scss";
 
 @mixin gitgameshTheme {
-  @include valo;
-
-  // Insert your own theme rules here
+  	@include valo;
   
 	.gallery-element.v-customcomponent-gallery-element {
 		background: #fff;
@@ -162,5 +160,94 @@
 	
 	.galleryLayout[width-range~="901px-"] .gallery-element:nth-child(3n) {
 	    margin-right: 0px;
+	}
+	
+	.root-layout-gitgamesh[width-range~="901px-"] .v-widget.menu-fixed-left.v-csslayout-menu-fixed-left {
+		-webkit-animation: valo-animate-in-slide-right 700ms 700ms backwards;
+	    -moz-animation: valo-animate-in-slide-right 700ms 700ms backwards;
+	    animation: valo-animate-in-slide-right 700ms 700ms backwards;
+	}
+	
+	.v-widget.menu-fixed-left.v-csslayout-menu-fixed-left {
+	    width: 150px;
+	    position: absolute;
+	    background-color: #414B56;
+	    background-image: -webkit-linear-gradient(right, #38414a 0%, #414B56 9px);
+	    background-image: linear-gradient(to left,#38414a 0%, #414B56 9px);
+	    color: #9ca5af;
+	    font-size: 14px;
+	    line-height: 30px;
+	    border-right: 1px solid #333b43;
+	    white-space: nowrap;
+	    display: table;
+	}
+
+	.v-widget.gitgamesh-button-layout.v-csslayout-gitgamesh-button-layout {
+	    display: table-cell;
+	    vertical-align: middle;
+	}
+	
+	.biitGalleryPage .gitgamesh-button-layout .v-button.v-widget {
+	    width: 100%;
+	    height: 80px;
+	    border-radius: 0px;
+	    border-width: 0px;
+	    color: #B5BCC3;
+	    background-image: -webkit-linear-gradient(top, #56616D 2%, #3C4956 98%);
+	    background-image: linear-gradient(to bottom,#56616D 2%, #3C4956 98%);
+	    -webkit-box-shadow: inset 0 1px 0 #5E6873, inset 0 -1px 0 #333B43, 0 2px 3px rgba(0, 0, 0, 0.05);
+	    box-shadow: inset 0 1px 0 #5E6873, inset 0 -1px 0 #333B43, 0 2px 3px rgba(0, 0, 0, 0.05);
+	    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.05);
+	}
+	
+	.biitGalleryPage .gitgamesh-button-layout .v-button.v-widget.menu-button-selected.v-button-menu-button-selected {
+	    color: white !important;
+	    background-image: linear-gradient(to bottom,rgba(86, 97, 109, 0.75) 2%, rgba(60, 73, 86, 0.75) 98%);
+	    background-image: -webkit-linear-gradient(top, rgba(86, 97, 109, 0.75) 2%, rgba(60, 73, 86, 0.75) 98%);
+	}
+	
+	.v-layout.v-widget.content-area.v-csslayout-content-area {
+	    padding-left: 150px;
+	    background-color: beige;
+	    
+	    min-height:100%;
+	}
+	
+	.biitGalleryPage .gitgamesh-button-layout .v-button:before {
+	    vertical-align: top;
+	}
+	
+	.biitGalleryPage .gitgamesh-button-layout .v-button.v-widget span.v-button-wrap {
+	    display: inline-block;
+	    padding-top: 13px;
+	}
+	
+	.biitGalleryPage .gitgamesh-button-layout .v-button.v-widget img.v-icon {
+	    width: 100%;
+	    height: 32px;
+	    vertical-align: middle;
+	}
+	
+	.biitGalleryPage .gitgamesh-button-layout .v-button.v-widget span.v-button-caption {
+	    float: left;
+	    margin: auto;
+	    width: 100%;
+	}
+	
+	.biitGalleryPage .gitgamesh-button-layout .v-button.v-widget:hover {
+	    color: #E7EBEF;
+	}
+	
+	.biitGalleryPage .gitgamesh-button-layout .v-button:hover img.v-icon {
+    	opacity: 0.8;
+	}
+	
+	.biitGalleryPage .gitgamesh-button-layout .v-button img.v-icon {
+	    -webkit-filter: invert(1.0);
+	    opacity: 0.7;
+	}
+	
+	.biitGalleryPage .gitgamesh-button-layout .v-button.v-widget.menu-button-selected.v-button-menu-button-selected img.v-icon {
+	    opacity: 0.9 !important;
 	}
 }

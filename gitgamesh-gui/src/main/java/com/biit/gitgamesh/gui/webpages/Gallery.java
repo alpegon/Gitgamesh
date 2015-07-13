@@ -9,8 +9,8 @@ import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
 
 @UIScope
-@SpringView(name = GalleryPage.NAME)
-public class GalleryPage extends MVPVaadinView<IGalleryView, IGalleryPresenter> {
+@SpringView(name = Gallery.NAME)
+public class Gallery extends MVPVaadinView<IGalleryView, IGalleryPresenter> {
 	private static final long serialVersionUID = -3170418574111723368L;
 	public static final String NAME = "gallery";
 	
