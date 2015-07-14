@@ -12,8 +12,12 @@ public enum ThemeIcon implements IThemeResource {
 	GALLERY("gallery.svg"),
 	UPLOAD("cloud.upload.svg"), 
 	
+	ACCEPT("button.accept.svg"), 
 	CANCEL("button.cancel.svg"), 
+	
+	CREATE_PROJECT("alert.svg"), 
 
+	
 	;
 
 	// On web the resources are always with '/' using the standard OS path

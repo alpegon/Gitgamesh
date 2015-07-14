@@ -1,7 +1,7 @@
 package com.biit.gitgamesh.gui.webpages.profile;
 
-import com.biit.gitgamesh.gui.mvp.IMVPPresenter;
+import com.biit.gitgamesh.gui.webpages.common.IGitgameshCommonPresenter;
 
-public interface IProfilePresenter extends IMVPPresenter<IProfileView> {
+public interface IProfilePresenter extends IGitgameshCommonPresenter<IProfileView> {
 
 }
