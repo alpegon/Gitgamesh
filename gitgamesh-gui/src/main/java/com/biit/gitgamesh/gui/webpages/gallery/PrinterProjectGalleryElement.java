@@ -21,7 +21,7 @@ public class PrinterProjectGalleryElement extends GalleryElement<PrinterProject>
 
 	@Override
 	protected String getUserName() {
-		return getElement().getName();
+		return getElement().getComparationId();
 	}
 
 	@Override
