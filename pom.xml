@@ -82,7 +82,7 @@
 		<maven-site-plugin.version>3.4</maven-site-plugin.version>
 		<findbugs-maven-plugin.version>3.0.0</findbugs-maven-plugin.version>
 		<activiti.version>5.16.1</activiti.version>
-		<jersey.version>2.17</jersey.version>
+		<jsch.version>0.1.53</jsch.version>
 	</properties>
 
 	<dependencies>

@@ -3,11 +3,13 @@
 	<test name="GitgameshTest" enabled="true" preserve-order="true">
 		<groups>
 			<run>
-			<!-- <include name="" /> -->
+				<exclude name="sshCommandExecutor" />
+				<include name="gitClient" />
 			</run>
 		</groups>
 		<classes>
-			<!-- <class name="" /> -->
+			<class name="com.biit.gitgamesh.core.git.ssh.test.SshCommandExecutorTest" />
+			<class name="com.biit.gitgamesh.core.git.ssh.test.GitClientTest" />
 		</classes>
 	</test>
 </suite>
