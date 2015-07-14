@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>gitgamesh-gui</artifactId>
 	<packaging>war</packaging>
@@ -61,7 +62,8 @@
 								<configuration>
 									<target>
 										<!-- Modify the web.xml -->
-										<replaceregexp file="src/main/webapp/WEB-INF/web.xml" match=".*(param-value).(false).(\/param-value).*" replace="${param.value.true}" />
+										<replaceregexp file="src/main/webapp/WEB-INF/web.xml"
+											match=".*(param-value).(false).(\/param-value).*" replace="${param.value.true}" />
 									</target>
 								</configuration>
 								<goals>
@@ -167,6 +169,12 @@
 					<artifactId>spring-web</artifactId>
 				</exclusion>
 			</exclusions>
+		</dependency>
+		<!-- Carousel Vaadin Add-on -->
+		<dependency>
+			<groupId>org.vaadin.virkki</groupId>
+			<artifactId>carousel</artifactId>
+			<version>${carousel.version}</version>
 		</dependency>
 		<!-- Project dependencies -->
 		<dependency>

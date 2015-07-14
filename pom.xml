@@ -24,6 +24,14 @@
 			<timezone>Europe/Madrid</timezone>
 		</developer>
 		<developer>
+			<id>dmartinez</id>
+			<name>David Martinez</name>
+			<roles>
+				<role>Developer</role>
+			</roles>
+			<timezone>Europe/Madrid</timezone>
+		</developer>
+		<developer>
 			<id>jhortelano</id>
 			<name>Jorge Hortelano</name>
 			<roles>
@@ -115,6 +123,7 @@
 		<findbugs-maven-plugin.version>3.0.0</findbugs-maven-plugin.version>
 		<activiti.version>5.16.1</activiti.version>
 		<jersey.version>2.17</jersey.version>
+		<carousel.version>0.5.2</carousel.version>
 	</properties>
 
 	<dependencies>
