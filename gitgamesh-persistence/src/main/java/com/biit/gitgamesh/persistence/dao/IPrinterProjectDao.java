@@ -18,8 +18,12 @@ public interface IPrinterProjectDao extends IJpaGenericDao<PrinterProject, Long>
 	 *            defines the order of the elements.
 	 * @param filterByName
 	 *            only get elements that the name is like this.
-	 * @param tags
-	 *            NOT IMPLEMENTED YET:
+	 * @param tag
+	 *            NOT IMPLEMENTED YET!
+	 * @param category
+	 *            Projects are classified by category. Select the projects of this category.
+	 * @param userName
+	 *            Selects the projects by author.
 	 * @return
 	 */
 	List<PrinterProject> get(int startElement, int numberOfElements, GalleryOrder galleryOrder, String filterByName,

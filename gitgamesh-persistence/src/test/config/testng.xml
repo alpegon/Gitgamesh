@@ -4,11 +4,13 @@
 		<groups>
 			<run>
 				<include name="printerProjectDao" />
+				<include name="projectImageDao" />
 				<include name="imageTests" />
 			</run>
 		</groups>
 		<classes>
 			<class name="com.biit.gitgamesh.persistence.dao.jpa.PrinterProjectDaoTest" />
+			<class name="com.biit.gitgamesh.persistence.dao.jpa.ProjectImageDaoTest" />
 			<class name="com.biit.gitgamesh.utils.ImageToolsTest" />
 		</classes>
 	</test>
