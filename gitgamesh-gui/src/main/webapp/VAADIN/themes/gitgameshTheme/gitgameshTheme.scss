@@ -31,6 +31,12 @@
 
 @mixin gitgameshTheme {
   	@include valo;
+  	
+  	.v-label.v-widget.page-title.v-label-page-title.v-has-width {
+	    font-size: 60px;
+	    padding-left: 40px;
+	    padding-top: 10px;
+	}
   
 	 .inserted-gallery.v-customcomponent-inserted-gallery {
 	    padding-left: 40px;

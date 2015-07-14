@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.biit.gitgamesh.gui.components.GalleryComponent;
 import com.biit.gitgamesh.gui.components.IGalleryProvider;
+import com.biit.gitgamesh.gui.localization.LanguageCodes;
 import com.biit.gitgamesh.gui.webpages.common.GitgameshCommonView;
 import com.biit.gitgamesh.persistence.dao.IPrinterProjectDao;
 import com.biit.gitgamesh.persistence.dao.jpa.GalleryOrder;
@@ -15,6 +16,7 @@ import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.Component;
+import com.vaadin.ui.Label;
 
 @UIScope
 @SpringComponent
@@ -22,6 +24,8 @@ public class GalleryView extends GitgameshCommonView<IGalleryView,IGalleryPresen
 	private static final long serialVersionUID = -3493109786988382122L;
 
 	private static final String CSS_INSERTED_GALLERY = "inserted-gallery";
+
+	private static final String CSS_PAGE_TITLE = "page-title";
 	
 	@Autowired
 	private IPrinterProjectDao projectDao;
@@ -35,6 +39,11 @@ public class GalleryView extends GitgameshCommonView<IGalleryView,IGalleryPresen
 	@Override
 	public void init() {
 		
+		Label title = new Label(LanguageCodes.GALLERY_CAPTION.translation());
+		title.setStyleName(CSS_PAGE_TITLE);
+		
+		getContentLayout().addComponent(title);
+		
 		gallery = new GalleryComponent(9, new IGalleryProvider() {
 			
 			@Override
@@ -43,9 +52,8 @@ public class GalleryView extends GitgameshCommonView<IGalleryView,IGalleryPresen
 			}
 			
 			@Override
-			public List<Component> getElements(int startElement, int numberOfElements, GalleryOrder galleryOrder, String filterByName,
-					List<String> tags) {
-				List<PrinterProject> projects = projectDao.get(startElement, numberOfElements, galleryOrder, filterByName, tags);
+			public List<Component> getElements(int startElement, int numberOfElements, GalleryOrder galleryOrder, String filterByName) {
+				List<PrinterProject> projects = projectDao.get(startElement, numberOfElements, galleryOrder, filterByName, filterByName, filterByName,filterByName);
 				List<Component> components = new ArrayList<>();
 				for(PrinterProject project: projects){
 					components.add(new PrinterProjectGalleryElement(project));
