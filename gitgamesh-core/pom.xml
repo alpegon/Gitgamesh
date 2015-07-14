@@ -81,6 +81,12 @@
 			<artifactId>${project.parent.artifactId}-persistence</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<!-- JSCH - Allows ssh connections -->
+		<dependency>
+			<groupId>com.jcraft</groupId>
+			<artifactId>jsch</artifactId>
+			<version>${jsch.version}</version>
+		</dependency>
 	</dependencies>
 
 	<build>

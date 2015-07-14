@@ -3,10 +3,14 @@
 	<test name="GitgameshTest" enabled="true" preserve-order="true">
 		<groups>
 			<run>
+				<exclude name="sshCommandExecutor" />
+				<include name="gitClient" />
 				<!-- <include name="jgitTest" />--> 
 			</run>
 		</groups>
 		<classes>
+			<class name="com.biit.gitgamesh.core.git.ssh.test.SshCommandExecutorTest" />
+			<class name="com.biit.gitgamesh.core.git.ssh.test.GitClientTest" />
 				<!-- <class name="com.biit.gitgamesh.core.git.GitUserTasksTest" /> --> 
 		</classes>
 	</test>
