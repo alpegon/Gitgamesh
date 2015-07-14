@@ -16,21 +16,7 @@
 		<root.directory>${project.basedir}/..</root.directory>
 	</properties>
 
-	<!-- JGit Repo -->
-	<repositories>
-		<repository>
-			<id>jgit-repository</id>
-			<url>https://repo.eclipse.org/content/groups/releases/</url>
-		</repository>
-	</repositories>
-
 	<dependencies>
-		<!-- JGit Core Library -->
-		<dependency>
-			<groupId>org.eclipse.jgit</groupId>
-			<artifactId>org.eclipse.jgit</artifactId>
-			<version>${jgit.version}</version>
-		</dependency>
 		<!-- For SpringContextHelper -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
