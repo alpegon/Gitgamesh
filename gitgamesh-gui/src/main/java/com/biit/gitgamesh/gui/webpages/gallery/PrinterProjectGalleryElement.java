@@ -14,14 +14,13 @@ import com.vaadin.server.StreamResource.StreamSource;
 public class PrinterProjectGalleryElement extends GalleryElement<PrinterProject> {
 	private static final long serialVersionUID = -1180272951539494732L;
 
-
 	public PrinterProjectGalleryElement(PrinterProject element) {
 		super(element);
 	}
 
 	@Override
 	protected String getUserName() {
-		return getElement().getName();
+		return getElement().getCreatedBy();
 	}
 
 	@Override
