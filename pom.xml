@@ -8,6 +8,46 @@
 	<packaging>pom</packaging>
 	<name>Gitgamesh</name>
 	<description>3D Object Printing Free Portal</description>
+	
+	<organization>
+		<name>BiiT Sourcing Solution, S.L.</name>
+		<url>http://biit-solutions.com/</url>
+	</organization>
+	
+	<developers>
+		<developer>
+			<id>aperez</id>
+			<name>Alfonso Pérez</name>
+			<roles>
+				<role>Developer</role>
+			</roles>
+			<timezone>Europe/Madrid</timezone>
+		</developer>
+		<developer>
+			<id>dmartinez</id>
+			<name>David Martinez</name>
+			<roles>
+				<role>Developer</role>
+			</roles>
+			<timezone>Europe/Madrid</timezone>
+		</developer>
+		<developer>
+			<id>jhortelano</id>
+			<name>Jorge Hortelano</name>
+			<roles>
+				<role>Developer</role>
+			</roles>
+			<timezone>Europe/Madrid</timezone>
+		</developer>
+		<developer>
+			<id>jizquierdo</id>
+			<name>Jorge Izquierdo</name>
+			<roles>
+				<role>Developer</role>
+			</roles>
+			<timezone>Europe/Madrid</timezone>
+		</developer>
+	</developers>
 
 	<modules>
 		<module>gitgamesh-logger</module>
@@ -83,6 +123,7 @@
 		<findbugs-maven-plugin.version>3.0.0</findbugs-maven-plugin.version>
 		<activiti.version>5.16.1</activiti.version>
 		<jsch.version>0.1.53</jsch.version>
+		<carousel.version>0.5.2</carousel.version>
 	</properties>
 
 	<dependencies>

@@ -11,7 +11,6 @@ import com.vaadin.ui.Label;
 @SpringComponent
 public class ProfileView extends GitgameshCommonView<IProfileView, IProfilePresenter> implements IProfileView {
 	private static final long serialVersionUID = -2538329776726592610L;
-	private static final String CSS_PAGE_TITLE = "page-title";
 
 	public ProfileView() {
 		super();

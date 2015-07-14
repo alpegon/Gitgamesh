@@ -174,11 +174,11 @@ public class GalleryComponent extends CustomComponent {
 
 	}
 
-	protected void clear() {
+	public void clear() {
 		galleryLayout.removeAllComponents();
 	}
 
-	protected void actionLoad() {
+	public void actionLoad() {
 		actionLoad(0);
 		resultMessage.setValue("Search Results: (" + provider.getNumberOfElements() + ")");
 	}

@@ -15,12 +15,12 @@ public enum ThemeIcon implements IThemeResource {
 	ACCEPT("button.accept.svg"), 
 	CANCEL("button.cancel.svg"), 
 	
-	CREATE_PROJECT("alert.svg"), 
+	CREATE_PROJECT("project.add.svg"), 
 
 	
 	;
 
-	// On web the resources are alwais with '/' using the standard OS path
+	// On web the resources are always with '/' using the standard OS path
 	// breaks this on some browsers.
 	private final static String PATH = "img/";
 
