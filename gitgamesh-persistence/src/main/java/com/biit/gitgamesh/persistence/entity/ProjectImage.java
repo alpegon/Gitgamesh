@@ -4,6 +4,7 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -22,11 +23,11 @@ public class ProjectImage extends BaseStorableObject {
 	private byte[] image;
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = "printerProject")
 	private PrinterProject printerProject;
 
-	public ProjectImage(PrinterProject printerProject) {
+	public ProjectImage() {
 		super();
-		this.printerProject = printerProject;
 	}
 
 	public byte[] getImage() {
@@ -35,6 +36,14 @@ public class ProjectImage extends BaseStorableObject {
 
 	public void setImage(byte[] image) {
 		this.image = image;
+	}
+
+	public PrinterProject getPrinterProject() {
+		return printerProject;
+	}
+
+	public void setPrinterProject(PrinterProject printerProject) {
+		this.printerProject = printerProject;
 	}
 
 }

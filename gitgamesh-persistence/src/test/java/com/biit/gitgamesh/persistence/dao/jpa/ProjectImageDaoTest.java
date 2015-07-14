@@ -71,13 +71,15 @@ public class ProjectImageDaoTest extends AbstractTransactionalTestNGSpringContex
 		Assert.assertEquals(printerProjectDao.getRowCount(), 1);
 
 		// Assign image.
-		ProjectImage projectImage1 = new ProjectImage(project1);
+		ProjectImage projectImage1 = new ProjectImage();
+		projectImage1.setPrinterProject(project1);
 		projectImage1.setImage(ImageTools.loadImageFromResource(PROJECT_1_IMAGE_1));
 		projectImageDao.makePersistent(projectImage1);
 		Assert.assertNotNull(projectImage1.getId());
 		Assert.assertEquals(projectImageDao.getRowCount(), 1);
 
-		ProjectImage projectImage2 = new ProjectImage(project1);
+		ProjectImage projectImage2 = new ProjectImage();
+		projectImage2.setPrinterProject(project1);
 		projectImage2.setImage(ImageTools.loadImageFromResource(PROJECT_1_IMAGE_2));
 		projectImageDao.makePersistent(projectImage2);
 		Assert.assertNotNull(projectImage2.getId());
@@ -85,19 +87,21 @@ public class ProjectImageDaoTest extends AbstractTransactionalTestNGSpringContex
 
 		// Same images to project2
 		project2 = PrinterProjectDaoTest.createPrinterProject(PROJECT_2_NAME, PROJECT_2_DESCRIPTION, PROJECT_2_TAGS,
-				PROJECT_1_CATEGORIES, ImageTools.loadImageFromResource(PROJECT_2_PREVIEW_FILE), PROJECT_2_USER);
+				PROJECT_2_CATEGORIES, ImageTools.loadImageFromResource(PROJECT_2_PREVIEW_FILE), PROJECT_2_USER);
 		printerProjectDao.makePersistent(project2);
 		Assert.assertNotNull(project2.getId());
 		Assert.assertEquals(printerProjectDao.getRowCount(), 2);
 
 		// Assign image.
-		projectImage1 = new ProjectImage(project2);
+		projectImage1 = new ProjectImage();
+		projectImage1.setPrinterProject(project2);
 		projectImage1.setImage(ImageTools.loadImageFromResource(PROJECT_1_IMAGE_1));
 		projectImageDao.makePersistent(projectImage1);
 		Assert.assertNotNull(projectImage1.getId());
 		Assert.assertEquals(projectImageDao.getRowCount(), 3);
 
-		projectImage2 = new ProjectImage(project2);
+		projectImage2 = new ProjectImage();
+		projectImage2.setPrinterProject(project2);
 		projectImage2.setImage(ImageTools.loadImageFromResource(PROJECT_1_IMAGE_2));
 		projectImageDao.makePersistent(projectImage2);
 		Assert.assertNotNull(projectImage2.getId());
