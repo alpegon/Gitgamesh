@@ -1,7 +1,11 @@
 package com.biit.gitgamesh.gui.components;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
+import com.vaadin.event.LayoutEvents.LayoutClickEvent;
+import com.vaadin.event.LayoutEvents.LayoutClickListener;
 import com.vaadin.server.Resource;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.CustomComponent;
@@ -37,14 +41,25 @@ public abstract class GalleryElement<T> extends CustomComponent {
 
 	private final T element;
 
+	private final List<IGalleryElementClickListener> listeners;
+
 	public GalleryElement(T element) {
 		super();
 		this.element = element;
+		this.listeners = new ArrayList<>();
 
 		setStyleName(CSS_GALLERY_ELEMENT);
 
 		rootLayout = new CssLayout();
 		rootLayout.setSizeFull();
+		rootLayout.addLayoutClickListener(new LayoutClickListener() {
+			private static final long serialVersionUID = 5444838130947486394L;
+
+			@Override
+			public void layoutClick(LayoutClickEvent event) {
+				fireListeners();
+			}
+		});
 
 		title = new Label();
 		title.setStyleName(CSS_GALLERY_ELEMENT_TITLE);
@@ -97,6 +112,20 @@ public abstract class GalleryElement<T> extends CustomComponent {
 		rootLayout.addComponent(update);
 
 		setCompositionRoot(rootLayout);
+	}
+
+	protected void fireListeners() {
+		for (IGalleryElementClickListener listener : listeners) {
+			listener.clickedElement(getElement());
+		}
+	}
+
+	public void addElementClickListener(IGalleryElementClickListener listener) {
+		listeners.add(listener);
+	}
+	
+	public void removeElementClickListener(IGalleryElementClickListener listener) {
+		listeners.remove(listener);
 	}
 
 	protected abstract Resource getPreviewResource();

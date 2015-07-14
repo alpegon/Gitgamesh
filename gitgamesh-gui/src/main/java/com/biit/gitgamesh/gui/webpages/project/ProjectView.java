@@ -44,7 +44,7 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 	}
 
 	private void updateUi() {
-		title.setValue(title.getValue()+" "+project.getName());
+		title.setValue(LanguageCodes.PROJECT_CAPTION.translation()+" "+project.getName());
 	}
 
 }

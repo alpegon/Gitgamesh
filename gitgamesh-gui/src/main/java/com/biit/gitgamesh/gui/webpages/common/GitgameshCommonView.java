@@ -9,9 +9,11 @@ import com.biit.gitgamesh.gui.theme.ThemeIcon;
 import com.biit.gitgamesh.gui.utils.MessageManager;
 import com.biit.gitgamesh.gui.webpages.Gallery;
 import com.biit.gitgamesh.gui.webpages.Profile;
+import com.biit.gitgamesh.gui.webpages.Project;
 import com.biit.gitgamesh.gui.windows.AcceptActionListener;
 import com.biit.gitgamesh.gui.windows.IWindowAcceptCancel;
 import com.biit.gitgamesh.gui.windows.WindowNewProject;
+import com.biit.gitgamesh.persistence.entity.PrinterProject;
 import com.vaadin.server.Responsive;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -107,8 +109,9 @@ public abstract class GitgameshCommonView<IV extends IMVPView<IP>, IP extends IG
 							public void acceptAction(IWindowAcceptCancel window) {
 								WindowNewProject newProjectWindow = (WindowNewProject) window;
 								try {
-									getCastedPresenter().createNewProject(newProjectWindow.getName(), newProjectWindow.getProjectDescription());
+									PrinterProject project = getCastedPresenter().createNewProject(newProjectWindow.getName(), newProjectWindow.getProjectDescription());
 									window.close();
+									GitgameshUi.navigateTo(Project.NAME + "/" + project.getId());									
 								} catch (ProjectAlreadyExists e) {
 									System.out.println("kiwi5");
 									MessageManager.showError(LanguageCodes.ERROR_PROJECT_ALREADY_EXISTS);
