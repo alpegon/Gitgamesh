@@ -8,10 +8,9 @@ public enum ThemeIcon implements IThemeResource {
 	PAGE_NOT_FOUND("page.not.found.svg"), 
 	AUTHORIZATION_ERROR("forbidden.access.svg"),
 	
-	//TODO
-	USER_PROFILE("alert.svg"), 
-	GALLERY("alert.svg"),
-	UPLOAD("alert.svg"), 
+	USER_PROFILE("user.tie.svg"), 
+	GALLERY("gallery.svg"),
+	UPLOAD("cloud.upload.svg"), 
 	
 	CANCEL("button.cancel.svg"), 
 
