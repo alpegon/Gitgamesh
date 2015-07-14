@@ -16,7 +16,7 @@ public enum ThemeIcon implements IThemeResource {
 
 	;
 
-	// On web the resources are alwais with '/' using the standard OS path
+	// On web the resources are always with '/' using the standard OS path
 	// breaks this on some browsers.
 	private final static String PATH = "img/";
 

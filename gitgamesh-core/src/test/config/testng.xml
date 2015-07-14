@@ -3,11 +3,11 @@
 	<test name="GitgameshTest" enabled="true" preserve-order="true">
 		<groups>
 			<run>
-			<!-- <include name="" /> -->
+				<include name="jgitTest" /> 
 			</run>
 		</groups>
 		<classes>
-			<!-- <class name="" /> -->
+				<class name="com.biit.gitgamesh.core.git.GitUserTasksTest" /> 
 		</classes>
 	</test>
 </suite>

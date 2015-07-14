@@ -53,8 +53,9 @@ public class PrinterProjectDao extends AnnotatedGenericDao<PrinterProject, Long>
 
 		// Select tags.
 		if (tag != null) {
-			// LIKE TAG!!
+			// TODO must be use a LIKE not IN!!
 			// predicates.add(printerProjectRoot.join("tags").in(tag));
+			predicates.add(printerProjectRoot.join("tags").in(tag));
 		}
 
 		// Select categories.
