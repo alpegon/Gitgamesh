@@ -25,8 +25,11 @@ public class PrinterProject extends BaseStorableObject {
 	// 0.5mb
 	private static final int MAX_PREVIEW_FILE_SIZE = 512 * 1024;
 
+	public static final int MAX_DESCRIPTION_LENGTH = 512;
+
 	private String name;
 
+	@Column(length = MAX_DESCRIPTION_LENGTH)
 	private String description;
 
 	@ElementCollection

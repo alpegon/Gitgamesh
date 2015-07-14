@@ -32,6 +32,11 @@
 @mixin gitgameshTheme {
   	@include valo;
   	
+  	.v-button.v-widget.iconbutton-size-small.v-button-iconbutton-size-small .v-icon {
+	    width: 16px;
+	    height: 16px;
+	}
+  	
   	.v-label.v-widget.page-title.v-label-page-title.v-has-width {
 	    font-size: 60px;
 	    padding-left: 40px;

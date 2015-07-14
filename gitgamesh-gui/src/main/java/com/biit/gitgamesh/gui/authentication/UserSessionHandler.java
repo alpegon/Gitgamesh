@@ -7,17 +7,17 @@ import com.vaadin.ui.UI;
 public class UserSessionHandler {
 
 	private IUser user;
-	
+
 	public UserSessionHandler(UI ui) {
 		setUser(null);
-		
+
 		if (ui == null) {
 			throw new IllegalArgumentException("Application Ui can't be null");
-		}else{
-			ui.getSession().setAttribute(UserSessionHandler.class,this);
+		} else {
+			ui.getSession().setAttribute(UserSessionHandler.class, this);
 		}
 	}
-	
+
 	public static UserSessionHandler getCurrent() {
 		UserSessionHandler handler = UI.getCurrent().getSession().getAttribute(UserSessionHandler.class);
 		if (handler == null) {
@@ -45,5 +45,5 @@ public class UserSessionHandler {
 	public static String getUserMainViewName() {
 		return Gallery.NAME;
 	}
-	
+
 }

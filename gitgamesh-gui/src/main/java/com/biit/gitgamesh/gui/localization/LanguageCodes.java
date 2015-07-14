@@ -17,7 +17,9 @@ public enum LanguageCodes implements ILanguageCode{
 	DELETE_BUTTON_CAPTION("delete.button.caption"),
 	DELETE_BUTTON_TOOLTIP("delete.button.tooltip"),
 	SAVE_BUTTON_CAPTION("save.button.caption"),	
-	SAVE_BUTTON_TOOLTIP("save.button.tooltip"),	
+	SAVE_BUTTON_TOOLTIP("save.button.tooltip"),
+	CREATE_BUTTON_CAPTION("create.button.caption"),
+	CREATE_BUTTON_TOOLTIP("create.button.tooltip"),
 
 	// Login
 	LOGIN_CAPTION_EMAIL("login.caption.email"),
@@ -35,6 +37,8 @@ public enum LanguageCodes implements ILanguageCode{
 	PAGE_ERROR("page.error"), 
 	PAGE_NOT_FOUND("page.not.found"), 
 	AUTHORIZATION_ERROR("authorization.error"), 
+	ERROR_PROJECT_ALREADY_EXISTS("error.project.already.exists"),
+	INVALID_NAME("invalid.name"),
 	
 	// Left buttons
 	USER_PROFILE_CAPTION("user.profile.caption"), 
@@ -42,7 +46,17 @@ public enum LanguageCodes implements ILanguageCode{
 	GALLERY_CAPTION("gallery.caption"), 
 	GALLERY_TOOLTIP("gallery.tooltip"), 
 	UPLOAD_CAPTION("upload.caption"), 
-	UPLOAD_TOOLTIP("upload.tooltip"),
+	UPLOAD_TOOLTIP("upload.tooltip"), 
+	CREATE_PROJECT_CAPTION("create.project.caption"), 
+	CREATE_PROJECT_TOOLTIP("create.project.tooltip"), 
+	
+	//Windows
+	NEW_WINDOW_CAPTION("new.window.caption"), 
+	NAME_CAPTION("name.caption"),
+	NAME_INPUT_PROMPT("name.input.prompt"), 
+	DESCRIPTION_CAPTION("description.caption"), 
+	DESCRIPTION_INPUT_PROMPT("description.input.prompt"), 
+	
 	;
 
 	private String value;
