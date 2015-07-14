@@ -9,7 +9,6 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import javax.persistence.metamodel.EntityType;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Isolation;
@@ -32,7 +31,6 @@ public class PrinterProjectDao extends AnnotatedGenericDao<PrinterProject, Long>
 			String filterByName, String tag, String category, String userName) {
 		// Get the criteria builder instance from entity manager
 		CriteriaBuilder criteriaBuilder = getEntityManager().getCriteriaBuilder();
-		EntityType<PrinterProject> type = getEntityManager().getMetamodel().entity(PrinterProject.class);
 		// Create criteria query and pass the value object which needs to be populated as result
 		CriteriaQuery<PrinterProject> criteriaQuery = criteriaBuilder.createQuery(getEntityClass());
 		// Tell to criteria query which tables/entities you want to fetch
@@ -42,13 +40,13 @@ public class PrinterProjectDao extends AnnotatedGenericDao<PrinterProject, Long>
 		List<Predicate> predicates = new ArrayList<Predicate>();
 		// Search name criteria
 		if (filterByName != null && filterByName.length() > 0) {
-			predicates.add(criteriaBuilder.like(criteriaBuilder.lower(printerProjectRoot.get(type
-					.getDeclaredSingularAttribute("name", String.class))), "%" + filterByName.toLowerCase() + "%"));
+			predicates.add(criteriaBuilder.like(criteriaBuilder.lower(printerProjectRoot.<String> get("name")), "%"
+					+ filterByName.toLowerCase() + "%"));
 		}
 		// Search by user.
 		if (userName != null && userName.length() > 0) {
-			predicates.add(criteriaBuilder.like(criteriaBuilder.lower(printerProjectRoot.get(type
-					.getDeclaredSingularAttribute("createdBy", String.class))), "%" + userName.toLowerCase() + "%"));
+			predicates.add(criteriaBuilder.like(criteriaBuilder.lower(printerProjectRoot.<String> get("createdBy")),
+					"%" + userName.toLowerCase() + "%"));
 		}
 
 		// Select tags.
