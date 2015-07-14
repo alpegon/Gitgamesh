@@ -176,6 +176,22 @@
 			<artifactId>carousel</artifactId>
 			<version>${carousel.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava-gwt</artifactId>
+			<version>${google.guava.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.xtext</groupId>
+			<artifactId>org.eclipse.xtext.xbase.lib.gwt</artifactId>
+			<version>${eclipse.xtext.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>com.google.guava</groupId>
+					<artifactId>guava-gwt</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
 		<!-- Project dependencies -->
 		<dependency>
 			<groupId>com.biit</groupId>

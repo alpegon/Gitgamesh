@@ -3,7 +3,7 @@
 	<test name="GitgameshTest" enabled="true" preserve-order="true">
 		<groups>
 			<run>
-				<exclude name="sshCommandExecutor" />
+				<include name="sshCommandExecutor" />
 				<include name="gitClient" />
 				<!-- <include name="jgitTest" />--> 
 			</run>
