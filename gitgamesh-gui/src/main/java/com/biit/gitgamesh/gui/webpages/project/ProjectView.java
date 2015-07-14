@@ -1,4 +1,4 @@
-package com.biit.gitgamesh.gui.webpages.profile;
+package com.biit.gitgamesh.gui.webpages.project;
 
 import com.biit.gitgamesh.gui.localization.LanguageCodes;
 import com.biit.gitgamesh.gui.webpages.common.GitgameshCommonView;
@@ -9,24 +9,22 @@ import com.vaadin.ui.Label;
 
 @UIScope
 @SpringComponent
-public class ProfileView extends GitgameshCommonView<IProfileView, IProfilePresenter> implements IProfileView {
-	private static final long serialVersionUID = -2538329776726592610L;
+public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPresenter> implements IProjectView {
+	private static final long serialVersionUID = 8364085061299494663L;
 
-	public ProfileView() {
-		super();
-	}
-	
 	@Override
 	public void init() {
-		Label title = new Label(LanguageCodes.USER_PROFILE_CAPTION.translation());
+		Label title = new Label(LanguageCodes.PROJECT_CAPTION.translation());
 		title.setStyleName(CSS_PAGE_TITLE);
-		
+
 		getContentLayout().addComponent(title);
+
 	}
 
 	@Override
 	public void enter(ViewChangeEvent event) {
-		selectButton(getUserProfile());
+		// TODO Auto-generated method stub
+
 	}
 
 }

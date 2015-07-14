@@ -24,8 +24,6 @@ public class GalleryView extends GitgameshCommonView<IGalleryView,IGalleryPresen
 	private static final long serialVersionUID = -3493109786988382122L;
 
 	private static final String CSS_INSERTED_GALLERY = "inserted-gallery";
-
-	private static final String CSS_PAGE_TITLE = "page-title";
 	
 	@Autowired
 	private IPrinterProjectDao projectDao;
@@ -38,7 +36,6 @@ public class GalleryView extends GitgameshCommonView<IGalleryView,IGalleryPresen
 	
 	@Override
 	public void init() {
-		
 		Label title = new Label(LanguageCodes.GALLERY_CAPTION.translation());
 		title.setStyleName(CSS_PAGE_TITLE);
 		
