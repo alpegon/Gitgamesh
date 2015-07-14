@@ -109,8 +109,10 @@ public abstract class GitgameshCommonView<IV extends IMVPView<IP>, IP extends IG
 									getCastedPresenter().createNewProject(newProjectWindow.getName(), newProjectWindow.getProjectDescription());
 									window.close();
 								} catch (ProjectAlreadyExists e) {
+									System.out.println("kiwi5");
 									MessageManager.showError(LanguageCodes.ERROR_PROJECT_ALREADY_EXISTS);
 								} catch (ProjectNameInvalid e) {
+									System.out.println("kiwi6");
 									MessageManager.showError(LanguageCodes.INVALID_NAME);
 								}
 							}

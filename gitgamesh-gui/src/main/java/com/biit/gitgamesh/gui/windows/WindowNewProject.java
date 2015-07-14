@@ -87,13 +87,11 @@ public class WindowNewProject extends WindowAcceptCancel {
 	}
 
 	public String getName() {
-		// TODO Auto-generated method stub
-		return null;
+		return projectName.getValue();
 	}
 
 	public String getProjectDescription() {
-		// TODO Auto-generated method stub
-		return null;
+		return description.getValue();
 	}
 
 }
