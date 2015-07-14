@@ -7,12 +7,12 @@ import com.vaadin.spring.annotation.UIScope;
 
 @UIScope
 @SpringComponent
-public class ProjectPresenter extends GitgameshCommonPresenter<IProjectView, IProjectPresenter> implements IProjectPresenter{
+public class ProjectPresenter extends GitgameshCommonPresenter<IProjectView, IProjectPresenter> implements IProjectPresenter {
 
 	@Override
 	public void init() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override

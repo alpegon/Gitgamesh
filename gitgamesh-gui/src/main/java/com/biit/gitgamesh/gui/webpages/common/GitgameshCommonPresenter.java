@@ -61,4 +61,7 @@ public abstract class GitgameshCommonPresenter<IV extends IMVPView<IP>, IP exten
 		return project;
 	}
 
+	public PrinterProject getProject(Long id) {
+		return printerProjectDao.get(id);
+	}
 }

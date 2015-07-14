@@ -13,4 +13,6 @@ public interface IGitgameshCommonPresenter<IV extends IMVPView<?>> extends IMVPP
 	
 	PrinterProject createNewProject(String name, String projectDescription) throws ProjectAlreadyExists, ProjectNameInvalid;
 	
+	PrinterProject getProject(Long id);
+	
 }
