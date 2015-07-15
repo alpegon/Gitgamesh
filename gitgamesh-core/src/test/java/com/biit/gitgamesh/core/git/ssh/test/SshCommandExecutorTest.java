@@ -21,8 +21,6 @@ public class SshCommandExecutorTest extends AbstractTestNGSpringContextTests {
 	private final static String GIT_USER = GitgameshConfigurationReader.getInstance().getGitUser();
 	private final static String GIT_KEY_FILE = GitgameshConfigurationReader.getInstance().getGitKeyFile();
 	private final static String GIT_URL = GitgameshConfigurationReader.getInstance().getGitUrl();
-	private final static String GIT_OUTPUT_DIRECTORY = "./src/test/resources/git";
-	private final static String GIT_OUTPUT_FILE = "git.out";
 	private final static int SSH_PORT = 22;
 
 	private String createGitTestFolderCommand() {
@@ -45,7 +43,7 @@ public class SshCommandExecutorTest extends AbstractTestNGSpringContextTests {
 		SshCommandExecutor commandExecutor = new SshCommandExecutor(GIT_USER, GIT_KEY_FILE, GIT_URL, SSH_PORT);
 		commandExecutor.connect();
 		commandExecutor.setCommandOutputEnabled(true);
-		commandExecutor.runCommand("git --version", GIT_OUTPUT_DIRECTORY, GIT_OUTPUT_FILE);
+		commandExecutor.runCommand("git --version");
 		commandExecutor.disconnect();
 	}
 
@@ -56,7 +54,7 @@ public class SshCommandExecutorTest extends AbstractTestNGSpringContextTests {
 		commandExecutor.setCommandOutputEnabled(true);
 		List<String> commands = Arrays.asList(createGitTestFolderCommand(), getGitTestFolderCommand(),
 				"mkdir -p testRepo", "cd testRepo/", "git init", "git status -s");
-		commandExecutor.runCommands(commands, GIT_OUTPUT_DIRECTORY, GIT_OUTPUT_FILE);
+		commandExecutor.runCommands(commands);
 		commandExecutor.disconnect();
 	}
 }

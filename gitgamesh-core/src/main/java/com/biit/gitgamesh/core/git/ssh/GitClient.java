@@ -24,29 +24,32 @@ public class GitClient {
 	private final static String GIT_USER = GitgameshConfigurationReader.getInstance().getGitUser();
 	private final static String GIT_KEY_FILE = GitgameshConfigurationReader.getInstance().getGitKeyFile();
 	private final static String GIT_URL = GitgameshConfigurationReader.getInstance().getGitUrl();
-	private final static String GIT_OUTPUT_DIRECTORY = "./src/main/resources/git";
-	private final static String GIT_OUTPUT_FILE = "git.out";
 	private final static String STL_FILE_END = ".stl";
 	private final static String USER_FILES_FOLDER = "files";
 	private final static int SSH_PORT = 22;
 
-	private List<String> getGitFolder() {
+	private List<String> setGitFolder() {
 		List<String> commands = new ArrayList<>();
 		commands.add("cd " + GIT_FOLDER);
 		return commands;
 	}
 
-	private void executeCommands(List<String> commands) throws JSchException {
+	private String getFilesFolderPath(String userName, String repositoryName) {
+		return userName + "/" + repositoryName + "/" + USER_FILES_FOLDER + "/";
+	}
+
+	private String executeCommands(List<String> commands) throws JSchException {
 		SshCommandExecutor commandExecutor = new SshCommandExecutor(GIT_USER, GIT_KEY_FILE, GIT_URL, SSH_PORT);
 		commandExecutor.connect();
 		// Enables output
 		commandExecutor.setCommandOutputEnabled(true);
-		commandExecutor.runCommands(commands, GIT_OUTPUT_DIRECTORY, GIT_OUTPUT_FILE);
+		String commandOuput = commandExecutor.runCommands(commands);
 		commandExecutor.disconnect();
+		return commandOuput;
 	}
 
 	public void createNewRepository(String userName) throws JSchException {
-		List<String> commands = getGitFolder();
+		List<String> commands = setGitFolder();
 		// Creates the main git repo folder for the user
 		commands.add("mkdir " + userName);
 		// Initilizes the git repo
@@ -56,10 +59,10 @@ public class GitClient {
 	}
 
 	public void commitNewFiles(String userName, String repositoryName) throws JSchException {
-		List<String> commands = getGitFolder();
-		commands.add("cd " + userName + File.separator + repositoryName);
+		List<String> commands = setGitFolder();
+		commands.add("cd " + getFilesFolderPath(userName, repositoryName));
 		// Clone the repository in the user folder
-		commands.add("git add .");
+		commands.add("git add . --all");
 		commands.add("git commit -m \"New files commited\"");
 		executeCommands(commands);
 	}
@@ -72,7 +75,7 @@ public class GitClient {
 	 * @throws JSchException
 	 */
 	public void cloneRepository(String userName, String repositoryPath) throws JSchException {
-		List<String> commands = getGitFolder();
+		List<String> commands = setGitFolder();
 		commands.add("cd " + userName + File.separator);
 		// Clone the repository in the user folder
 		commands.add("git clone " + repositoryPath);
@@ -97,8 +100,7 @@ public class GitClient {
 		}
 		String imageName = fileName + ".jpg";
 		// Build the complete path used for looking for the image
-		String imagePath = GIT_FOLDER + userName + File.separator + repositoryName + File.separator + USER_FILES_FOLDER
-				+ File.separator + imageName;
+		String imagePath = GIT_FOLDER + getFilesFolderPath(userName, repositoryName) + imageName;
 		try {
 			URL url = new File(imagePath).toURI().toURL();
 			return ImageIO.read(url);
@@ -106,5 +108,25 @@ public class GitClient {
 			GitgameshLogger.errorMessage(this.getClass().getName(), e);
 			return null;
 		}
+	}
+
+	/**
+	 * Returns a String containing all the commit information for the repository
+	 * passed.<br>
+	 * 
+	 * The format of the output string (for each commit) is: "%cd || %H" <br>
+	 * To know more about the git output formats ->
+	 * http://git-scm.com/book/en/v2/Git-Basics-Viewing-the-Commit-History
+	 * 
+	 * @param userName
+	 * @param repositoryName
+	 * @return
+	 * @throws JSchException
+	 */
+	public String getRepositoryCommits(String userName, String repositoryName) throws JSchException {
+		List<String> commands = setGitFolder();
+		commands.add("cd " + getFilesFolderPath(userName, repositoryName));
+		commands.add("git log --pretty=format:\"%cd || %H\"");
+		return executeCommands(commands);
 	}
 }
