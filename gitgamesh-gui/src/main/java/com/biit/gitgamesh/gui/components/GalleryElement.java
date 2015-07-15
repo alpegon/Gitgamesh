@@ -25,9 +25,8 @@ public abstract class GalleryElement<T> extends CustomComponent {
 	private static final String CSS_GALLERY_ELEMENT_RIGHT_CONTENT = "gallery-element-right-content";
 
 	private static final String FULL = "100%";
-	private static final String LEFT_CONTENT_WIDTH = "80px";
-	private static final String THUMBNAIL_WIDTH = "60px";
-	private static final String THUMBNAIL_HEIGHT = "60px";
+	private static final String THUMBNAIL_WIDTH = "120px";
+	private static final String THUMBNAIL_HEIGHT = "120px";
 
 	private final CssLayout rootLayout;
 	private final CssLayout contentLayout;
@@ -74,7 +73,6 @@ public abstract class GalleryElement<T> extends CustomComponent {
 
 		leftContent = new CssLayout();
 		leftContent.setStyleName(CSS_GALLERY_ELEMENT_LEFT_CONTENT);
-		leftContent.setWidth(LEFT_CONTENT_WIDTH);
 		leftContent.setHeight(FULL);
 
 		Resource resource = getPreviewResource();
