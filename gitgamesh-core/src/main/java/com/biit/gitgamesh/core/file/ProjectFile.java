@@ -29,7 +29,7 @@ public class ProjectFile {
 		if (updateTime != null) {
 			return updateTime;
 		} else {
-			updateTime = new java.sql.Timestamp(new java.util.Date().getTime());
+			updateTime = getCreationTime();
 			return updateTime;
 		}
 	}

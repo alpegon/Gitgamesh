@@ -36,8 +36,8 @@ public class FilesTable extends Table {
 
 		setColumnCollapsingAllowed(true);
 		setColumnCollapsed(TableColumn.FILE_NAME, false);
-		setColumnCollapsed(TableColumn.FILE_CREATION_TIME, true);
-		setColumnCollapsed(TableColumn.FILE_UPDATE_TIME, true);
+		setColumnCollapsed(TableColumn.FILE_CREATION_TIME, false);
+		setColumnCollapsed(TableColumn.FILE_UPDATE_TIME, false);
 
 		setColumnExpandRatio(TableColumn.FILE_NAME, 1.0f);
 		setColumnExpandRatio(TableColumn.FILE_CREATION_TIME, 1.0f);
