@@ -59,6 +59,8 @@ public enum LanguageCodes implements ILanguageCode{
 	
 	//Project
 	PROJECT_CAPTION("project.caption"),
+	PROJECT_DOWNLOAD_FILE_BUTTON("project.download.file"),
+	PROJECT_DOWNLOAD_FILE_BUTTON_TOOLTIP("project.download.file.tooltip"),
 	PROJECT_NEW_FILE_BUTTON("project.new.file"),
 	PROJECT_NEW_FILE_BUTTON_TOOLTIP("project.new.file.tooltip"),
 	PROJECT_UPDATE_BUTTON("project.update.file"),
