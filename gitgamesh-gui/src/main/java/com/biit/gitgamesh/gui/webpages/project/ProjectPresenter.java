@@ -1,13 +1,13 @@
-package com.biit.gitgamesh.gui.webpages.upload;
+package com.biit.gitgamesh.gui.webpages.project;
 
-import com.biit.gitgamesh.gui.mvp.MVPPresenter;
+import com.biit.gitgamesh.gui.webpages.common.GitgameshCommonPresenter;
 import com.biit.gitgamesh.utils.IActivity;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
 
 @UIScope
 @SpringComponent
-public class UploadPresenter extends MVPPresenter<IUploadView, IUploadPresenter> implements IUploadPresenter {
+public class ProjectPresenter extends GitgameshCommonPresenter<IProjectView, IProjectPresenter> implements IProjectPresenter {
 
 	@Override
 	public void init() {
