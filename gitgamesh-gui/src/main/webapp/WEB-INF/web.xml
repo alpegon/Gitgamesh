@@ -15,7 +15,7 @@
 	<context-param>
 		<description>Gitgamesh 3D Printer Gallery</description>
 		<param-name>productionMode</param-name>
-		<param-value>false</param-value>
+		<param-value>true</param-value>
 	</context-param>
 
 	<!-- Using Vaadin GUI -->
