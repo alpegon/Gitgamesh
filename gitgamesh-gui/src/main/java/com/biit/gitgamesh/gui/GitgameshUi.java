@@ -1,5 +1,8 @@
 package com.biit.gitgamesh.gui;
 
+import java.io.IOException;
+import java.util.HashMap;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.biit.gitgamesh.gui.authentication.UserSessionHandler;
@@ -17,7 +20,10 @@ import com.vaadin.annotations.Push;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Widgetset;
 import com.vaadin.navigator.ViewChangeListener;
+import com.vaadin.server.RequestHandler;
 import com.vaadin.server.VaadinRequest;
+import com.vaadin.server.VaadinResponse;
+import com.vaadin.server.VaadinSession;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.spring.navigator.SpringViewProvider;
 import com.vaadin.ui.UI;
@@ -37,12 +43,47 @@ public class GitgameshUi extends UI{
 	
 	@Autowired
 	private LocalizationManager localization;
+	
+	private HashMap<String, IServeDynamicFile> dinamicFiles;
+	
+	public GitgameshUi() {
+		dinamicFiles = new HashMap<>();
+	}
 
 	@Override
 	protected void init(VaadinRequest request) {
 		getPage().setTitle("");
 		defineNavigation();
 		setErrorHandler(new CustomErrorHandler(LanguageCodes.ERROR_UNEXPECTED_ERROR));
+		
+		VaadinSession.getCurrent().addRequestHandler(new RequestHandler() {
+			private static final long serialVersionUID = -3272419412231462706L;
+
+			@Override
+			public boolean handleRequest(VaadinSession session, VaadinRequest request, VaadinResponse response) throws IOException {
+				IServeDynamicFile dynamicFile = getDinamicFile(request);
+				if(dynamicFile==null){
+					return false;
+				}else{
+					dynamicFile.serveFileWithResponse(response);
+					return true;
+				}
+			}
+		});
+		
+	}
+	
+	public synchronized void addDynamicFiles(String name, IServeDynamicFile serveFile){
+		dinamicFiles.put(name, serveFile);
+	}
+	
+	/**
+	 * Restuns null if the file can't be served.
+	 * @param name
+	 * @return
+	 */
+	public synchronized IServeDynamicFile getDinamicFile(VaadinRequest request){
+		return dinamicFiles.get(request.getPathInfo().substring(1, request.getPathInfo().length()));
 	}
 
 	public String translate(ILanguageCode languageCode, String... args) {
