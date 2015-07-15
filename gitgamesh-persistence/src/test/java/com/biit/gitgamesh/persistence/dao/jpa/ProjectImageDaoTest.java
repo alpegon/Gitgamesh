@@ -22,7 +22,7 @@ import com.biit.gitgamesh.persistence.dao.IPrinterProjectDao;
 import com.biit.gitgamesh.persistence.dao.IProjectImageDao;
 import com.biit.gitgamesh.persistence.dao.exceptions.ElementCannotBeRemovedException;
 import com.biit.gitgamesh.persistence.entity.PrinterProject;
-import com.biit.gitgamesh.persistence.entity.ProjectImage;
+import com.biit.gitgamesh.persistence.entity.ProjectFile;
 import com.biit.gitgamesh.persistence.entity.exceptions.PreviewTooLongException;
 import com.biit.gitgamesh.utils.ImageTools;
 
@@ -71,16 +71,16 @@ public class ProjectImageDaoTest extends AbstractTransactionalTestNGSpringContex
 		Assert.assertEquals(printerProjectDao.getRowCount(), 1);
 
 		// Assign image.
-		ProjectImage projectImage1 = new ProjectImage();
+		ProjectFile projectImage1 = new ProjectFile();
 		projectImage1.setPrinterProject(project1);
-		projectImage1.setImage(ImageTools.loadImageFromResource(PROJECT_1_IMAGE_1));
+		projectImage1.setFile(ImageTools.loadImageFromResource(PROJECT_1_IMAGE_1));
 		projectImageDao.makePersistent(projectImage1);
 		Assert.assertNotNull(projectImage1.getId());
 		Assert.assertEquals(projectImageDao.getRowCount(), 1);
 
-		ProjectImage projectImage2 = new ProjectImage();
+		ProjectFile projectImage2 = new ProjectFile();
 		projectImage2.setPrinterProject(project1);
-		projectImage2.setImage(ImageTools.loadImageFromResource(PROJECT_1_IMAGE_2));
+		projectImage2.setFile(ImageTools.loadImageFromResource(PROJECT_1_IMAGE_2));
 		projectImageDao.makePersistent(projectImage2);
 		Assert.assertNotNull(projectImage2.getId());
 		Assert.assertEquals(projectImageDao.getRowCount(), 2);
@@ -93,16 +93,16 @@ public class ProjectImageDaoTest extends AbstractTransactionalTestNGSpringContex
 		Assert.assertEquals(printerProjectDao.getRowCount(), 2);
 
 		// Assign image.
-		projectImage1 = new ProjectImage();
+		projectImage1 = new ProjectFile();
 		projectImage1.setPrinterProject(project2);
-		projectImage1.setImage(ImageTools.loadImageFromResource(PROJECT_1_IMAGE_1));
+		projectImage1.setFile(ImageTools.loadImageFromResource(PROJECT_1_IMAGE_1));
 		projectImageDao.makePersistent(projectImage1);
 		Assert.assertNotNull(projectImage1.getId());
 		Assert.assertEquals(projectImageDao.getRowCount(), 3);
 
-		projectImage2 = new ProjectImage();
+		projectImage2 = new ProjectFile();
 		projectImage2.setPrinterProject(project2);
-		projectImage2.setImage(ImageTools.loadImageFromResource(PROJECT_1_IMAGE_2));
+		projectImage2.setFile(ImageTools.loadImageFromResource(PROJECT_1_IMAGE_2));
 		projectImageDao.makePersistent(projectImage2);
 		Assert.assertNotNull(projectImage2.getId());
 		Assert.assertEquals(projectImageDao.getRowCount(), 4);
@@ -112,10 +112,10 @@ public class ProjectImageDaoTest extends AbstractTransactionalTestNGSpringContex
 	@Rollback(value = false)
 	@Transactional(value = TxType.NEVER)
 	public void getImagesOfProject() throws IOException, PreviewTooLongException {
-		List<ProjectImage> projectImages1 = projectImageDao.getAll(project1);
+		List<ProjectFile> projectImages1 = projectImageDao.getAll(project1);
 		Assert.assertEquals(projectImages1.size(), 2);
 
-		List<ProjectImage> projectImages2 = projectImageDao.getAll(project2);
+		List<ProjectFile> projectImages2 = projectImageDao.getAll(project2);
 		Assert.assertEquals(projectImages2.size(), 2);
 
 		Assert.assertEquals(projectImageDao.getRowCount(), 4);
@@ -124,7 +124,7 @@ public class ProjectImageDaoTest extends AbstractTransactionalTestNGSpringContex
 	@AfterGroups(alwaysRun = true, value = { "projectImageDao" })
 	@Rollback(value = false)
 	public void clearDatabase() throws ElementCannotBeRemovedException {
-		for (ProjectImage projectImage : projectImageDao.getAll()) {
+		for (ProjectFile projectImage : projectImageDao.getAll()) {
 			projectImageDao.makeTransient(projectImage);
 		}
 		Assert.assertEquals(projectImageDao.getRowCount(), 0);

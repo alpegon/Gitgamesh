@@ -59,7 +59,13 @@ public enum LanguageCodes implements ILanguageCode{
 	
 	//Project
 	PROJECT_CAPTION("project.caption"),
-	
+	PROJECT_NEW_FILE_BUTTON("project.new.file"),
+	PROJECT_NEW_FILE_BUTTON_TOOLTIP("project.new.file.tooltip"),
+	PROJECT_UPDATE_BUTTON("project.update.file"),
+	PROJECT_UPDATE_BUTTON_TOOLTIP("project.update.file.tooltip"),
+	FILE_TABLE_HEADER_NAME("project.file.table.name"),
+	FILE_TABLE_HEADER_CREATION_TIME("project.file.table.creation.time"),
+	FILE_TABLE_HEADER_UPDATE_TIME("project.file.table.update.time"),
 	;
 
 	private String value;

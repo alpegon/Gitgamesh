@@ -9,7 +9,7 @@ import java.io.InputStream;
 import javax.imageio.ImageIO;
 
 import com.biit.gitgamesh.logger.GitgameshLogger;
-import com.biit.gitgamesh.persistence.entity.ProjectImage;
+import com.biit.gitgamesh.persistence.entity.ProjectFile;
 import com.biit.gitgamesh.utils.ImageTools;
 import com.vaadin.server.StreamResource.StreamSource;
 
@@ -17,17 +17,17 @@ public class DatabaseImageResource implements StreamSource {
 	private static final long serialVersionUID = 4055558717900112056L;
 	private BufferedImage projectImage;
 
-	public DatabaseImageResource(ProjectImage projectImage) {
+	public DatabaseImageResource(ProjectFile projectImage) {
 		try {
-			this.projectImage = ImageTools.getImage(projectImage.getImage());
+			this.projectImage = ImageTools.getImage(projectImage.getFile());
 		} catch (IOException e) {
 			GitgameshLogger.errorMessage(this.getClass().getName(), e);
 		}
 	}
 
-	public DatabaseImageResource(ProjectImage projectImage, int width, int high) {
+	public DatabaseImageResource(ProjectFile projectImage, int width, int high) {
 		try {
-			this.projectImage = ImageTools.resizeImage(ImageTools.getImage(projectImage.getImage()), width, high);
+			this.projectImage = ImageTools.resizeImage(ImageTools.getImage(projectImage.getFile()), width, high);
 		} catch (IOException e) {
 			GitgameshLogger.errorMessage(this.getClass().getName(), e);
 		}

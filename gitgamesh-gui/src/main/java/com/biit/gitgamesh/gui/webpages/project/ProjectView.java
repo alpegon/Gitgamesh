@@ -20,7 +20,7 @@ import com.biit.gitgamesh.gui.webpages.common.GitgameshCommonView;
 import com.biit.gitgamesh.logger.GitgameshLogger;
 import com.biit.gitgamesh.persistence.dao.IProjectImageDao;
 import com.biit.gitgamesh.persistence.entity.PrinterProject;
-import com.biit.gitgamesh.persistence.entity.ProjectImage;
+import com.biit.gitgamesh.persistence.entity.ProjectFile;
 import com.biit.gitgamesh.utils.FileReader;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.StreamResource;
@@ -46,11 +46,12 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 
 	private PrinterProject project;
 	private Label title, description;
+	private FilesMenu filesMenu;
+	private FilesTable filesTable;
+	private HorizontalCarousel carousel;
 
 	@Autowired
 	private IProjectImageDao projectImageDao;
-
-	private HorizontalCarousel carousel;
 
 	@Override
 	public void init() {
@@ -58,6 +59,7 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 		title.setStyleName(CSS_PAGE_TITLE);
 		description = new Label();
 		description.setStyleName(CSS_PAGE_DESCRIPTION);
+		VerticalLayout verticalLayout = createFilesRootLayout();
 
 		getContentLayout().addComponent(title);
 		getContentLayout().addComponent(description);
@@ -69,6 +71,7 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 			e.printStackTrace();
 			GitgameshLogger.errorMessage(this.getClass().getName(), e);
 		}
+		getContentLayout().addComponent(verticalLayout);
 	}
 
 	private Component createWebpage() throws IOException {
@@ -98,6 +101,25 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 		return frame;
 	}
 
+	private VerticalLayout createFilesRootLayout() {
+		VerticalLayout verticalLayout = new VerticalLayout();
+
+		verticalLayout.addComponent(createMenu());
+		verticalLayout.addComponent(createFilesTable());
+
+		return verticalLayout;
+	}
+
+	private FilesTable createFilesTable() {
+		filesTable = new FilesTable();
+		return filesTable;
+	}
+
+	private FilesMenu createMenu() {
+		filesMenu = new FilesMenu();
+		return filesMenu;
+	}
+
 	private AbstractComponentContainer createCarousel() {
 		carousel = new HorizontalCarousel();
 		// Only react to arrow keys when focused
@@ -113,8 +135,8 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 	private void addImagesToCarousel() {
 		carousel.removeAllComponents();
 		// Add images of the project.
-		List<ProjectImage> images = projectImageDao.getAll(project);
-		for (ProjectImage image : images) {
+		List<ProjectFile> images = projectImageDao.getAll(project);
+		for (ProjectFile image : images) {
 			carousel.addComponent(imageLayout(getImage(image)));
 		}
 
@@ -145,7 +167,7 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 		return new Image(null, resource);
 	}
 
-	private Image getImage(ProjectImage image) {
+	private Image getImage(ProjectFile image) {
 		// Create an instance of our stream source.
 		StreamSource imageSource = new DatabaseImageResource(image, (int) carousel.getWidth(), (int) carousel.getHeight());
 

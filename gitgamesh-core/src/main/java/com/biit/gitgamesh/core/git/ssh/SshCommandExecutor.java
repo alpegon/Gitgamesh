@@ -1,9 +1,6 @@
 package com.biit.gitgamesh.core.git.ssh;
 
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
@@ -68,33 +65,25 @@ public class SshCommandExecutor {
 		}
 	}
 
-	private void saveExitInDirectory(String text, String directory, String file) {
-		File exitDirectory;
-		byte b[] = text.getBytes();
-		exitDirectory = new File(directory + File.separator + file);
-		FileOutputStream exitChannel = null;
-		try {
-			exitChannel = new FileOutputStream(exitDirectory);
-		} catch (FileNotFoundException ex) {
-			GitgameshLogger.errorMessage(this.getClass().getName(), ex);
-		}
-		try {
-			exitChannel.write(b);
-			exitChannel.close();
-		} catch (IOException ex) {
-			GitgameshLogger.errorMessage(this.getClass().getName(), ex);
-		}
-	}
-
-	public void runCommands(List<String> commands, String directory, String file) {
+	public String runCommands(List<String> commands) {
 		String concatenatedCommands = "";
 		for (String command : commands) {
 			concatenatedCommands += command + "; ";
 		}
-		runCommand(concatenatedCommands, directory, file);
+		GitgameshLogger.debug(this.getClass().getName(), "Executing commands: " + concatenatedCommands);
+		return runCommand(concatenatedCommands);
 	}
 
-	public void runCommand(String command, String directory, String file) {
+	/**
+	 * Run the command passed as String.<br>
+	 * 
+	 * @param command
+	 * @return The command output
+	 */
+	public String runCommand(String command) {
+		
+		System.out.println("COMMAND RUNNING: " + command);
+		
 		try {
 			channel = session.openChannel("exec");
 			((ChannelExec) channel).setCommand(command);
@@ -111,7 +100,9 @@ public class SshCommandExecutor {
 						break;
 					}
 					if (isCommandOutputEnabled()) {
-						saveExitInDirectory((new String(byteBuffer, 0, i)), directory, file);
+						String output = new String(byteBuffer, 0, i);
+						GitgameshLogger.debug(this.getClass().getName(), "Command return: " + output);
+						return output;
 					}
 				}
 				if (channel.isClosed()) {
@@ -128,6 +119,7 @@ public class SshCommandExecutor {
 		} catch (Exception e) {
 			GitgameshLogger.errorMessage(this.getClass().getName(), "Error while running command :" + e);
 		}
+		return null;
 	}
 
 	public void disconnect() {

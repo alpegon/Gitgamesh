@@ -10,8 +10,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "ProjectImages")
-public class ProjectImage extends BaseStorableObject {
+@Table(name = "ProjectFiles")
+public class ProjectFile extends BaseStorableObject {
 	private static final long serialVersionUID = -1633999193588469899L;
 
 	// 10 mb
@@ -20,22 +20,24 @@ public class ProjectImage extends BaseStorableObject {
 	@Lob
 	@Column(length = MAX_FILE_SIZE, nullable = false)
 	@Basic(fetch = FetchType.LAZY)
-	private byte[] image;
+	private byte[] file;
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "printerProject")
 	private PrinterProject printerProject;
 
-	public ProjectImage() {
+	private String fileName;
+
+	public ProjectFile() {
 		super();
 	}
 
-	public byte[] getImage() {
-		return image;
+	public byte[] getFile() {
+		return file;
 	}
 
-	public void setImage(byte[] image) {
-		this.image = image;
+	public void setFile(byte[] file) {
+		this.file = file;
 	}
 
 	public PrinterProject getPrinterProject() {
@@ -46,4 +48,11 @@ public class ProjectImage extends BaseStorableObject {
 		this.printerProject = printerProject;
 	}
 
+	public String getFileName() {
+		return fileName;
+	}
+
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
+	}
 }
