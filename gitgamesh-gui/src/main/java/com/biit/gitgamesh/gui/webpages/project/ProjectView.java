@@ -14,17 +14,14 @@ import com.biit.gitgamesh.gui.webpages.common.GitgameshCommonView;
 import com.biit.gitgamesh.persistence.dao.IProjectImageDao;
 import com.biit.gitgamesh.persistence.entity.PrinterProject;
 import com.biit.gitgamesh.persistence.entity.ProjectImage;
-import com.biit.gitgamesh.utils.ImageTools;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.StreamResource;
 import com.vaadin.server.StreamResource.StreamSource;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.AbstractComponentContainer;
-import com.vaadin.ui.Button;
 import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
-import com.vaadin.ui.TextField;
 
 @UIScope
 @SpringComponent
