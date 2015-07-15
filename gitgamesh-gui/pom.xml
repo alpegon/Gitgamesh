@@ -192,6 +192,12 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
+		<!-- Plupload Addon -->
+		<dependency>
+			<groupId>pl.exsio</groupId>
+			<artifactId>plupload-vaadin</artifactId>
+			<version>${plupload.version}</version>
+		</dependency>
 		<!-- Project dependencies -->
 		<dependency>
 			<groupId>com.biit</groupId>

@@ -33,4 +33,5 @@
     <!-- <set-configuration-property name="devModeRedirectEnabled" value="true" /> -->
     
      <inherits name="org.vaadin.virkki.carousel.CarouselWidgetSet" />
+     <inherits name="pl.exsio.plupload.PluploadWidgetSet" />
 </module>

@@ -126,6 +126,7 @@
 		<carousel.version>0.5.2</carousel.version>
 		<google.guava.version>18.0</google.guava.version>
 		<eclipse.xtext.version>2.8.3</eclipse.xtext.version>
+		<plupload.version>2.0.0</plupload.version>
 	</properties>
 
 	<dependencies>

@@ -18,7 +18,7 @@ import java.nio.file.Paths;
 import javax.imageio.ImageIO;
 
 public class ImageTools {
-	
+
 	/**
 	 * Loads an image from a specific path
 	 * 
@@ -177,6 +177,24 @@ public class ImageTools {
 
 		// Return the buffered image
 		return bufferedimage;
+	}
+
+	/**
+	 * Return the extension of a file.
+	 * 
+	 * @param path
+	 * @return
+	 */
+	public static String getExtension(String path) {
+		String extension = "";
+
+		int i = path.lastIndexOf('.');
+		int p = Math.max(path.lastIndexOf('/'), path.lastIndexOf('\\'));
+
+		if (i > p) {
+			extension = path.substring(i + 1);
+		}
+		return extension;
 	}
 
 }

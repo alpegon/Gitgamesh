@@ -70,6 +70,12 @@ public enum LanguageCodes implements ILanguageCode{
 	FILE_TABLE_HEADER_UPDATE_TIME("project.file.table.update.time"),
 	IMAGE_UPLOAD("image.upload"),
 	IMAGE_DELETE("image.delete"),
+	FILE_UPLOAD_SUCCESS("file.upload.success"),
+	FILE_UPLOAD_ERROR("file.upload.error"),
+	FILE_DELETE_SUCCESS("file.delete.success"),
+	
+	PROJECT_FORK_BUTTON("project.fork.button"),
+	PROJECT_FORK_BUTTON_TOOLTIP("project.fork.button.tooltip"),
 	;
 
 	private String value;

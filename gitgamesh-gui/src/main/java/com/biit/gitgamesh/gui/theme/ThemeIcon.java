@@ -23,6 +23,8 @@ public enum ThemeIcon implements IThemeResource {
 	IMAGE_UPLOAD("image.upload.svg"),
 	IMAGE_DELETE("image.delete.svg"),
 	
+	FORK_PROJECT("project.fork.svg"),
+	
 	;
 
 	// On web the resources are always with '/' using the standard OS path

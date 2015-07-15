@@ -30,13 +30,13 @@ public class GitClient {
 	private final static String USER_FILES_FOLDER = "files";
 	private final static int SSH_PORT = 22;
 
-	private List<String> getGitFolder() {
+	private static List<String> getGitFolder() {
 		List<String> commands = new ArrayList<>();
 		commands.add("cd " + GIT_FOLDER);
 		return commands;
 	}
 
-	private void executeCommands(List<String> commands) throws JSchException {
+	private static void executeCommands(List<String> commands) throws JSchException {
 		SshCommandExecutor commandExecutor = new SshCommandExecutor(GIT_USER, GIT_KEY_FILE, GIT_URL, SSH_PORT);
 		commandExecutor.connect();
 		// Enables output
@@ -45,7 +45,7 @@ public class GitClient {
 		commandExecutor.disconnect();
 	}
 
-	public void createNewRepository(String userName) throws JSchException {
+	public static void createNewRepository(String userName) throws JSchException {
 		List<String> commands = getGitFolder();
 		// Creates the main git repo folder for the user
 		commands.add("mkdir " + userName);
@@ -55,7 +55,7 @@ public class GitClient {
 		executeCommands(commands);
 	}
 
-	public void commitNewFiles(String userName, String repositoryName) throws JSchException {
+	public static void commitNewFiles(String userName, String repositoryName) throws JSchException {
 		List<String> commands = getGitFolder();
 		commands.add("cd " + userName + File.separator + repositoryName);
 		// Clone the repository in the user folder
@@ -67,30 +67,29 @@ public class GitClient {
 	/**
 	 * Must receive the complete repository path to clone
 	 * 
-	 * @param userName
+	 * @param currentName
 	 * @param repositoryPath
 	 * @throws JSchException
 	 */
-	public void cloneRepository(String userName, String repositoryPath) throws JSchException {
+	public static void cloneRepository(String currentName, String repositoryPath) throws JSchException {
 		List<String> commands = getGitFolder();
-		commands.add("cd " + userName + File.separator);
+		commands.add("cd " + currentName + File.separator);
 		// Clone the repository in the user folder
 		commands.add("git clone " + repositoryPath);
 		executeCommands(commands);
 	}
 
 	/**
-	 * We are going to look for an image that has the same name than the file
-	 * name passed in the parameter.<br>
-	 * This method don't use shell commands, but it's kept here so we have all
-	 * the git related methods in the same class.
+	 * We are going to look for an image that has the same name than the file name passed in the parameter.<br>
+	 * This method don't use shell commands, but it's kept here so we have all the git related methods in the same
+	 * class.
 	 * 
 	 * @param userName
 	 * @param repositoryName
 	 * @param fileName
 	 * @throws IOException
 	 */
-	public BufferedImage getRepositoryImage(String userName, String repositoryName, String fileName) {
+	public static BufferedImage getRepositoryImage(String userName, String repositoryName, String fileName) {
 		// Remove the .stl if exists
 		if (fileName.endsWith(STL_FILE_END)) {
 			fileName = fileName.substring(0, fileName.length() - 4);
@@ -103,7 +102,7 @@ public class GitClient {
 			URL url = new File(imagePath).toURI().toURL();
 			return ImageIO.read(url);
 		} catch (IOException e) {
-			GitgameshLogger.errorMessage(this.getClass().getName(), e);
+			GitgameshLogger.errorMessage(GitClient.class.getName(), e);
 			return null;
 		}
 	}
