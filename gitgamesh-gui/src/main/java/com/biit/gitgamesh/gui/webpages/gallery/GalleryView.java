@@ -27,6 +27,7 @@ public class GalleryView extends GitgameshCommonView<IGalleryView, IGalleryPrese
 	private static final long serialVersionUID = -3493109786988382122L;
 
 	private static final String CSS_INSERTED_GALLERY = "inserted-gallery";
+	private static final String CSS_GALLEY_CONTENT_AREA = "gallery-content-area";
 
 	@Autowired
 	private IPrinterProjectDao projectDao;
@@ -43,6 +44,8 @@ public class GalleryView extends GitgameshCommonView<IGalleryView, IGalleryPrese
 		title.setStyleName(CSS_PAGE_TITLE);
 
 		getContentLayout().addComponent(title);
+		getContentLayout().setHeight(FULL);
+		getContentLayout().addStyleName(CSS_GALLEY_CONTENT_AREA);
 
 		gallery = new GalleryComponent(9, new IGalleryProvider() {
 

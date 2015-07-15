@@ -47,6 +47,7 @@
 	    padding-left: 40px;
 	    padding-right: 40px;
 	    padding-top: 40px;
+	    padding-bottom: 40px;
 	}
 	
 	input.v-textfield.v-widget.gallery-filter-name-field.v-textfield-gallery-filter-name-field.v-has-width.v-textfield-prompt {
@@ -146,6 +147,8 @@
 	
 	.gallery-element-description.v-label-gallery-element-description {
 	    padding-bottom: 5px;
+	    max-height: 90px;
+    	min-height: 90px;
 	}
 	
 	.gallery-element.v-customcomponent-gallery-element:hover {
@@ -297,5 +300,9 @@
 	
 	.root-layout-gitgamesh .gitgamesh-button-layout .v-button.v-widget.menu-button-selected.v-button-menu-button-selected img.v-icon {
 	    opacity: 0.9 !important;
+	}
+	
+	.gallery-content-area {
+		overflow-y: auto;
 	}
 }
