@@ -73,23 +73,26 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 
 		// Add default image if no images.
 		if (images.isEmpty()) {
-			carousel.addComponent(imageLayout(getImage("noimages.png")));
+			carousel.addComponent(imageLayout(getImage("no.image.png")));
 		}
 	}
 
 	private Layout imageLayout(Image image) {
 		VerticalLayout imageLayout = new VerticalLayout();
 		imageLayout.setSizeFull();
+		imageLayout.setMargin(false);
+		imageLayout.setSpacing(false);
 		imageLayout.addComponent(image);
 		imageLayout.setComponentAlignment(image, Alignment.MIDDLE_CENTER);
 		return imageLayout;
 	}
 
 	private Image getImage(String resourceName) {
-		StreamSource imageSource = new DatabaseImageResource(resourceName);
+		StreamSource imageSource = new DatabaseImageResource(resourceName, (int) carousel.getWidth(),
+				(int) carousel.getHeight());
 
 		// Create a resource that uses the stream source
-		StreamResource resource = new StreamResource(imageSource, "gallery_image.png");
+		StreamResource resource = new StreamResource(imageSource, "tmp_gallery_image.png");
 
 		// Create an image component that gets its contents from the resource.
 		return new Image("", resource);
@@ -101,7 +104,7 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 				(int) carousel.getHeight());
 
 		// Create a resource that uses the stream source
-		StreamResource resource = new StreamResource(imageSource, "gallery_image.png");
+		StreamResource resource = new StreamResource(imageSource, "tmp_gallery_image.png");
 
 		// Create an image component that gets its contents from the resource.
 		return new Image("", resource);

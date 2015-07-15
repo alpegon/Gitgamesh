@@ -10,6 +10,7 @@ import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.testng.annotations.Test;
 
 import com.biit.gitgamesh.core.git.ssh.SshCommandExecutor;
+import com.biit.gitgamesh.persistence.configuration.GitgameshConfigurationReader;
 import com.jcraft.jsch.JSchException;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -17,37 +18,45 @@ import com.jcraft.jsch.JSchException;
 @Test(groups = { "sshCommandExecutor" })
 public class SshCommandExecutorTest extends AbstractTestNGSpringContextTests {
 
-	private final static String SSH_USER = "gitgamesh";
-	private final static String SSH_KEY_FILE = "gitgamesh";
-	private final static String SSH_URL = "gitgamesh.biit-solutions.com";
-	private final static String GIT_COMMAND = "git --version";
-	private final static String DIRECTORY = "./src/test/resources/git";
-	private final static String OUTPUT_FILE = "git.out";
+	private final static String GIT_USER = GitgameshConfigurationReader.getInstance().getGitUser();
+	private final static String GIT_KEY_FILE = GitgameshConfigurationReader.getInstance().getGitKeyFile();
+	private final static String GIT_URL = GitgameshConfigurationReader.getInstance().getGitUrl();
+	private final static String GIT_OUTPUT_DIRECTORY = "./src/test/resources/git";
+	private final static String GIT_OUTPUT_FILE = "git.out";
 	private final static int SSH_PORT = 22;
+
+	private String createGitTestFolderCommand() {
+		return "mkdir -p " + GitgameshConfigurationReader.getInstance().getGitTestFolder();
+	}
+
+	private String getGitTestFolderCommand() {
+		return "cd " + GitgameshConfigurationReader.getInstance().getGitTestFolder();
+	}
 
 	@Test
 	public void checkSshConnection() throws JSchException {
-		SshCommandExecutor commandExecutor = new SshCommandExecutor(SSH_USER, SSH_KEY_FILE, SSH_URL, SSH_PORT);
+		SshCommandExecutor commandExecutor = new SshCommandExecutor(GIT_USER, GIT_KEY_FILE, GIT_URL, SSH_PORT);
 		commandExecutor.connect();
 		commandExecutor.disconnect();
 	}
 
 	@Test
 	public void runBasicCommand() throws JSchException {
-		SshCommandExecutor commandExecutor = new SshCommandExecutor(SSH_USER, SSH_KEY_FILE, SSH_URL, SSH_PORT);
+		SshCommandExecutor commandExecutor = new SshCommandExecutor(GIT_USER, GIT_KEY_FILE, GIT_URL, SSH_PORT);
 		commandExecutor.connect();
 		commandExecutor.setCommandOutputEnabled(true);
-		commandExecutor.runCommand(GIT_COMMAND, DIRECTORY, OUTPUT_FILE);
+		commandExecutor.runCommand("git --version", GIT_OUTPUT_DIRECTORY, GIT_OUTPUT_FILE);
 		commandExecutor.disconnect();
 	}
 
 	@Test
 	public void runCommands() throws JSchException {
-		SshCommandExecutor commandExecutor = new SshCommandExecutor(SSH_USER, SSH_KEY_FILE, SSH_URL, SSH_PORT);
+		SshCommandExecutor commandExecutor = new SshCommandExecutor(GIT_USER, GIT_KEY_FILE, GIT_URL, SSH_PORT);
 		commandExecutor.connect();
 		commandExecutor.setCommandOutputEnabled(true);
-		List<String> commands = Arrays.asList("cd git", "mkdir testRepo", "cd testRepo/", "git init", "git status -s");
-		commandExecutor.runCommands(commands, DIRECTORY, OUTPUT_FILE);
+		List<String> commands = Arrays.asList(createGitTestFolderCommand(), getGitTestFolderCommand(),
+				"mkdir -p testRepo", "cd testRepo/", "git init", "git status -s");
+		commandExecutor.runCommands(commands, GIT_OUTPUT_DIRECTORY, GIT_OUTPUT_FILE);
 		commandExecutor.disconnect();
 	}
 }

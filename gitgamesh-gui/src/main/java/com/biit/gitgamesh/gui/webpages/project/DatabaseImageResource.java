@@ -41,6 +41,15 @@ public class DatabaseImageResource implements StreamSource {
 		}
 	}
 
+	public DatabaseImageResource(String resource, int width, int high) {
+		try {
+			this.projectImage = ImageTools.resizeImage(ImageTools.getImage(ImageTools.loadImageFromResource(resource)),
+					width, high);
+		} catch (IOException e) {
+			GitgameshLogger.errorMessage(this.getClass().getName(), e);
+		}
+	}
+
 	@Override
 	public InputStream getStream() {
 		/* Create an image and draw something on it. */

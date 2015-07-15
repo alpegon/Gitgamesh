@@ -10,18 +10,22 @@ public class GitgameshConfigurationReader extends ConfigurationReader {
 	private static final String CONFIG_FILE = "settings.conf";
 	
 	// Tags
-	private static final String GIT_BLIT_URL = "git.blit.url";
-	private static final String GIT_BLIT_ADMIN_USER = "git.blit.admin.user";
-	private static final String GIT_BLIT_ADMIN_PASS = "git.blit.admin.password";
+	private static final String GIT_URL = "git.url";
+	private static final String GIT_USER = "git.user";
+	private static final String GIT_KEY_FILE = "git.key.file";
+	private static final String GIT_FOLDER = "git.folder";
+	private static final String GIT_TEST_FOLDER = "git.test.folder";
 	
 	private static GitgameshConfigurationReader instance;
 
 	private GitgameshConfigurationReader() {
 		super();
 
-		addProperty(GIT_BLIT_URL, "");
-		addProperty(GIT_BLIT_ADMIN_USER, "");
-		addProperty(GIT_BLIT_ADMIN_PASS, "");
+		addProperty(GIT_URL, "");
+		addProperty(GIT_USER, "");
+		addProperty(GIT_KEY_FILE, "");
+		addProperty(GIT_FOLDER, "");
+		addProperty(GIT_TEST_FOLDER, "");
 
 		addPropertiesSource(new PropertiesSourceFile(CONFIG_FILE));
 
@@ -49,16 +53,23 @@ public class GitgameshConfigurationReader extends ConfigurationReader {
 		}
 	}
 
-	public String getGitBlitUrl() {
-		return getPropertyLogException(GIT_BLIT_URL);
+	public String getGitUrl() {
+		return getPropertyLogException(GIT_URL);
 	}
 
-	public String getGitBlitAdminUser() {
-		return getPropertyLogException(GIT_BLIT_ADMIN_USER);
+	public String getGitUser() {
+		return getPropertyLogException(GIT_USER);
 	}
 
-	public String getGitBlitAdminPass() {
-		return getPropertyLogException(GIT_BLIT_ADMIN_PASS);
+	public String getGitKeyFile() {
+		return getPropertyLogException(GIT_KEY_FILE);
 	}
 
+	public String getGitFolder() {
+		return getPropertyLogException(GIT_FOLDER);
+	}
+	
+	public String getGitTestFolder() {
+		return getPropertyLogException(GIT_TEST_FOLDER);
+	}
 }
