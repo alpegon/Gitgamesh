@@ -207,12 +207,9 @@ public class PrinterProjectDaoTest extends AbstractTransactionalTestNGSpringCont
 	@Rollback(value = false)
 	@Transactional(value = TxType.NEVER)
 	public void getByCombination() throws IOException, PreviewTooLongException {
-		System.out.println("#############################################################");
 		Assert.assertEquals(printerProjectDao.getRowCount(), 2);
-		System.out.println("#############################################################");
 		List<PrinterProject> projects = printerProjectDao.get(0, 100, GalleryOrder.RECENT, PROJECT_1_NAME, null, "sports",
 				PROJECT_1_USER);
-		System.out.println("#############################################################");
 		Assert.assertEquals(projects.size(), 2);
 	}
 
