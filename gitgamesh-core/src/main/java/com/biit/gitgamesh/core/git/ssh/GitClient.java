@@ -27,6 +27,7 @@ public class GitClient {
 	private final static String GIT_OUTPUT_DIRECTORY = "./src/main/resources/git";
 	private final static String GIT_OUTPUT_FILE = "git.out";
 	private final static String STL_FILE_END = ".stl";
+	private final static String USER_FILES_FOLDER = "files";
 	private final static int SSH_PORT = 22;
 
 	private List<String> getGitFolder() {
@@ -65,6 +66,7 @@ public class GitClient {
 
 	/**
 	 * Must receive the complete repository path to clone
+	 * 
 	 * @param userName
 	 * @param repositoryPath
 	 * @throws JSchException
@@ -88,14 +90,15 @@ public class GitClient {
 	 * @param fileName
 	 * @throws IOException
 	 */
-	public BufferedImage getProjectImage(String userName, String repositoryName, String fileName) {
+	public BufferedImage getRepositoryImage(String userName, String repositoryName, String fileName) {
 		// Remove the .stl if exists
 		if (fileName.endsWith(STL_FILE_END)) {
 			fileName = fileName.substring(0, fileName.length() - 4);
 		}
 		String imageName = fileName + ".jpg";
 		// Build the complete path used for looking for the image
-		String imagePath = GIT_FOLDER + userName + File.separator + repositoryName + File.separator + imageName;
+		String imagePath = GIT_FOLDER + userName + File.separator + repositoryName + File.separator + USER_FILES_FOLDER
+				+ File.separator + imageName;
 		try {
 			URL url = new File(imagePath).toURI().toURL();
 			return ImageIO.read(url);
