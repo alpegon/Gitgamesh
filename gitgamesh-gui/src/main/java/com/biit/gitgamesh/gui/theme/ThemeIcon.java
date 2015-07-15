@@ -18,7 +18,10 @@ public enum ThemeIcon implements IThemeResource {
 	CREATE_PROJECT("project.add.svg"), 
 	UPLOAD_FILE("page.upload.svg"),
 	UPDATE_FILE("page.update.svg"),
+	DELETE_FILE("page.delete.svg"),
 
+	IMAGE_UPLOAD("image.upload.svg"),
+	IMAGE_DELETE("image.delete.svg"),
 	
 	;
 

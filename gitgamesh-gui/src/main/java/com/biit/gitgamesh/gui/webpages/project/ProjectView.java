@@ -1,17 +1,23 @@
 package com.biit.gitgamesh.gui.webpages.project;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.vaadin.virkki.carousel.ComponentSelectListener;
 import org.vaadin.virkki.carousel.HorizontalCarousel;
 import org.vaadin.virkki.carousel.client.widget.gwt.ArrowKeysMode;
 import org.vaadin.virkki.carousel.client.widget.gwt.CarouselLoadMode;
 
 import com.biit.gitgamesh.gui.GitgameshUi;
 import com.biit.gitgamesh.gui.localization.LanguageCodes;
+import com.biit.gitgamesh.gui.theme.ThemeIcon;
 import com.biit.gitgamesh.gui.webpages.Gallery;
 import com.biit.gitgamesh.gui.webpages.common.GitgameshCommonView;
+import com.biit.gitgamesh.logger.GitgameshLogger;
 import com.biit.gitgamesh.persistence.dao.IProjectImageDao;
+import com.biit.gitgamesh.persistence.dao.exceptions.ElementCannotBeRemovedException;
 import com.biit.gitgamesh.persistence.entity.PrinterProject;
 import com.biit.gitgamesh.persistence.entity.ProjectImage;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
@@ -20,7 +26,16 @@ import com.vaadin.server.StreamResource.StreamSource;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.AbstractComponentContainer;
+import com.vaadin.ui.AbstractLayout;
 import com.vaadin.ui.Alignment;
+import com.vaadin.ui.Button;
+import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.Button.ClickListener;
+import com.vaadin.ui.Component;
+import com.vaadin.ui.CssLayout;
+import com.vaadin.ui.HasComponents.ComponentDetachEvent;
+import com.vaadin.ui.HasComponents.ComponentDetachListener;
+import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Layout;
@@ -31,11 +46,20 @@ import com.vaadin.ui.VerticalLayout;
 public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPresenter> implements IProjectView {
 	private static final long serialVersionUID = 8364085061299494663L;
 
+	private static final String CSS_BUTTON_LAYOUT = "gitgamesh-image-button-layout";
+	private static final String CSS_TABLE_LAYOUT = "gitgamesh-table-layout";
+
 	private PrinterProject project;
 	private Label title, description;
 	private FilesMenu filesMenu;
 	private FilesTable filesTable;
 	private HorizontalCarousel carousel;
+	private Component carouselSelected;
+	private Map<Layout, ProjectImage> carouselImages;
+
+	public ProjectView() {
+		carouselImages = new HashMap<>();
+	}
 
 	@Autowired
 	private IProjectImageDao projectImageDao;
@@ -50,12 +74,13 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 
 		getContentLayout().addComponent(title);
 		getContentLayout().addComponent(description);
-		getContentLayout().addComponent(createCarousel());
+		getContentLayout().addComponent(createCarouselLayout());
 		getContentLayout().addComponent(verticalLayout);
 	}
 
 	private VerticalLayout createFilesRootLayout() {
 		VerticalLayout verticalLayout = new VerticalLayout();
+		verticalLayout.setStyleName(CSS_TABLE_LAYOUT);
 
 		verticalLayout.addComponent(createMenu());
 		verticalLayout.addComponent(createFilesTable());
@@ -73,6 +98,71 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 		return filesMenu;
 	}
 
+	private Layout createCarouselLayout() {
+		HorizontalLayout rootCarousel = new HorizontalLayout();
+		AbstractComponentContainer carousel = createCarousel();
+		rootCarousel.addComponent(carousel);
+		AbstractLayout menu = createImageMenu();
+		rootCarousel.addComponent(menu);
+		return rootCarousel;
+	}
+
+	private Button createButton(ThemeIcon icon, LanguageCodes caption, LanguageCodes description,
+			ClickListener clickListener) {
+		Button button = new Button(icon.getThemeResource());
+		button.setCaption(caption.translation());
+		button.setDescription(description.translation());
+		button.addClickListener(clickListener);
+
+		return button;
+	}
+
+	private AbstractLayout createImageMenu() {
+		CssLayout buttonLayout = new CssLayout();
+		buttonLayout.setWidth(FULL);
+		buttonLayout.setStyleName(CSS_BUTTON_LAYOUT);
+
+		Button uploadImage, deleteImage;
+
+		uploadImage = createButton(ThemeIcon.IMAGE_UPLOAD, LanguageCodes.IMAGE_UPLOAD, LanguageCodes.IMAGE_UPLOAD,
+				new ClickListener() {
+					private static final long serialVersionUID = 7783491340664046542L;
+
+					@Override
+					public void buttonClick(ClickEvent event) {
+						// carousel.addComponent();
+						refreshCarousel();
+
+					}
+				});
+		deleteImage = createButton(ThemeIcon.IMAGE_DELETE, LanguageCodes.IMAGE_DELETE, LanguageCodes.IMAGE_DELETE,
+				new ClickListener() {
+					private static final long serialVersionUID = -3163207753297454630L;
+
+					@Override
+					public void buttonClick(ClickEvent event) {
+						removeSelectedImage();
+						carousel.removeComponent(carouselSelected);
+					}
+				});
+
+		buttonLayout.addComponent(uploadImage);
+		buttonLayout.addComponent(deleteImage);
+
+		return buttonLayout;
+	}
+
+	private void removeSelectedImage() {
+		ProjectImage projectImage = carouselImages.get(carouselSelected);
+		if (projectImage != null) {
+			try {
+				projectImageDao.makeTransient(projectImage);
+			} catch (ElementCannotBeRemovedException e) {
+				GitgameshLogger.errorMessage(this.getClass().getName(), e);
+			}
+		}
+	}
+
 	private AbstractComponentContainer createCarousel() {
 		carousel = new HorizontalCarousel();
 		// Only react to arrow keys when focused
@@ -81,16 +171,25 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 		carousel.setLoadMode(CarouselLoadMode.LAZY);
 		// Transition animations between the children run 500 milliseconds
 		carousel.setTransitionDuration(500);
+		// Add behaviori
+		carousel.addComponentSelectListener(new ComponentSelectListener() {
+			@Override
+			public void componentSelected(Component component) {
+				carouselSelected = component;
+			}
+		});
 		// Add the Carousel to a parent layout
 		return carousel;
 	}
 
-	private void addImagesToCarousel() {
+	private void refreshCarousel() {
 		carousel.removeAllComponents();
 		// Add images of the project.
 		List<ProjectImage> images = projectImageDao.getAll(project);
 		for (ProjectImage image : images) {
-			carousel.addComponent(imageLayout(getImage(image)));
+			Layout imageLayout = imageLayout(getImage(image));
+			carouselImages.put(imageLayout, image);
+			carousel.addComponent(imageLayout);
 		}
 
 		// Add default image if no images.
@@ -151,7 +250,7 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 	private void updateUi() {
 		title.setValue(LanguageCodes.PROJECT_CAPTION.translation() + " " + project.getName());
 		description.setValue(project.getDescription() != null ? project.getDescription() : "");
-		addImagesToCarousel();
+		refreshCarousel();
 	}
 
 }
