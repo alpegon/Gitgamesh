@@ -7,6 +7,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
@@ -53,12 +54,12 @@ public class PrinterProjectDao extends AnnotatedGenericDao<PrinterProject, Long>
 		if (tag != null) {
 			// TODO must be use a LIKE not IN!!
 			// predicates.add(printerProjectRoot.join("tags").in(tag));
-			predicates.add(printerProjectRoot.join("tags").in(tag));
+			predicates.add(printerProjectRoot.join("tags", JoinType.LEFT).in(tag));
 		}
 
 		// Select categories.
 		if (category != null) {
-			predicates.add(printerProjectRoot.join("categories").in(category));
+			predicates.add(printerProjectRoot.join("categories", JoinType.LEFT).in(category));
 		}
 
 		if (!predicates.isEmpty()) {
@@ -80,6 +81,8 @@ public class PrinterProjectDao extends AnnotatedGenericDao<PrinterProject, Long>
 				break;
 			}
 		}
+		
+		criteriaQuery.distinct(true);
 
 		try {
 			TypedQuery<PrinterProject> query = getEntityManager().createQuery(criteriaQuery);

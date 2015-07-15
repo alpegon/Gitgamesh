@@ -29,6 +29,7 @@ public abstract class GitgameshCommonView<IV extends IMVPView<IP>, IP extends IG
 	private static final String CSS_BUTTON_LAYOUT = "gitgamesh-button-layout";
 	private static final String CSS_BUTTON_SELECTED = "menu-button-selected";
 	protected static final String CSS_PAGE_TITLE = "page-title";
+	protected static final String CSS_PAGE_DESCRIPTION = "page-description";
 
 	private final CssLayout menuLayout;
 	private final CssLayout contentLayout;

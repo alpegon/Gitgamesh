@@ -141,7 +141,7 @@ public class ImageTools {
 			finalWidth = (int) (originalImage.getWidth() * scaledHeigh / (double) originalImage.getHeight());
 			finalHeigh = scaledHeigh;
 		}
-		int imageType = preserveAlpha ? BufferedImage.TYPE_INT_RGB : BufferedImage.TYPE_INT_ARGB;
+		int imageType = preserveAlpha ? BufferedImage.TYPE_INT_ARGB : BufferedImage.TYPE_INT_RGB;
 		resizedImage = new BufferedImage(finalWidth, finalHeigh, imageType);
 		Graphics2D graphic = resizedImage.createGraphics();
 		graphic.setComposite(AlphaComposite.Src);

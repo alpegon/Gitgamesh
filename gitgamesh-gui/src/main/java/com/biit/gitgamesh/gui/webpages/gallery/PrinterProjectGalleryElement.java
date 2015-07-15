@@ -14,6 +14,8 @@ import com.vaadin.server.StreamResource.StreamSource;
 public class PrinterProjectGalleryElement extends GalleryElement<PrinterProject> {
 	private static final long serialVersionUID = -1180272951539494732L;
 
+	public static final int MAX_DESCRIPTION_LENGTH = 512;
+
 	public PrinterProjectGalleryElement(PrinterProject element) {
 		super(element);
 	}
@@ -35,7 +37,10 @@ public class PrinterProjectGalleryElement extends GalleryElement<PrinterProject>
 
 	@Override
 	protected String getElementDescription() {
-		return getElement().getDescription();
+		if (getElement().getDescription().length() < MAX_DESCRIPTION_LENGTH) {
+			return getElement().getDescription();
+		}
+		return getElement().getDescription().substring(0, MAX_DESCRIPTION_LENGTH - 3) + "...";
 	}
 
 	@Override

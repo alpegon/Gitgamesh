@@ -16,9 +16,11 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.testng.AbstractTransactionalTestNGSpringContextTests;
 import org.testng.Assert;
+import org.testng.annotations.AfterGroups;
 import org.testng.annotations.Test;
 
 import com.biit.gitgamesh.persistence.dao.IPrinterProjectDao;
+import com.biit.gitgamesh.persistence.dao.exceptions.ElementCannotBeRemovedException;
 import com.biit.gitgamesh.persistence.entity.PrinterProject;
 import com.biit.gitgamesh.persistence.entity.exceptions.PreviewTooLongException;
 import com.biit.gitgamesh.utils.ImageTools;
@@ -55,6 +57,11 @@ public class PrinterProjectDaoTest extends AbstractTransactionalTestNGSpringCont
 
 	@Autowired
 	private IPrinterProjectDao printerProjectDao;
+
+	public static PrinterProject createPrinterProject() throws PreviewTooLongException, IOException {
+		return createPrinterProject(PROJECT_1_NAME, PROJECT_1_DESCRIPTION, PROJECT_1_TAGS, PROJECT_1_CATEGORIES,
+				ImageTools.loadImageFromResource(PROJECT_1_PREVIEW_FILE), PROJECT_1_USER);
+	}
 
 	public static PrinterProject createPrinterProject(String name, String description, Set<String> tags,
 			Set<String> categories, byte[] preview, String user) throws PreviewTooLongException {
@@ -194,6 +201,25 @@ public class PrinterProjectDaoTest extends AbstractTransactionalTestNGSpringCont
 		List<PrinterProject> projects = printerProjectDao.get(0, 100, GalleryOrder.RECENT, null, null, null,
 				PROJECT_1_USER);
 		Assert.assertEquals(projects.size(), 2);
+	}
+
+	@Test(dependsOnMethods = { "storeEntity" })
+	@Rollback(value = false)
+	@Transactional(value = TxType.NEVER)
+	public void getByCombination() throws IOException, PreviewTooLongException {
+		Assert.assertEquals(printerProjectDao.getRowCount(), 2);
+		List<PrinterProject> projects = printerProjectDao.get(0, 100, GalleryOrder.RECENT, PROJECT_1_NAME, null, "sports",
+				PROJECT_1_USER);
+		Assert.assertEquals(projects.size(), 2);
+	}
+
+	@AfterGroups(alwaysRun = true, value = { "printerProjectDao" })
+	@Rollback(value = false)
+	public void clearDatabase() throws ElementCannotBeRemovedException {
+		for (PrinterProject project : printerProjectDao.getAll()) {
+			printerProjectDao.makeTransient(project);
+		}
+		Assert.assertEquals(printerProjectDao.getRowCount(), 0);
 	}
 
 }

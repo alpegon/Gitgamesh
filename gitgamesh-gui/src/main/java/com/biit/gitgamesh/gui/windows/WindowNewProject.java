@@ -14,7 +14,7 @@ public class WindowNewProject extends WindowAcceptCancel {
 	private static final long serialVersionUID = 4128310838311952427L;
 	private static final String WIDTH = "450px";
 	private static final String HEIGHT = "500px";
-	
+
 	private TextField projectName;
 	private TextArea description;
 
@@ -26,7 +26,7 @@ public class WindowNewProject extends WindowAcceptCancel {
 		setModal(true);
 
 		setCaption(LanguageCodes.NEW_WINDOW_CAPTION.translation());
-		
+
 		setContent(generateContent());
 	}
 
@@ -35,24 +35,25 @@ public class WindowNewProject extends WindowAcceptCancel {
 		rootLayout.setSizeFull();
 		rootLayout.setMargin(true);
 		rootLayout.setSpacing(true);
-		
+
 		projectName = new TextField();
 		projectName.setCaption(LanguageCodes.NAME_CAPTION.translation());
 		projectName.setInputPrompt(LanguageCodes.NAME_INPUT_PROMPT.translation());
 		projectName.setWidth("100%");
 		projectName.setHeightUndefined();
-		
+
 		description = new TextArea();
 		description.setCaption(LanguageCodes.DESCRIPTION_CAPTION.translation());
-		description.setInputPrompt(LanguageCodes.DESCRIPTION_INPUT_PROMPT.translation(""+PrinterProject.MAX_DESCRIPTION_LENGTH));
+		description.setInputPrompt(LanguageCodes.DESCRIPTION_INPUT_PROMPT.translation(""
+				+ PrinterProject.MAX_DESCRIPTION_LENGTH));
 		description.setMaxLength(PrinterProject.MAX_DESCRIPTION_LENGTH);
 		description.setSizeFull();
-		
+
 		rootLayout.addComponent(projectName);
 		rootLayout.setExpandRatio(projectName, 0.0f);
 		rootLayout.addComponent(description);
 		rootLayout.setExpandRatio(description, 1.0f);
-		
+
 		return rootLayout;
 	}
 
