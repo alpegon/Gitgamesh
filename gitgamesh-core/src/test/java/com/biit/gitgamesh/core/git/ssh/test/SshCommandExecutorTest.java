@@ -1,6 +1,6 @@
 package com.biit.gitgamesh.core.git.ssh.test;
 
-import java.util.List;
+import java.io.IOException;
 
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
@@ -66,18 +66,29 @@ public class SshCommandExecutorTest extends AbstractTestNGSpringContextTests {
 	// commandExecutor.runCommands(commands);
 	// commandExecutor.disconnect();
 	// }
-
+//
+//	@Test
+//	public void testGitClient() throws JSchException {
+//		PrinterProject project = new PrinterProject();
+//		project.setCreatedBy("tpalmer");
+//		project.setName("P100_Cube");
+//		List<ProjectFile> files = GitClient.getRepositoryFilesInformation(project);
+//		for (ProjectFile file : files) {
+//			System.out.println(file.getFileName());
+//			System.out.println(file.getCreationTime());
+//		}
+//	}
+	
 	@Test
-	public void testGitClient() throws JSchException {
+	public void testGitClient() throws JSchException, IOException {
 		PrinterProject project = new PrinterProject();
-		project.setCreatedBy("tpalmer");
-		project.setName("P100_Cube");
-		// System.out.println(client.getRepositoryCommits("tpalmer",
-		// "P100_Cube"));
-		List<ProjectFile> files = GitClient.getRepositoryFilesInformation(project);
-		for (ProjectFile file : files) {
-			System.out.println(file.getFileName());
-			System.out.println(file.getCreationTime());
-		}
+		project.setCreatedBy("brickify");
+		project.setName("polytopes");
+		
+		ProjectFile projectFile = new ProjectFile();
+		projectFile.setFileName("cube.ascii.stl");
+		projectFile.setPrinterProject(project);
+		
+		GitClient.getRepositoryFile(projectFile);
 	}
 }
