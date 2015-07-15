@@ -13,26 +13,26 @@ import org.springframework.stereotype.Repository;
 
 import com.biit.gitgamesh.persistence.dao.IProjectImageDao;
 import com.biit.gitgamesh.persistence.entity.PrinterProject;
-import com.biit.gitgamesh.persistence.entity.ProjectImage;
+import com.biit.gitgamesh.persistence.entity.ProjectFile;
 
 @Repository
-public class ProjectImageDao extends AnnotatedGenericDao<ProjectImage, Long> implements IProjectImageDao {
+public class ProjectImageDao extends AnnotatedGenericDao<ProjectFile, Long> implements IProjectImageDao {
 
 	public ProjectImageDao() {
-		super(ProjectImage.class);
+		super(ProjectFile.class);
 	}
 
 	@Override
-	public List<ProjectImage> getAll(PrinterProject printerProject) {
+	public List<ProjectFile> getAll(PrinterProject printerProject) {
 		if (printerProject == null) {
-			return new ArrayList<ProjectImage>();
+			return new ArrayList<ProjectFile>();
 		}
 		// Get the criteria builder instance from entity manager
 		CriteriaBuilder criteriaBuilder = getEntityManager().getCriteriaBuilder();
 		// Create criteria query and pass the value object which needs to be populated as result
-		CriteriaQuery<ProjectImage> criteriaQuery = criteriaBuilder.createQuery(getEntityClass());
+		CriteriaQuery<ProjectFile> criteriaQuery = criteriaBuilder.createQuery(getEntityClass());
 		// Tell to criteria query which tables/entities you want to fetch
-		Root<ProjectImage> projectImage = criteriaQuery.from(getEntityClass());
+		Root<ProjectFile> projectImage = criteriaQuery.from(getEntityClass());
 
 		// Apply a filter to the sql.
 		List<Predicate> predicates = new ArrayList<Predicate>();
@@ -45,7 +45,7 @@ public class ProjectImageDao extends AnnotatedGenericDao<ProjectImage, Long> imp
 		try {
 			return getEntityManager().createQuery(criteriaQuery).getResultList();
 		} catch (NoResultException nre) {
-			return new ArrayList<ProjectImage>();
+			return new ArrayList<ProjectFile>();
 		}
 	}
 

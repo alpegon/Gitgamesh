@@ -5,8 +5,13 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
+import java.util.Random;
 
 import com.biit.gitgamesh.logger.GitgameshLogger;
 import com.biit.gitgamesh.utils.FileReader;
@@ -68,33 +73,25 @@ public class SshCommandExecutor {
 		}
 	}
 
-	private void saveExitInDirectory(String text, String directory, String file) {
-		File exitDirectory;
-		byte b[] = text.getBytes();
-		exitDirectory = new File(directory + File.separator + file);
-		FileOutputStream exitChannel = null;
-		try {
-			exitChannel = new FileOutputStream(exitDirectory);
-		} catch (FileNotFoundException ex) {
-			GitgameshLogger.errorMessage(this.getClass().getName(), ex);
-		}
-		try {
-			exitChannel.write(b);
-			exitChannel.close();
-		} catch (IOException ex) {
-			GitgameshLogger.errorMessage(this.getClass().getName(), ex);
-		}
-	}
-
-	public void runCommands(List<String> commands, String directory, String file) {
+	public String runCommands(List<String> commands) {
 		String concatenatedCommands = "";
 		for (String command : commands) {
 			concatenatedCommands += command + "; ";
 		}
-		runCommand(concatenatedCommands, directory, file);
+		GitgameshLogger.debug(this.getClass().getName(), "Executing commands: " + concatenatedCommands);
+		return runCommand(concatenatedCommands);
 	}
 
-	public void runCommand(String command, String directory, String file) {
+	/**
+	 * Run the command passed as String.<br>
+	 * 
+	 * @param command
+	 * @return The command output
+	 */
+	public String runCommand(String command) {
+
+		System.out.println("COMMAND RUNNING: " + command);
+
 		try {
 			channel = session.openChannel("exec");
 			((ChannelExec) channel).setCommand(command);
@@ -111,7 +108,9 @@ public class SshCommandExecutor {
 						break;
 					}
 					if (isCommandOutputEnabled()) {
-						saveExitInDirectory((new String(byteBuffer, 0, i)), directory, file);
+						String output = new String(byteBuffer, 0, i);
+						GitgameshLogger.debug(this.getClass().getName(), "Command return: " + output);
+						return output;
 					}
 				}
 				if (channel.isClosed()) {
@@ -128,6 +127,7 @@ public class SshCommandExecutor {
 		} catch (Exception e) {
 			GitgameshLogger.errorMessage(this.getClass().getName(), "Error while running command :" + e);
 		}
+		return null;
 	}
 
 	public void disconnect() {
@@ -150,5 +150,142 @@ public class SshCommandExecutor {
 			GitgameshLogger.errorMessage(this.getClass().getName(), e);
 		}
 		return null;
+	}
+
+	/**
+	 * Returns a file from the remote machine.<br>
+	 * Code extracted from
+	 * http://www.jcraft.com/jsch/examples/ScpFrom.java.html.
+	 * 
+	 * @param filePath
+	 * @return
+	 */
+	public byte[] getRemoteFile(String filePath) {
+
+		File tempDir = new File(System.getProperty("java.io.tmpdir"));
+		Random rand = new Random();
+		int randomFileName = rand.nextInt(99999999);
+		Path tmpFilePath = FileSystems.getDefault().getPath(
+				tempDir.getPath() + File.separator + randomFileName + ".stl");
+
+		try {
+			connect();
+			// exec 'scp -f rfile' remotely
+			String command = "scp -f " + filePath;
+
+			Channel channel = session.openChannel("exec");
+			((ChannelExec) channel).setCommand(command);
+
+			// get I/O streams for remote scp
+			OutputStream out = channel.getOutputStream();
+			InputStream in = channel.getInputStream();
+
+			channel.connect();
+
+			byte[] buf = new byte[1024];
+
+			// send '\0'
+			buf[0] = 0;
+			out.write(buf, 0, 1);
+			out.flush();
+
+			while (true) {
+				int c = checkAck(in);
+				if (c != 'C') {
+					break;
+				}
+
+				// read '0644 '
+				in.read(buf, 0, 5);
+
+				long filesize = 0L;
+				while (true) {
+					if (in.read(buf, 0, 1) < 0) {
+						// error
+						break;
+					}
+					if (buf[0] == ' ')
+						break;
+					filesize = filesize * 10L + (long) (buf[0] - '0');
+				}
+
+				for (int i = 0;; i++) {
+					in.read(buf, i, 1);
+					if (buf[i] == (byte) 0x0a) {
+						String file = new String(buf, 0, i);
+						break;
+					}
+				}
+
+				// send '\0'
+				buf[0] = 0;
+				out.write(buf, 0, 1);
+				out.flush();
+
+				FileOutputStream fos = new FileOutputStream(tmpFilePath.toString());
+				int foo;
+				while (true) {
+					if (buf.length < filesize)
+						foo = buf.length;
+					else
+						foo = (int) filesize;
+					foo = in.read(buf, 0, foo);
+					if (foo < 0) {
+						// error
+						break;
+					}
+					fos.write(buf, 0, foo);
+					filesize -= foo;
+					if (filesize == 0L)
+						break;
+				}
+
+				fos.close();
+				fos = null;
+
+				if (checkAck(in) != 0) {
+					System.exit(0);
+				}
+
+				// send '\0'
+				buf[0] = 0;
+				out.write(buf, 0, 1);
+				out.flush();
+
+			}
+			session.disconnect();
+			return Files.readAllBytes(tmpFilePath);
+		} catch (Exception e) {
+			GitgameshLogger.errorMessage(this.getClass().getName(), e);
+		}
+		return null;
+	}
+
+	static int checkAck(InputStream in) throws IOException {
+		int b = in.read();
+		// b may be 0 for success,
+		// 1 for error,
+		// 2 for fatal error,
+		// -1
+		if (b == 0)
+			return b;
+		if (b == -1)
+			return b;
+
+		if (b == 1 || b == 2) {
+			StringBuffer sb = new StringBuffer();
+			int c;
+			do {
+				c = in.read();
+				sb.append((char) c);
+			} while (c != '\n');
+			if (b == 1) { // error
+				System.out.print(sb.toString());
+			}
+			if (b == 2) { // fatal error
+				System.out.print(sb.toString());
+			}
+		}
+		return b;
 	}
 }

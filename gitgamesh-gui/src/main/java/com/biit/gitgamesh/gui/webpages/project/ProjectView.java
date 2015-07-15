@@ -2,8 +2,13 @@ package com.biit.gitgamesh.gui.webpages.project;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.vaadin.virkki.carousel.ComponentSelectListener;
@@ -16,6 +21,7 @@ import pl.exsio.plupload.PluploadError;
 import pl.exsio.plupload.PluploadFile;
 
 import com.biit.gitgamesh.gui.GitgameshUi;
+import com.biit.gitgamesh.gui.IServeDynamicFile;
 import com.biit.gitgamesh.gui.localization.LanguageCodes;
 import com.biit.gitgamesh.gui.theme.ThemeIcon;
 import com.biit.gitgamesh.gui.utils.MessageManager;
@@ -25,11 +31,13 @@ import com.biit.gitgamesh.logger.GitgameshLogger;
 import com.biit.gitgamesh.persistence.dao.IProjectImageDao;
 import com.biit.gitgamesh.persistence.dao.exceptions.ElementCannotBeRemovedException;
 import com.biit.gitgamesh.persistence.entity.PrinterProject;
-import com.biit.gitgamesh.persistence.entity.ProjectImage;
+import com.biit.gitgamesh.persistence.entity.ProjectFile;
+import com.biit.gitgamesh.utils.FileReader;
 import com.biit.gitgamesh.utils.IdGenerator;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.StreamResource;
 import com.vaadin.server.StreamResource.StreamSource;
+import com.vaadin.server.VaadinResponse;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.AbstractComponentContainer;
@@ -41,6 +49,8 @@ import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.BrowserFrame;
+import com.vaadin.ui.Component;
 import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Layout;
@@ -55,6 +65,8 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 	private static final String CSS_TABLE_LAYOUT = "gitgamesh-table-layout";
 
 	private static final String MAX_FILE_SIZE = "5mb";
+
+	private static final String CSS_IMAGE_IN_CAROUSEL = "image-in-carousel";
 
 	private PrinterProject project;
 	private Label title, description;
@@ -83,6 +95,13 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 
 		VerticalLayout verticalLayout = createFilesRootLayout();
 
+		try {
+			getContentLayout().addComponent(createWebpage());
+		} catch (IOException e) {
+			// Insert other thing.
+			e.printStackTrace();
+			GitgameshLogger.errorMessage(this.getClass().getName(), e);
+		}
 		getContentLayout().addComponent(verticalLayout);
 	}
 
@@ -110,6 +129,33 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 		titleLayout.setExpandRatio(gitMenu, 1f);
 
 		return titleLayout;
+	}
+
+	private Component createWebpage() throws IOException {
+		String fileName = UUID.randomUUID() + ".stl";
+		((GitgameshUi) GitgameshUi.getCurrent()).addDynamicFiles(fileName, new IServeDynamicFile() {
+			@Override
+			public void serveFileWithResponse(VaadinResponse response) {
+				response.setContentType("text/plain");
+				File fileStl = FileReader.getResource("slotted_disk.stl");
+				try {
+					response.getOutputStream().write(Files.readAllBytes(fileStl.toPath()));
+				} catch (IOException e) {
+					e.printStackTrace();
+					GitgameshLogger.errorMessage(this.getClass().getName(), e);
+				}
+			}
+		});
+
+		String viewerHtml = FileReader.getResource("viewer.html", Charset.forName("UTF-8"));
+		viewerHtml = viewerHtml.replace("%%FILE_URL%%", "/" + fileName);
+
+		StreamResource resource = new StreamResource(new ViewerStreamSource(viewerHtml), UUID.randomUUID().toString() + ".html");
+		BrowserFrame frame = new BrowserFrame(null, resource);
+		frame.setWidth("500px");
+		frame.setHeight("500px");
+
+		return frame;
 	}
 
 	private VerticalLayout createFilesRootLayout() {
@@ -280,8 +326,8 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 		carouselImages = new HashMap<>();
 		carousel.removeAllComponents();
 		// Add images of the project.
-		List<ProjectImage> images = projectImageDao.getAll(project);
-		for (ProjectImage image : images) {
+		List<ProjectFile> images = projectImageDao.getAll(project);
+		for (ProjectFile image : images) {
 			addImageToCarousel(image);
 		}
 
@@ -308,13 +354,13 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 		imageLayout.setMargin(false);
 		imageLayout.setSpacing(false);
 		imageLayout.addComponent(image);
+		image.addStyleName(CSS_IMAGE_IN_CAROUSEL);
 		imageLayout.setComponentAlignment(image, Alignment.MIDDLE_CENTER);
 		return imageLayout;
 	}
 
 	private Image getImage(String resourceName) {
-		StreamSource imageSource = new DatabaseImageResource(resourceName, (int) carousel.getWidth(),
-				(int) carousel.getHeight());
+		StreamSource imageSource = new DatabaseImageResource(resourceName, (int) carousel.getWidth(), (int) carousel.getHeight());
 
 		// Create a resource that uses the stream source
 		StreamResource resource = new StreamResource(imageSource, IdGenerator.createId());
@@ -324,10 +370,9 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 		return new Image(null, resource);
 	}
 
-	private Image getImage(ProjectImage image) {
+	private Image getImage(ProjectFile image) {
 		// Create an instance of our stream source.
-		StreamSource imageSource = new DatabaseImageResource(image, (int) carousel.getWidth(),
-				(int) carousel.getHeight());
+		StreamSource imageSource = new DatabaseImageResource(image, (int) carousel.getWidth(), (int) carousel.getHeight());
 
 		// Create a resource that uses the stream source
 		StreamResource resource = new StreamResource(imageSource, IdGenerator.createId());
