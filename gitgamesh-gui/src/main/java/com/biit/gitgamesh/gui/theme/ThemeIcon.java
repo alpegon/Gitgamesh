@@ -16,6 +16,8 @@ public enum ThemeIcon implements IThemeResource {
 	CANCEL("button.cancel.svg"), 
 	
 	CREATE_PROJECT("project.add.svg"), 
+	UPLOAD_FILE("page.upload.svg"),
+	UPDATE_FILE("page.update.svg"),
 
 	
 	;
