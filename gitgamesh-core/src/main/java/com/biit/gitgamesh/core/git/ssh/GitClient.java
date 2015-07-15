@@ -138,34 +138,37 @@ public class GitClient {
 		return executeCommands(commands);
 	}
 
-//	/**
-//	 * Return a file from the repository based on a commit id.<br>
-//	 * This method allows to retrieve files from older commits.
-//	 * 
-//	 * @param userName
-//	 * @param repositoryName
-//	 * @param commitId
-//	 * @return
-//	 * @throws JSchException
-//	 */
-//	public static byte[] getRepositoryFile(ProjectFile file, String commitId) throws JSchException {
-//		String fileName = file.getFileName();
-//		String userName = file.getPrinterProject().getCreatedBy();
-//		String repositoryName = file.getPrinterProject().getName();
-//
-//		Path outFilePath = FileSystems.getDefault().getPath("/tmp/", commitId + file.getFileName());
-//
-//		List<String> commands = setGitFolder();
-//		commands.add("cd " + getFilesFolderPath(userName, repositoryName));
-//		commands.add("git show " + commitId + ":" + fileName + " > " + outFilePath.toString());
-//
-//		try {
-//			return Files.readAllBytes(outFilePath);
-//		} catch (IOException e) {
-//			GitgameshLogger.errorMessage(GitClient.class.getName(), e);
-//			return null;
-//		}
-//	}
+	// /**
+	// * Return a file from the repository based on a commit id.<br>
+	// * This method allows to retrieve files from older commits.
+	// *
+	// * @param userName
+	// * @param repositoryName
+	// * @param commitId
+	// * @return
+	// * @throws JSchException
+	// */
+	// public static byte[] getRepositoryFile(ProjectFile file, String commitId)
+	// throws JSchException {
+	// String fileName = file.getFileName();
+	// String userName = file.getPrinterProject().getCreatedBy();
+	// String repositoryName = file.getPrinterProject().getName();
+	//
+	// Path outFilePath = FileSystems.getDefault().getPath("/tmp/", commitId +
+	// file.getFileName());
+	//
+	// List<String> commands = setGitFolder();
+	// commands.add("cd " + getFilesFolderPath(userName, repositoryName));
+	// commands.add("git show " + commitId + ":" + fileName + " > " +
+	// outFilePath.toString());
+	//
+	// try {
+	// return Files.readAllBytes(outFilePath);
+	// } catch (IOException e) {
+	// GitgameshLogger.errorMessage(GitClient.class.getName(), e);
+	// return null;
+	// }
+	// }
 
 	/**
 	 * Returns a list of the repository files.<br>
@@ -206,14 +209,34 @@ public class GitClient {
 
 	/**
 	 * This method allows to retrieve files from the repository.<br>
+	 * Returns the file passed with the stl file information inside.
 	 * 
 	 * @param file
 	 * @return
 	 * @throws JSchException
 	 * @throws IOException
 	 */
-	public static byte[] getRepositoryFile(ProjectFile file) throws JSchException, IOException {
+	public static void getRepositoryFile(ProjectFile file) throws JSchException, IOException {
 		String fileName = file.getFileName();
+		String userName = file.getPrinterProject().getCreatedBy();
+		String repositoryName = file.getPrinterProject().getName();
+
+		SshCommandExecutor commandExecutor = new SshCommandExecutor(GIT_USER, GIT_KEY_FILE, GIT_URL, SSH_PORT);
+		commandExecutor.connect();
+		file.setFile(commandExecutor
+				.getRemoteFile(GIT_FOLDER + getFilesFolderPath(userName, repositoryName) + fileName));
+	}
+
+	/**
+	 * This method allows to retrieve files from the repository.<br>
+	 * 
+	 * @param file
+	 * @return
+	 * @throws JSchException
+	 * @throws IOException
+	 */
+	public static byte[] setRepositoryFile(ProjectFile file) throws JSchException, IOException {
+		String fileName = "test" + file.getFileName();
 		String userName = file.getPrinterProject().getCreatedBy();
 		String repositoryName = file.getPrinterProject().getName();
 
