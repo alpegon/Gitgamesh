@@ -25,6 +25,14 @@ public class DatabaseImageResource implements StreamSource {
 		}
 	}
 
+	public DatabaseImageResource(ProjectImage projectImage, int width, int high) {
+		try {
+			this.projectImage = ImageTools.resizeImage(ImageTools.getImage(projectImage.getImage()), width, high);
+		} catch (IOException e) {
+			GitgameshLogger.errorMessage(this.getClass().getName(), e);
+		}
+	}
+
 	public DatabaseImageResource(String resource) {
 		try {
 			this.projectImage = ImageTools.getImage(ImageTools.loadImageFromResource(resource));

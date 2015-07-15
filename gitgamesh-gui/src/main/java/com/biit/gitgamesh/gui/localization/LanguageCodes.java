@@ -58,7 +58,7 @@ public enum LanguageCodes implements ILanguageCode{
 	DESCRIPTION_INPUT_PROMPT("description.input.prompt"), 
 	
 	//Project
-	PROJECT_CAPTION("project.caption"), 
+	PROJECT_CAPTION("project.caption"),
 	
 	;
 

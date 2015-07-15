@@ -20,8 +20,11 @@ import com.vaadin.server.StreamResource.StreamSource;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.AbstractComponentContainer;
+import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.Layout;
+import com.vaadin.ui.VerticalLayout;
 
 @UIScope
 @SpringComponent
@@ -29,7 +32,7 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 	private static final long serialVersionUID = 8364085061299494663L;
 
 	private PrinterProject project;
-	private Label title;
+	private Label title, description;
 
 	@Autowired
 	private IProjectImageDao projectImageDao;
@@ -40,8 +43,11 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 	public void init() {
 		title = new Label(LanguageCodes.PROJECT_CAPTION.translation());
 		title.setStyleName(CSS_PAGE_TITLE);
+		description = new Label();
+		description.setStyleName(CSS_PAGE_DESCRIPTION);
 
 		getContentLayout().addComponent(title);
+		getContentLayout().addComponent(description);
 		getContentLayout().addComponent(createCarousel());
 	}
 
@@ -62,13 +68,21 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 		// Add images of the project.
 		List<ProjectImage> images = projectImageDao.getAll(project);
 		for (ProjectImage image : images) {
-			carousel.addComponent(getImage(image));
+			carousel.addComponent(imageLayout(getImage(image)));
 		}
 
 		// Add default image if no images.
 		if (images.isEmpty()) {
-			carousel.addComponent(getImage("noimages.png"));
+			carousel.addComponent(imageLayout(getImage("noimages.png")));
 		}
+	}
+
+	private Layout imageLayout(Image image) {
+		VerticalLayout imageLayout = new VerticalLayout();
+		imageLayout.setSizeFull();
+		imageLayout.addComponent(image);
+		imageLayout.setComponentAlignment(image, Alignment.MIDDLE_CENTER);
+		return imageLayout;
 	}
 
 	private Image getImage(String resourceName) {
@@ -83,7 +97,8 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 
 	private Image getImage(ProjectImage image) {
 		// Create an instance of our stream source.
-		StreamSource imageSource = new DatabaseImageResource(image);
+		StreamSource imageSource = new DatabaseImageResource(image, (int) carousel.getWidth(),
+				(int) carousel.getHeight());
 
 		// Create a resource that uses the stream source
 		StreamResource resource = new StreamResource(imageSource, "gallery_image.png");
@@ -110,6 +125,7 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 
 	private void updateUi() {
 		title.setValue(LanguageCodes.PROJECT_CAPTION.translation() + " " + project.getName());
+		description.setValue(project.getDescription() != null ? project.getDescription() : "");
 		addImagesToCarousel();
 	}
 
