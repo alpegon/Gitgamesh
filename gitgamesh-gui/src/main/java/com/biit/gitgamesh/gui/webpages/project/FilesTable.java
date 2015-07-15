@@ -2,8 +2,8 @@ package com.biit.gitgamesh.gui.webpages.project;
 
 import java.sql.Timestamp;
 
-import com.biit.gitgamesh.core.file.ProjectFile;
 import com.biit.gitgamesh.gui.localization.LanguageCodes;
+import com.biit.gitgamesh.persistence.entity.ProjectFile;
 import com.biit.gitgamesh.utils.DateManager;
 import com.vaadin.data.Item;
 import com.vaadin.ui.Table;
@@ -61,7 +61,7 @@ public class FilesTable extends Table {
 	private void setRow(ProjectFile file, Item item) {
 		if (file != null) {
 			// Paint columns.
-			item.getItemProperty(TableColumn.FILE_NAME).setValue(file.getName());
+			item.getItemProperty(TableColumn.FILE_NAME).setValue(file.getFileName());
 
 			try {
 				item.getItemProperty(TableColumn.FILE_CREATION_TIME).setValue(

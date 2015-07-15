@@ -81,6 +81,9 @@ public class SshCommandExecutor {
 	 * @return The command output
 	 */
 	public String runCommand(String command) {
+		
+		System.out.println("COMMAND RUNNING: " + command);
+		
 		try {
 			channel = session.openChannel("exec");
 			((ChannelExec) channel).setCommand(command);

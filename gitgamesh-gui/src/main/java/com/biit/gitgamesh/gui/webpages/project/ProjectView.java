@@ -13,7 +13,7 @@ import com.biit.gitgamesh.gui.webpages.Gallery;
 import com.biit.gitgamesh.gui.webpages.common.GitgameshCommonView;
 import com.biit.gitgamesh.persistence.dao.IProjectImageDao;
 import com.biit.gitgamesh.persistence.entity.PrinterProject;
-import com.biit.gitgamesh.persistence.entity.ProjectImage;
+import com.biit.gitgamesh.persistence.entity.ProjectFile;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.StreamResource;
 import com.vaadin.server.StreamResource.StreamSource;
@@ -88,8 +88,8 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 	private void addImagesToCarousel() {
 		carousel.removeAllComponents();
 		// Add images of the project.
-		List<ProjectImage> images = projectImageDao.getAll(project);
-		for (ProjectImage image : images) {
+		List<ProjectFile> images = projectImageDao.getAll(project);
+		for (ProjectFile image : images) {
 			carousel.addComponent(imageLayout(getImage(image)));
 		}
 
@@ -120,7 +120,7 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 		return new Image("", resource);
 	}
 
-	private Image getImage(ProjectImage image) {
+	private Image getImage(ProjectFile image) {
 		// Create an instance of our stream source.
 		StreamSource imageSource = new DatabaseImageResource(image, (int) carousel.getWidth(),
 				(int) carousel.getHeight());
