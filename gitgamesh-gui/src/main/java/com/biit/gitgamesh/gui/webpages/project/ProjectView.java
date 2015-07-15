@@ -31,6 +31,8 @@ import com.vaadin.ui.VerticalLayout;
 public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPresenter> implements IProjectView {
 	private static final long serialVersionUID = 8364085061299494663L;
 
+	private static final String CSS_IMAGE_IN_CAROUSEL = "image-in-carousel";
+
 	private PrinterProject project;
 	private Label title, description;
 
@@ -83,6 +85,7 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 		imageLayout.setMargin(false);
 		imageLayout.setSpacing(false);
 		imageLayout.addComponent(image);
+		image.addStyleName(CSS_IMAGE_IN_CAROUSEL);
 		imageLayout.setComponentAlignment(image, Alignment.MIDDLE_CENTER);
 		return imageLayout;
 	}
@@ -95,7 +98,7 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 		StreamResource resource = new StreamResource(imageSource, "tmp_gallery_image.png");
 
 		// Create an image component that gets its contents from the resource.
-		return new Image("", resource);
+		return new Image(null, resource);
 	}
 
 	private Image getImage(ProjectImage image) {
@@ -107,7 +110,7 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 		StreamResource resource = new StreamResource(imageSource, "tmp_gallery_image.png");
 
 		// Create an image component that gets its contents from the resource.
-		return new Image("", resource);
+		return new Image(null, resource);
 	}
 
 	@Override
