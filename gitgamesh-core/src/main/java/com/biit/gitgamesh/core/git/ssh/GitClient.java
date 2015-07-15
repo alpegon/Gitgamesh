@@ -4,6 +4,9 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,7 +56,7 @@ public class GitClient {
 		// Creates the main git repo folder for the user
 		commands.add("mkdir " + userName);
 		// Initilizes the git repo
-		commands.add("cd " + userName + File.separator);
+		commands.add("cd " + userName + "/");
 		commands.add("git init");
 		executeCommands(commands);
 	}
@@ -76,7 +79,7 @@ public class GitClient {
 	 */
 	public void cloneRepository(String userName, String repositoryPath) throws JSchException {
 		List<String> commands = setGitFolder();
-		commands.add("cd " + userName + File.separator);
+		commands.add("cd " + userName + "/");
 		// Clone the repository in the user folder
 		commands.add("git clone " + repositoryPath);
 		executeCommands(commands);
@@ -111,8 +114,8 @@ public class GitClient {
 	}
 
 	/**
-	 * Returns a String containing all the commit information for the repository
-	 * passed.<br>
+	 * Returns a String containing all the commit information for the
+	 * repository.<br>
 	 * 
 	 * The format of the output string (for each commit) is: "%cd || %H" <br>
 	 * To know more about the git output formats ->
@@ -127,6 +130,47 @@ public class GitClient {
 		List<String> commands = setGitFolder();
 		commands.add("cd " + getFilesFolderPath(userName, repositoryName));
 		commands.add("git log --pretty=format:\"%cd || %H\"");
+		return executeCommands(commands);
+	}
+
+	/**
+	 * Return a file from the repository based on a commit id.<br>
+	 * This method allows to retrieve files from older commits.
+	 * 
+	 * @param userName
+	 * @param repositoryName
+	 * @param commitId
+	 * @return
+	 * @throws JSchException
+	 */
+	public byte[] getRepositoryFile(String userName, String repositoryName, String commitId, String fileName)
+			throws JSchException {
+		Path outFilePath = FileSystems.getDefault().getPath("/tmp/", commitId + fileName);
+
+		List<String> commands = setGitFolder();
+		commands.add("cd " + getFilesFolderPath(userName, repositoryName));
+		commands.add("git show " + commitId + ":" + fileName + " > " + outFilePath.toString());
+
+		try {
+			return Files.readAllBytes(outFilePath);
+		} catch (IOException e) {
+			GitgameshLogger.errorMessage(this.getClass().getName(), e);
+			return null;
+		}
+	}
+
+	/**
+	 * Returns a list of the repository files.<br>
+	 * 
+	 * @param userName
+	 * @param repositoryName
+	 * @return
+	 * @throws JSchException
+	 */
+	public String getRepositoryFiles(String userName, String repositoryName) throws JSchException {
+		List<String> commands = setGitFolder();
+		commands.add("cd " + getFilesFolderPath(userName, repositoryName));
+		commands.add("ls");
 		return executeCommands(commands);
 	}
 }

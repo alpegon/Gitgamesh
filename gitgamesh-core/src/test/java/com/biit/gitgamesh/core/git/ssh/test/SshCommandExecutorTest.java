@@ -57,4 +57,5 @@ public class SshCommandExecutorTest extends AbstractTestNGSpringContextTests {
 		commandExecutor.runCommands(commands);
 		commandExecutor.disconnect();
 	}
+	
 }
