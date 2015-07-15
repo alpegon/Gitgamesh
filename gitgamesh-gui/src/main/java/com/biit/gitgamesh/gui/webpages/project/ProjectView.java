@@ -33,11 +33,12 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 
 	private PrinterProject project;
 	private Label title, description;
+	private FilesMenu filesMenu;
+	private FilesTable filesTable;
+	private HorizontalCarousel carousel;
 
 	@Autowired
 	private IProjectImageDao projectImageDao;
-
-	private HorizontalCarousel carousel;
 
 	@Override
 	public void init() {
@@ -45,10 +46,31 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 		title.setStyleName(CSS_PAGE_TITLE);
 		description = new Label();
 		description.setStyleName(CSS_PAGE_DESCRIPTION);
+		VerticalLayout verticalLayout = createFilesRootLayout();
 
 		getContentLayout().addComponent(title);
 		getContentLayout().addComponent(description);
 		getContentLayout().addComponent(createCarousel());
+		getContentLayout().addComponent(verticalLayout);
+	}
+
+	private VerticalLayout createFilesRootLayout() {
+		VerticalLayout verticalLayout = new VerticalLayout();
+
+		verticalLayout.addComponent(createMenu());
+		verticalLayout.addComponent(createFilesTable());
+
+		return verticalLayout;
+	}
+
+	private FilesTable createFilesTable() {
+		filesTable = new FilesTable();
+		return filesTable;
+	}
+
+	private FilesMenu createMenu() {
+		filesMenu = new FilesMenu();
+		return filesMenu;
 	}
 
 	private AbstractComponentContainer createCarousel() {
