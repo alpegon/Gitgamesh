@@ -1,11 +1,10 @@
 package com.biit.gitgamesh.gui.webpages.project;
 
-import java.io.IOException;
-import java.util.HashMap;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -43,14 +42,13 @@ import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.AbstractComponentContainer;
 import com.vaadin.ui.AbstractLayout;
 import com.vaadin.ui.Alignment;
+import com.vaadin.ui.BrowserFrame;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.BrowserFrame;
-import com.vaadin.ui.Component;
 import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Layout;
@@ -74,7 +72,7 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 	private FilesTable filesTable;
 	private HorizontalCarousel carousel;
 	private Component carouselSelected;
-	private Map<Layout, ProjectImage> carouselImages;
+	private Map<Layout, ProjectFile> carouselImages;
 
 	public ProjectView() {
 		carouselImages = new HashMap<>();
@@ -217,7 +215,7 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 			@Override
 			public void onFileUploaded(PluploadFile file) {
 				try {
-					ProjectImage updatedImage = getCastedPresenter().storeImage(project,
+					ProjectFile updatedImage = getCastedPresenter().storeImage(project,
 							file.getUploadedFile().toString());
 					addImageToCarousel(updatedImage);
 
@@ -286,7 +284,7 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 	}
 
 	private void removeSelectedImage() {
-		ProjectImage projectImage = carouselImages.get(carouselSelected);
+		ProjectFile projectImage = carouselImages.get(carouselSelected);
 		if (projectImage != null) {
 			try {
 				if (carouselSelected != null) {
@@ -338,7 +336,7 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 		// }
 	}
 
-	private void addImageToCarousel(ProjectImage image) {
+	private void addImageToCarousel(ProjectFile image) {
 		Layout imageLayout = imageLayout(getImage(image));
 		carouselImages.put(imageLayout, image);
 		carousel.addComponent(imageLayout);

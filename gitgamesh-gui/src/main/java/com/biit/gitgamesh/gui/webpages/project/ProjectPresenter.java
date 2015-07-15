@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.biit.gitgamesh.gui.webpages.common.GitgameshCommonPresenter;
 import com.biit.gitgamesh.persistence.dao.jpa.ProjectImageDao;
 import com.biit.gitgamesh.persistence.entity.PrinterProject;
-import com.biit.gitgamesh.persistence.entity.ProjectImage;
+import com.biit.gitgamesh.persistence.entity.ProjectFile;
 import com.biit.gitgamesh.utils.IActivity;
 import com.biit.gitgamesh.utils.ImageTools;
 import com.vaadin.spring.annotation.SpringComponent;
@@ -46,9 +46,9 @@ public class ProjectPresenter extends GitgameshCommonPresenter<IProjectView, IPr
 	}
 
 	@Override
-	public ProjectImage storeImage(PrinterProject project, String path) throws IOException {
-		ProjectImage uploadedImage = new ProjectImage();
-		uploadedImage.setImage(ImageTools.getBytes(ImageTools.loadFromFile(path), ImageTools.getExtension(path)));
+	public ProjectFile storeImage(PrinterProject project, String path) throws IOException {
+		ProjectFile uploadedImage = new ProjectFile();
+		uploadedImage.setFile(ImageTools.getBytes(ImageTools.loadFromFile(path), ImageTools.getExtension(path)));
 		uploadedImage.setPrinterProject(project);
 		projectImageDao.makePersistent(uploadedImage);
 		return uploadedImage;
