@@ -245,10 +245,10 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 			try {
 				if (carouselSelected != null) {
 					projectImageDao.makeTransient(projectImage);
-					carousel.removeComponent(carouselSelected);
 					MessageManager.showInfo(LanguageCodes.FILE_DELETE_SUCCESS.translation());
 					carouselImages.remove(carouselSelected);
 					carouselSelected = null;
+					refreshCarousel();
 				}
 			} catch (ElementCannotBeRemovedException e) {
 				GitgameshLogger.errorMessage(this.getClass().getName(), e);
@@ -278,6 +278,7 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 
 	private void refreshCarousel() {
 		carouselImages = new HashMap<>();
+		carousel.removeAllComponents();
 		// Add images of the project.
 		List<ProjectImage> images = projectImageDao.getAll(project);
 		for (ProjectImage image : images) {
