@@ -8,16 +8,19 @@ public enum ThemeIcon implements IThemeResource {
 	PAGE_NOT_FOUND("page.not.found.svg"), 
 	AUTHORIZATION_ERROR("forbidden.access.svg"),
 	
-	//TODO
-	USER_PROFILE("alert.svg"), 
-	GALLERY("alert.svg"),
-	UPLOAD("alert.svg"), 
+	USER_PROFILE("user.tie.svg"), 
+	GALLERY("gallery.svg"),
+	UPLOAD("cloud.upload.svg"), 
 	
+	ACCEPT("button.accept.svg"), 
 	CANCEL("button.cancel.svg"), 
+	
+	CREATE_PROJECT("project.add.svg"), 
 
+	
 	;
 
-	// On web the resources are alwais with '/' using the standard OS path
+	// On web the resources are always with '/' using the standard OS path
 	// breaks this on some browsers.
 	private final static String PATH = "img/";
 

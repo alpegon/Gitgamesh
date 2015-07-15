@@ -21,6 +21,8 @@ public class CustomErrorHandler extends DefaultErrorHandler {
 	@Override
 	public void error(com.vaadin.server.ErrorEvent event) {
 		// Throw the error to the logger.
+		event.getThrowable().printStackTrace();
+		
 		GitgameshLogger.errorMessage(CustomErrorHandler.class.getName(), event.getThrowable());
 		MessageManager.showError(unexpectedError);
 	}

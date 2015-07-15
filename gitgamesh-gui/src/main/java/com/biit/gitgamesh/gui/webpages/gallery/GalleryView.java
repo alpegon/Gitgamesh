@@ -5,8 +5,12 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.biit.gitgamesh.gui.GitgameshUi;
 import com.biit.gitgamesh.gui.components.GalleryComponent;
+import com.biit.gitgamesh.gui.components.IGalleryElementClickListener;
 import com.biit.gitgamesh.gui.components.IGalleryProvider;
+import com.biit.gitgamesh.gui.localization.LanguageCodes;
+import com.biit.gitgamesh.gui.webpages.Project;
 import com.biit.gitgamesh.gui.webpages.common.GitgameshCommonView;
 import com.biit.gitgamesh.persistence.dao.IPrinterProjectDao;
 import com.biit.gitgamesh.persistence.dao.jpa.GalleryOrder;
@@ -15,46 +19,61 @@ import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.Component;
+import com.vaadin.ui.Label;
 
 @UIScope
 @SpringComponent
-public class GalleryView extends GitgameshCommonView<IGalleryView,IGalleryPresenter> implements IGalleryView {
+public class GalleryView extends GitgameshCommonView<IGalleryView, IGalleryPresenter> implements IGalleryView {
 	private static final long serialVersionUID = -3493109786988382122L;
 
 	private static final String CSS_INSERTED_GALLERY = "inserted-gallery";
-	
+
 	@Autowired
 	private IPrinterProjectDao projectDao;
-	
+
 	private GalleryComponent gallery;
-	
+
 	public GalleryView() {
 		super();
 	}
-	
+
 	@Override
 	public void init() {
-		
+		Label title = new Label(LanguageCodes.GALLERY_CAPTION.translation());
+		title.setStyleName(CSS_PAGE_TITLE);
+
+		getContentLayout().addComponent(title);
+
 		gallery = new GalleryComponent(9, new IGalleryProvider() {
-			
+
 			@Override
 			public int getNumberOfElements() {
 				return projectDao.getRowCount();
 			}
-			
+
 			@Override
-			public List<Component> getElements(int startElement, int numberOfElements, GalleryOrder galleryOrder, String filterByName,
-					List<String> tags) {
-				List<PrinterProject> projects = projectDao.get(startElement, numberOfElements, galleryOrder, filterByName, tags);
+			public List<Component> getElements(int startElement, int numberOfElements, GalleryOrder galleryOrder, String filterByName) {
+				List<PrinterProject> projects = projectDao.get(startElement, numberOfElements, galleryOrder, filterByName, filterByName,
+						filterByName, filterByName);
 				List<Component> components = new ArrayList<>();
-				for(PrinterProject project: projects){
-					components.add(new PrinterProjectGalleryElement(project));
+				for (PrinterProject project : projects) {
+					PrinterProjectGalleryElement element = new PrinterProjectGalleryElement(project);
+					element.addElementClickListener(new IGalleryElementClickListener() {
+
+						@Override
+						public void clickedElement(Object element) {
+							PrinterProject project = (PrinterProject) element;
+							GitgameshUi.navigateTo(Project.NAME + "/" + project.getId());
+						}
+					});
+					components.add(element);
+
 				}
-				
-				return components; 
+
+				return components;
 			}
 		});
-		
+
 		gallery.setWidth(FULL);
 		gallery.setHeightUndefined();
 		gallery.addStyleName(CSS_INSERTED_GALLERY);
@@ -64,6 +83,8 @@ public class GalleryView extends GitgameshCommonView<IGalleryView,IGalleryPresen
 	@Override
 	public void enter(ViewChangeEvent event) {
 		selectButton(getGallery());
+		gallery.clear();
+		gallery.actionLoad();
 	}
 
 }

@@ -42,7 +42,7 @@ public abstract class BaseStorableObject implements Serializable {
 	@Column(nullable = false)
 	private Timestamp creationTime = null;
 
-	private String createdBy = null;
+	protected String createdBy = null;
 
 	private Timestamp updateTime = null;
 

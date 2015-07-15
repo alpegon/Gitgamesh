@@ -9,7 +9,6 @@ public interface IGalleryProvider {
 
 	int getNumberOfElements();
 
-	List<Component> getElements(int startElement, int numberOfElements, GalleryOrder galleryOrder, String filterByName,
-			List<String> tags);
+	List<Component> getElements(int startElement, int numberOfElements, GalleryOrder galleryOrder, String filterByName);
 
 }

@@ -40,19 +40,18 @@ public class GalleryComponent extends CustomComponent {
 	private final CssLayout orderLayout;
 	private final CssLayout galleryLayout;
 	private final Button loadMore;
-	
+
 	private final TextField filterField;
 	private final Button cancelFilter;
-	
+
 	private final Label resultMessage;
 
 	private final int numberOfElementsToLoad;
 	private final IGalleryProvider provider;
 	private GalleryOrder orderType;
 	private String nameFilter;
-	
+
 	private Button alphabetical, valoration, recent;
-	 
 
 	public GalleryComponent(int numberOfElements, IGalleryProvider provider) {
 		super();
@@ -71,9 +70,9 @@ public class GalleryComponent extends CustomComponent {
 		setHeightUndefined();
 
 		setCompositionRoot(rootLayout);
-		
+
 		filterLayout = generateCssLayout(CSS_GALLERY_FILTER_LAYOUT, FULL, null);
-		
+
 		filterField = new TextField();
 		filterField.setWidth("100%");
 		filterField.setInputPrompt("Search for projects...");
@@ -86,25 +85,25 @@ public class GalleryComponent extends CustomComponent {
 			@Override
 			public void textChange(TextChangeEvent event) {
 				nameFilter = event.getText();
-				if(nameFilter.isEmpty()){
+				if (nameFilter.isEmpty()) {
 					nameFilter = null;
 				}
 				clear();
 				actionLoad();
 			}
 		});
-		
+
 		cancelFilter = new Button(ThemeIcon.CANCEL.getThemeResource());
 		cancelFilter.setStyleName(CSS_GALLERY_CANCEL_NAME_FILTER);
-		
+
 		filterLayout.addComponent(filterField);
-		filterLayout.addComponent(cancelFilter);		
+		filterLayout.addComponent(cancelFilter);
 
 		orderLayout = generateCssLayout(CSS_ORDER_LAYOUT, FULL, null);
 		resultMessage = new Label();
 		resultMessage.setWidth(null);
 		initializeOrderLayout();
-		
+
 		galleryLayout = generateCssLayout(CSS_GALLERY_LAYOUT, FULL, null);
 		Responsive.makeResponsive(galleryLayout);
 
@@ -123,7 +122,7 @@ public class GalleryComponent extends CustomComponent {
 		});
 
 		rootLayout.addComponent(loadMore);
-		
+
 		initializeData();
 	}
 
@@ -165,28 +164,28 @@ public class GalleryComponent extends CustomComponent {
 				actionLoad();
 			}
 		});
-		
+
 		buttonLayout.addComponent(alphabetical);
 		buttonLayout.addComponent(valoration);
 		buttonLayout.addComponent(recent);
-		
+
 		orderLayout.addComponent(buttonLayout);
 		orderLayout.addComponent(resultMessage);
-		
+
 	}
 
-	protected void clear() {
+	public void clear() {
 		galleryLayout.removeAllComponents();
 	}
-	
-	protected void actionLoad() {
+
+	public void actionLoad() {
 		actionLoad(0);
-		resultMessage.setValue("Search Results: ("+provider.getNumberOfElements()+")");
+		resultMessage.setValue("Search Results: (" + provider.getNumberOfElements() + ")");
 	}
 
 	protected void actionLoad(int startElement) {
 		// We ask to load one element more than needed
-		List<Component> elements = provider.getElements(startElement, numberOfElementsToLoad + 1,getOrderType(),nameFilter,null);
+		List<Component> elements = provider.getElements(startElement, numberOfElementsToLoad + 1, getOrderType(), nameFilter);
 		for (int i = 0; i < elements.size() && i < numberOfElementsToLoad; i++) {
 			galleryLayout.addComponent(elements.get(i));
 		}
@@ -220,9 +219,9 @@ public class GalleryComponent extends CustomComponent {
 		case VALORATION:
 			return valoration;
 		}
-		// Instead of return null if not found return alphabetical (default value)
+		// Instead of return null if not found return alphabetical (default
+		// value)
 		return alphabetical;
 	}
 
-	
 }
