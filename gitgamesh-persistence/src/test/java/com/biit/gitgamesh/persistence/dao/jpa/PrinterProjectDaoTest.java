@@ -203,6 +203,19 @@ public class PrinterProjectDaoTest extends AbstractTransactionalTestNGSpringCont
 		Assert.assertEquals(projects.size(), 2);
 	}
 
+	@Test(dependsOnMethods = { "storeEntity" })
+	@Rollback(value = false)
+	@Transactional(value = TxType.NEVER)
+	public void getByCombination() throws IOException, PreviewTooLongException {
+		System.out.println("#############################################################");
+		Assert.assertEquals(printerProjectDao.getRowCount(), 2);
+		System.out.println("#############################################################");
+		List<PrinterProject> projects = printerProjectDao.get(0, 100, GalleryOrder.RECENT, PROJECT_1_NAME, null, "sports",
+				PROJECT_1_USER);
+		System.out.println("#############################################################");
+		Assert.assertEquals(projects.size(), 2);
+	}
+
 	@AfterGroups(alwaysRun = true, value = { "printerProjectDao" })
 	@Rollback(value = false)
 	public void clearDatabase() throws ElementCannotBeRemovedException {
