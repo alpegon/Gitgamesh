@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import pl.exsio.plupload.Plupload;
 import pl.exsio.plupload.PluploadFile;
 
+import com.biit.gitgamesh.core.git.ssh.GitClient;
 import com.biit.gitgamesh.gui.GitgameshUi;
 import com.biit.gitgamesh.gui.IServeDynamicFile;
 import com.biit.gitgamesh.gui.localization.LanguageCodes;
@@ -22,6 +24,7 @@ import com.biit.gitgamesh.persistence.dao.IProjectImageDao;
 import com.biit.gitgamesh.persistence.entity.PrinterProject;
 import com.biit.gitgamesh.persistence.entity.ProjectFile;
 import com.biit.gitgamesh.utils.FileReader;
+import com.jcraft.jsch.JSchException;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.StreamResource;
 import com.vaadin.server.VaadinResponse;
@@ -149,6 +152,19 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 		return filesTable;
 	}
 
+	private void updateFilesTable() {
+		try {
+			List<ProjectFile> projectFiles = GitClient.getRepositoryFilesInformation(project);
+			if (filesTable != null) {
+				for (ProjectFile projectFile : projectFiles) {
+					filesTable.addRow(projectFile);
+				}
+			}
+		} catch (JSchException e) {
+			GitgameshLogger.errorMessage(this.getClass().getName(), e);
+		}
+	}
+
 	/**
 	 * Layout between header and file table.
 	 * 
@@ -197,6 +213,7 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 		title.setValue(LanguageCodes.PROJECT_CAPTION.translation() + " " + project.getName());
 		description.setValue(project.getDescription() != null ? project.getDescription() : "");
 		carouselLayout.refreshCarousel();
+		updateFilesTable();
 	}
 
 }
