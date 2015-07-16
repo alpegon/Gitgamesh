@@ -37,52 +37,52 @@
 		</style>
 	</head>
 	<body>
-		<script src="%%JAVASCRIPT_HOME%%/three.min.js"></script>
+		<script src="/VAADIN/js/three.min.js"></script>
 
-		<script src="%%JAVASCRIPT_HOME%%/loaders/STLLoader.js"></script>
+		<script src="/VAADIN/js/loaders/STLLoader.js"></script>
 
-		<script src="%%JAVASCRIPT_HOME%%/Detector.js"></script>
-		<script src="%%JAVASCRIPT_HOME%%/libs/stats.min.js"></script>
+		<script src="/VAADIN/js/Detector.js"></script>
+		<script src="/VAADIN/js/controls/OrbitControls.js"></script>
 
 		<script>
 
 			if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
 
-			var container, stats;
+			var container;
 
-			var camera, cameraTarget, scene, renderer;
+			var camera, controls, scene, renderer;
 
 			init();
-			animate();
+			render();
+			
+			function animate() {
+
+				requestAnimationFrame(animate);
+				controls.update();
+
+			}
 
 			function init() {
-
+			
 				container = document.createElement( 'div' );
 				document.body.appendChild( container );
 
-				camera = new THREE.PerspectiveCamera( 35, window.innerWidth / window.innerHeight, 1, 15 );
-				camera.position.set( 3, 0.15, 3 );
-
-				cameraTarget = new THREE.Vector3( 0, -0.25, 0 );
+				camera = new THREE.PerspectiveCamera( 35, window.innerWidth / window.innerHeight, 1, 10000 );
+				camera.position.z = 200;
+				
+				controls = new THREE.OrbitControls( camera );
+				controls.damping = 0.2;
+				controls.addEventListener( 'change', render );
 
 				scene = new THREE.Scene();
-				scene.fog = new THREE.Fog( 0x72645b, 2, 15 );
+				//scene.fog = new THREE.Fog( 0x72645b, 2, 15 );
 
-
-				// Ground
-
-				var plane = new THREE.Mesh(
-					new THREE.PlaneBufferGeometry( 40, 40 ),
-					new THREE.MeshPhongMaterial( { color: 0x999999, specular: 0x101010 } )
-				);
-				plane.rotation.x = -Math.PI/2;
-				plane.position.y = -0.5;
-				scene.add( plane );
-
-				plane.receiveShadow = true;
-
+				pos = scene.position; 
 
 				// ASCII file
+				var bBox;
+				var height;
+				var dist;
 
 				var loader = new THREE.STLLoader();
 				loader.load( '%%FILE_URL%%', function ( geometry ) {
@@ -96,11 +96,19 @@
 
 					mesh.castShadow = true;
 					mesh.receiveShadow = true;
-
+					
+					bBox = new THREE.Box3().setFromObject(mesh);
+					height = bBox.size().y;
+					dist = height / (2 * Math.tan(camera.fov * Math.PI / 360));
+					
 					scene.add( mesh );
+					
+					// fudge factor so the object doesn't take up the whole view
+					//camera.position.set(pos.x, pos.y, dist * -1.5); 
+					//camera.lookAt(pos);
 
 				} );
-
+								
 				// Lights
 
 				scene.add( new THREE.AmbientLight( 0x777777 ) );
@@ -111,7 +119,7 @@
 				// renderer
 
 				renderer = new THREE.WebGLRenderer( { antialias: true } );
-				renderer.setClearColor( scene.fog.color );
+				renderer.setClearColor( 0xcccccc );
 				renderer.setPixelRatio( window.devicePixelRatio );
 				renderer.setSize( window.innerWidth, window.innerHeight );
 
@@ -125,6 +133,8 @@
 
 				window.addEventListener( 'resize', onWindowResize, false );
 
+				animate();
+				
 			}
 
 			function addShadowedLight( x, y, z, color, intensity ) {
@@ -159,6 +169,8 @@
 				camera.updateProjectionMatrix();
 
 				renderer.setSize( window.innerWidth, window.innerHeight );
+				
+				renderer();
 
 			}
 
@@ -167,18 +179,10 @@
 				requestAnimationFrame( animate );
 
 				render();
-				stats.update();
 
 			}
 
 			function render() {
-
-				var timer = Date.now() * 0.0005;
-
-				camera.position.x = Math.cos( timer ) * 3;
-				camera.position.z = Math.sin( timer ) * 3;
-
-				camera.lookAt( cameraTarget );
 
 				renderer.render( scene, camera );
 
