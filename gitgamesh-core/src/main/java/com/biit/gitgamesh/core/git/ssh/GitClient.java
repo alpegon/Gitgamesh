@@ -98,12 +98,10 @@ public class GitClient {
 	}
 
 	/**
-	 * Returns a String containing all the commit information for the
-	 * repository.<br>
+	 * Returns a String containing all the commit information for the repository.<br>
 	 * 
 	 * The format of the output string (for each commit) is: "%cd || %H" <br>
-	 * To know more about the git output formats ->
-	 * http://git-scm.com/book/en/v2/Git-Basics-Viewing-the-Commit-History
+	 * To know more about the git output formats -> http://git-scm.com/book/en/v2/Git-Basics-Viewing-the-Commit-History
 	 * 
 	 * @param userName
 	 * @param repositoryName
@@ -200,19 +198,22 @@ public class GitClient {
 	 * 
 	 * @param file
 	 * @return
+	 * @return
 	 * @throws JSchException
 	 * @throws IOException
 	 */
-	public static void getRepositoryFile(ProjectFile file) throws JSchException, IOException {
+	public static byte[] getRepositoryFile(ProjectFile file) throws JSchException, IOException {
 		String fileName = file.getFileName();
 		String userName = file.getPrinterProject().getCreatedBy();
 		String repositoryName = file.getPrinterProject().getName();
 
 		SshCommandExecutor commandExecutor = new SshCommandExecutor(GIT_USER, GIT_KEY_FILE, GIT_URL, SSH_PORT);
 		commandExecutor.connectSession();
-		file.setFile(commandExecutor
-				.getRemoteFile(GIT_FOLDER + getFilesFolderPath(userName, repositoryName) + fileName));
-		commandExecutor.disconnect();
+		try {
+			return commandExecutor.getRemoteFile(GIT_FOLDER + getFilesFolderPath(userName, repositoryName) + fileName);
+		} finally {
+			commandExecutor.disconnect();
+		}
 	}
 
 	/**
@@ -225,9 +226,9 @@ public class GitClient {
 	 */
 	public static void uploadRepositoryFile(PrinterProject project, String fileName, File file) throws JSchException,
 			IOException {
-		
+
 		System.out.println("UPLOADING FILE");
-		
+
 		String userName = project.getCreatedBy();
 		String repositoryName = project.getName();
 		SshCommandExecutor commandExecutor = new SshCommandExecutor(GIT_USER, GIT_KEY_FILE, GIT_URL, SSH_PORT);
