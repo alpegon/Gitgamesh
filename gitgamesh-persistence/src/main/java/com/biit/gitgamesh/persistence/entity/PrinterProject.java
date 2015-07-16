@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Basic;
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
@@ -35,11 +36,11 @@ public class PrinterProject extends BaseStorableObject {
 	private String description;
 
 	@ElementCollection
-	@JoinColumn(name="printerproject_tags")
+	@CollectionTable(name="printerproject_tags")
 	private Set<String> tags;
 
 	@ElementCollection
-	@JoinColumn(name="printerproject_categories")
+	@CollectionTable(name="printerproject_categories")
 	private Set<String> categories;
 
 	@Lob
