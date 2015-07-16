@@ -21,7 +21,24 @@
 	<context:component-scan	base-package="com.biit.gitgamesh.persistence, com.biit.gitgamesh.gui" />
 
 	<!-- Read any *.properties file -->
-	<context:property-placeholder location="classpath*:*.properties" />
+	<bean
+			class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"
+			id="corePlaceHolder">
+		<property name="ignoreUnresolvablePlaceholders" value="true" />
+		<property name="ignoreResourceNotFound" value="true" />
+		<property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_OVERRIDE" />
+		<property name="searchSystemEnvironment" value="true" />
+		<property name="locations">
+			<list>
+				<value>classpath*:*.properties</value>
+				<value>file:#{systemEnvironment['GITGAMESH_CONFIG']}/database.properties
+				</value>
+			</list>
+		</property>
+	</bean>
+
+
+	<!-- <context:property-placeholder location="classpath*:*.properties" /> -->
 	
 	<!-- Transaction Manager -->
 	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">

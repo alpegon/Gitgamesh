@@ -5,7 +5,6 @@ import com.biit.gitgamesh.gui.webpages.common.GitgameshCommonView;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
-import com.vaadin.ui.Label;
 
 @UIScope
 @SpringComponent
@@ -15,13 +14,10 @@ public class ProfileView extends GitgameshCommonView<IProfileView, IProfilePrese
 	public ProfileView() {
 		super();
 	}
-	
+
 	@Override
 	public void init() {
-		Label title = new Label(LanguageCodes.USER_PROFILE_CAPTION.translation());
-		title.setStyleName(CSS_PAGE_TITLE);
-		
-		getContentLayout().addComponent(title);
+		getContentLayout().addComponent(createHeader(LanguageCodes.USER_PROFILE_CAPTION.translation(), null));
 	}
 
 	@Override

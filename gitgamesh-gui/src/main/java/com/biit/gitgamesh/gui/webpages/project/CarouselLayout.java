@@ -17,7 +17,7 @@ import com.biit.gitgamesh.gui.localization.LanguageCodes;
 import com.biit.gitgamesh.gui.theme.ThemeIcon;
 import com.biit.gitgamesh.gui.utils.MessageManager;
 import com.biit.gitgamesh.logger.GitgameshLogger;
-import com.biit.gitgamesh.persistence.dao.IProjectImageDao;
+import com.biit.gitgamesh.persistence.dao.IProjectFileDao;
 import com.biit.gitgamesh.persistence.dao.exceptions.ElementCannotBeRemovedException;
 import com.biit.gitgamesh.persistence.entity.PrinterProject;
 import com.biit.gitgamesh.persistence.entity.ProjectFile;
@@ -55,12 +55,12 @@ public class CarouselLayout extends HorizontalLayout {
 	private Map<Layout, ProjectFile> carouselImages;
 
 	private PrinterProject project;
-	private IProjectImageDao projectImageDao;
+	private IProjectFileDao projectImageDao;
 
 	private Plupload uploaderButton;
 	private Button removeButton;
 
-	public CarouselLayout(PrinterProject project, IProjectImageDao projectImageDao) {
+	public CarouselLayout(PrinterProject project, IProjectFileDao projectImageDao) {
 		this.project = project;
 		this.projectImageDao = projectImageDao;
 		carouselImages = new HashMap<>();
@@ -271,6 +271,14 @@ public class CarouselLayout extends HorizontalLayout {
 
 	public Button getRemoveButton() {
 		return removeButton;
+	}
+
+	public PrinterProject getProject() {
+		return project;
+	}
+
+	public void setProject(PrinterProject project) {
+		this.project = project;
 	}
 
 }

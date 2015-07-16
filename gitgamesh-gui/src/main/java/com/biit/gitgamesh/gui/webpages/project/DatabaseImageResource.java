@@ -11,6 +11,7 @@ import javax.imageio.ImageIO;
 import com.biit.gitgamesh.logger.GitgameshLogger;
 import com.biit.gitgamesh.persistence.entity.ProjectFile;
 import com.biit.gitgamesh.utils.ImageTools;
+import com.biit.gitgamesh.utils.exceptions.InvalidImageExtensionException;
 import com.vaadin.server.StreamResource.StreamSource;
 
 public class DatabaseImageResource implements StreamSource {
@@ -27,7 +28,7 @@ public class DatabaseImageResource implements StreamSource {
 
 	public DatabaseImageResource(ProjectFile projectImage, int width, int high) {
 		try {
-			this.projectImage = ImageTools.resizeImage(ImageTools.getImage(projectImage.getFile()), width, high);
+			this.projectImage = ImageTools.resizeImage(ImageTools.getImage(projectImage.getFile()), width, high, true);
 		} catch (IOException e) {
 			GitgameshLogger.errorMessage(this.getClass().getName(), e);
 		}
@@ -44,8 +45,8 @@ public class DatabaseImageResource implements StreamSource {
 	public DatabaseImageResource(String resource, int width, int high) {
 		try {
 			this.projectImage = ImageTools.resizeImage(ImageTools.getImage(ImageTools.loadImageFromResource(resource)),
-					width, high);
-		} catch (IOException e) {
+					width, high, ImageTools.preserveAlpha(ImageTools.getExtension(resource)));
+		} catch (IOException | InvalidImageExtensionException e) {
 			GitgameshLogger.errorMessage(this.getClass().getName(), e);
 		}
 	}

@@ -1,5 +1,6 @@
 package com.biit.gitgamesh.core.git.ssh;
 
+import java.io.File;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.ParseException;
@@ -40,7 +41,7 @@ public class GitClient {
 
 	private static String executeCommands(List<String> commands) throws JSchException {
 		SshCommandExecutor commandExecutor = new SshCommandExecutor(GIT_USER, GIT_KEY_FILE, GIT_URL, SSH_PORT);
-		commandExecutor.connect();
+		commandExecutor.connectSession();
 		// Enables output
 		commandExecutor.setCommandOutputEnabled(true);
 		String commandOuput = commandExecutor.runCommands(commands);
@@ -49,14 +50,22 @@ public class GitClient {
 	}
 
 	public static void createNewRepository(PrinterProject project) throws JSchException {
-		String userName = project.getCreatedBy();
-		List<String> commands = setGitFolder();
-		// Creates the main git repo folder for the user
-		commands.add("mkdir " + userName);
-		// Initilizes the git repo
-		commands.add("cd " + userName + "/");
-		commands.add("git init");
-		executeCommands(commands);
+		if (project != null) {
+			String userName = project.getCreatedBy();
+			String repositoryName = project.getName();
+
+			List<String> commands = setGitFolder();
+			// Creates the main git repo folder for the user
+			commands.add("mkdir -p " + userName);
+			commands.add("cd " + userName + "/");
+
+			commands.add("mkdir -p " + repositoryName);
+			commands.add("cd " + repositoryName + "/");
+
+			// Initilizes the empty git repo
+			commands.add("git init");
+			executeCommands(commands);
+		}
 	}
 
 	public static void commitNewFiles(PrinterProject project) throws JSchException {
@@ -80,41 +89,12 @@ public class GitClient {
 	public static void cloneRepository(String userName, PrinterProject project) throws JSchException {
 		String repositoryPath = GIT_FOLDER + project.getCreatedBy() + "/" + project.getName();
 		List<String> commands = setGitFolder();
+		commands.add("mkdir -p " + userName);
 		commands.add("cd " + userName + "/");
 		// Clone the repository in the user folder
 		commands.add("git clone " + repositoryPath);
 		executeCommands(commands);
 	}
-
-	// /**
-	// * We are going to look for an image that has the same name than the file
-	// * name passed in the parameter.<br>
-	// * This method don't use shell commands, but it's kept here so we have all
-	// * the git related methods in the same class.
-	// *
-	// * @param userName
-	// * @param repositoryName
-	// * @param fileName
-	// * @throws IOException
-	// */
-	// public BufferedImage getRepositoryImage(String userName, String
-	// repositoryName, String fileName) {
-	// // Remove the .stl if exists
-	// if (fileName.endsWith(STL_FILE_END)) {
-	// fileName = fileName.substring(0, fileName.length() - 4);
-	// }
-	// String imageName = fileName + ".jpg";
-	// // Build the complete path used for looking for the image
-	// String imagePath = GIT_FOLDER + getFilesFolderPath(userName,
-	// repositoryName) + imageName;
-	// try {
-	// URL url = new File(imagePath).toURI().toURL();
-	// return ImageIO.read(url);
-	// } catch (IOException e) {
-	// GitgameshLogger.errorMessage(this.getClass().getName(), e);
-	// return null;
-	// }
-	// }
 
 	/**
 	 * Returns a String containing all the commit information for the
@@ -182,27 +162,33 @@ public class GitClient {
 	public static List<ProjectFile> getRepositoryFilesInformation(PrinterProject project) throws JSchException {
 		String userName = project.getCreatedBy();
 		String repositoryName = project.getName();
-
-		List<String> commands = setGitFolder();
-		commands.add("cd " + getFilesFolderPath(userName, repositoryName));
-		commands.add("ls -l --time-style=\"+%d-%m-%y %H:%M:%S\" | awk '/^-/ {printf \"%s::%s %s\\n\",$NF,$6,$7}'");
-		String commandOutput = executeCommands(commands);
-		String[] outputs = commandOutput.split("\n");
 		List<ProjectFile> projectFiles = new ArrayList<>();
-		for (String output : outputs) {
-			String[] parsedOutput = output.split("::");
-			ProjectFile projectFile = new ProjectFile();
-			projectFile.setFileName(parsedOutput[0]);
-			try {
-				SimpleDateFormat format = new SimpleDateFormat("dd-MM-yy hh:mm:ss");
-				Date dateCreated = format.parse(parsedOutput[1]);
-				Timestamp time = new Timestamp(dateCreated.getTime());
-				projectFile.setCreationTime(time);
-				projectFile.setUpdateTime(time);
-				projectFiles.add(projectFile);
-			} catch (ParseException e) {
-				GitgameshLogger.errorMessage(GitClient.class.getName(), e);
+
+		try {
+			List<String> commands = setGitFolder();
+			commands.add("cd " + getFilesFolderPath(userName, repositoryName));
+			commands.add("ls -l --time-style=\"+%d-%m-%y %H:%M:%S\" | awk '/^-/ {printf \"%s::%s %s\\n\",$NF,$6,$7}'");
+			String commandOutput = executeCommands(commands);
+			if (commandOutput != null && commandOutput.length() > 1) {
+				String[] outputs = commandOutput.split("\n");
+				for (String output : outputs) {
+					String[] parsedOutput = output.split("::");
+					ProjectFile projectFile = new ProjectFile();
+					projectFile.setFileName(parsedOutput[0]);
+					try {
+						SimpleDateFormat format = new SimpleDateFormat("dd-MM-yy hh:mm:ss");
+						Date dateCreated = format.parse(parsedOutput[1]);
+						Timestamp time = new Timestamp(dateCreated.getTime());
+						projectFile.setCreationTime(time);
+						projectFile.setUpdateTime(time);
+						projectFiles.add(projectFile);
+					} catch (ParseException e) {
+						GitgameshLogger.errorMessage(GitClient.class.getName(), e);
+					}
+				}
 			}
+		} catch (NullPointerException e) {
+			GitgameshLogger.errorMessage(GitClient.class.getName(), e);
 		}
 		return projectFiles;
 	}
@@ -222,26 +208,32 @@ public class GitClient {
 		String repositoryName = file.getPrinterProject().getName();
 
 		SshCommandExecutor commandExecutor = new SshCommandExecutor(GIT_USER, GIT_KEY_FILE, GIT_URL, SSH_PORT);
-		commandExecutor.connect();
+		commandExecutor.connectSession();
 		file.setFile(commandExecutor
 				.getRemoteFile(GIT_FOLDER + getFilesFolderPath(userName, repositoryName) + fileName));
+		commandExecutor.disconnect();
 	}
 
 	/**
-	 * This method allows to retrieve files from the repository.<br>
+	 * This method allows to put the file in the repository.<br>
 	 * 
 	 * @param file
 	 * @return
 	 * @throws JSchException
 	 * @throws IOException
 	 */
-	public static byte[] setRepositoryFile(ProjectFile file) throws JSchException, IOException {
-		String fileName = "test" + file.getFileName();
-		String userName = file.getPrinterProject().getCreatedBy();
-		String repositoryName = file.getPrinterProject().getName();
-
+	public static void uploadRepositoryFile(PrinterProject project, String fileName, File file) throws JSchException,
+			IOException {
+		String userName = project.getCreatedBy();
+		String repositoryName = project.getName();
 		SshCommandExecutor commandExecutor = new SshCommandExecutor(GIT_USER, GIT_KEY_FILE, GIT_URL, SSH_PORT);
-		commandExecutor.connect();
-		return commandExecutor.getRemoteFile(GIT_FOLDER + getFilesFolderPath(userName, repositoryName) + fileName);
+		commandExecutor.connectSession();
+		String filePath = GIT_FOLDER + getFilesFolderPath(userName, repositoryName) + fileName;
+		commandExecutor.setRemoteFile(filePath, file, fileName);
+		commandExecutor.disconnect();
+		// Once the file is uploaded, we have to commit it to the repository to
+		// keep the track of the changes
+		commitNewFiles(project);
 	}
+
 }

@@ -2,6 +2,7 @@ package com.biit.gitgamesh.gui.components;
 
 import java.util.Iterator;
 
+import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.HorizontalLayout;
@@ -51,6 +52,12 @@ public class HorizontalButtonGroup extends CustomComponent {
 	}
 
 	public void addIconButton(IconButton button) {
+		rootLayout.addComponent(button);
+		button.setSizeFull();
+		button.addStyleName(BUTTON_IN_MENU_CLASS);
+	}
+	
+	public void addButton(Button button) {
 		rootLayout.addComponent(button);
 		button.setSizeFull();
 		button.addStyleName(BUTTON_IN_MENU_CLASS);

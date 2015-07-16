@@ -42,6 +42,7 @@ public abstract class BaseStorableObject implements Serializable {
 	@Column(nullable = false)
 	private Timestamp creationTime = null;
 
+	// The ScreenName of the user.
 	protected String createdBy = null;
 
 	private Timestamp updateTime = null;
@@ -157,6 +158,14 @@ public abstract class BaseStorableObject implements Serializable {
 
 	public synchronized String getComparationId() {
 		return comparationId;
+	}
+
+	protected void copyData(BaseStorableObject object) {
+		setCreatedBy(object.getCreatedBy());
+		setId(object.getId());
+		setComparationId(object.getComparationId());
+		setCreationTime(object.getCreationTime());
+		setUpdateTime(object.getUpdateTime());
 	}
 
 }

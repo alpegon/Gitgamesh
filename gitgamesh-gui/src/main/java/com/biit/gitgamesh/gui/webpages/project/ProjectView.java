@@ -15,15 +15,18 @@ import pl.exsio.plupload.PluploadFile;
 import com.biit.gitgamesh.core.git.ssh.GitClient;
 import com.biit.gitgamesh.gui.GitgameshUi;
 import com.biit.gitgamesh.gui.IServeDynamicFile;
+import com.biit.gitgamesh.gui.authentication.UserSessionHandler;
 import com.biit.gitgamesh.gui.localization.LanguageCodes;
 import com.biit.gitgamesh.gui.utils.MessageManager;
 import com.biit.gitgamesh.gui.webpages.Gallery;
+import com.biit.gitgamesh.gui.webpages.Project;
 import com.biit.gitgamesh.gui.webpages.common.GitgameshCommonView;
 import com.biit.gitgamesh.logger.GitgameshLogger;
-import com.biit.gitgamesh.persistence.dao.IProjectImageDao;
+import com.biit.gitgamesh.persistence.dao.IProjectFileDao;
 import com.biit.gitgamesh.persistence.entity.PrinterProject;
 import com.biit.gitgamesh.persistence.entity.ProjectFile;
 import com.biit.gitgamesh.utils.FileReader;
+import com.biit.gitgamesh.utils.exceptions.InvalidImageExtensionException;
 import com.jcraft.jsch.JSchException;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.StreamResource;
@@ -57,7 +60,7 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 	private static final String CSS_CAROUSEL_LAYOUT = "carousel-layout";
 
 	private PrinterProject project;
-	private Label title, description;
+	private Label description;
 	private FilesMenu filesMenu;
 	private FilesTable filesTable;
 	private CarouselLayout carouselLayout;
@@ -74,7 +77,7 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 	}
 
 	@Autowired
-	private IProjectImageDao projectImageDao;
+	private IProjectFileDao projectImageDao;
 
 	@Override
 	public void init() {
@@ -178,8 +181,7 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 		HorizontalLayout titleLayout = new HorizontalLayout();
 		titleLayout.setMargin(false);
 		titleLayout.setWidth("100%");
-		title = new Label(LanguageCodes.PROJECT_CAPTION.translation());
-		title.setStyleName(CSS_PAGE_TITLE);
+		Layout title = createHeader(LanguageCodes.PROJECT_CAPTION.translation(), null);
 		titleLayout.addComponent(title);
 		titleLayout.setExpandRatio(title, 10f);
 
@@ -189,7 +191,17 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-
+				try {
+					PrinterProject projectClonned = getCastedPresenter().createForkProject(project,
+							UserSessionHandler.getCurrent().getUser());
+					if (projectClonned != null) {
+						GitgameshUi.navigateTo(Project.NAME + "/" + projectClonned.getId());
+					}
+				} catch (JSchException e) {
+					e.printStackTrace();
+					MessageManager.showError(LanguageCodes.FORK_FAILED);
+					GitgameshLogger.errorMessage(this.getClass().getName(), e);
+				}
 			}
 		});
 
@@ -232,6 +244,27 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 		verticalLayout.setStyleName(CSS_TABLE_LAYOUT);
 
 		filesMenu = new FilesMenu();
+		filesMenu.getUploadFileButton().addFileUploadedListener(new Plupload.FileUploadedListener() {
+
+			private static final long serialVersionUID = 7155048020018422919L;
+
+			@Override
+			public void onFileUploaded(PluploadFile file) {
+				try {
+					File fileUploaded = new File(file.getUploadedFile().toString());
+					try {
+						GitClient.uploadRepositoryFile(project, file.getName(), fileUploaded);
+					} catch (JSchException e) {
+						GitgameshLogger.errorMessage(this.getClass().getName(), e);
+						MessageManager.showError(LanguageCodes.GIT_FILE_UPLOAD_ERROR.translation(file.getName()));
+					}
+					MessageManager.showInfo(LanguageCodes.FILE_UPLOAD_SUCCESS.translation(file.getName()));
+				} catch (IOException e) {
+					MessageManager.showError(LanguageCodes.FILE_UPLOAD_ERROR.translation(file.getName()));
+				}
+			}
+		});
+
 		verticalLayout.addComponent(filesMenu);
 		verticalLayout.addComponent(createFilesTable());
 
@@ -275,7 +308,9 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 
 					MessageManager.showInfo(LanguageCodes.FILE_UPLOAD_SUCCESS.translation(file.getName()));
 				} catch (IOException e) {
-					MessageManager.showInfo(LanguageCodes.FILE_UPLOAD_SUCCESS.translation(file.getName()));
+					MessageManager.showError(LanguageCodes.FILE_UPLOAD_ERROR.translation(file.getName()));
+				} catch (InvalidImageExtensionException e) {
+					MessageManager.showError(LanguageCodes.FILE_INVALID);
 				}
 			}
 		});
@@ -300,8 +335,18 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 	}
 
 	private void updateUi() {
-		title.setValue(LanguageCodes.PROJECT_CAPTION.translation() + " " + project.getName());
+		getTitleLabel().setValue(LanguageCodes.PROJECT_CAPTION.translation() + " " + project.getName());
+		if (project.getClonnedFromProject() == null) {
+			getAuthorLabel()
+					.setValue(LanguageCodes.PROJECT_AUTHOR_CAPTION.translation() + " " + project.getCreatedBy());
+		} else {
+			getAuthorLabel().setValue(
+					LanguageCodes.PROJECT_AUTHOR_CAPTION.translation() + " " + project.getCreatedBy() + " ("
+							+ LanguageCodes.PROJECT_AUTHOR_SOURCE_CAPTION.translation() + " "
+							+ project.getClonnedFromProject().getCreatedBy() + ")");
+		}
 		description.setValue(project.getDescription() != null ? project.getDescription() : "");
+		carouselLayout.setProject(project);
 		// carouselLayout.refreshCarousel();
 		// updateFilesTable();
 		
@@ -313,5 +358,4 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 		getContentLayout().addComponent(carouselLayout);
 		
 	}
-
 }

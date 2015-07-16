@@ -1,6 +1,7 @@
 package com.biit.gitgamesh.core.git.ssh;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -49,7 +50,7 @@ public class SshCommandExecutor {
 		this.commandOutputEnabled = print;
 	}
 
-	public void connect() throws JSchException {
+	public void connectSession() throws JSchException {
 		try {
 			JSch jsch = new JSch();
 			// Private key must be byte array
@@ -90,7 +91,7 @@ public class SshCommandExecutor {
 	 */
 	public String runCommand(String command) {
 
-		System.out.println("COMMAND RUNNING: " + command);
+		GitgameshLogger.debug(this.getClass().getName(), "Executing command: " + command);
 
 		try {
 			channel = session.openChannel("exec");
@@ -154,8 +155,7 @@ public class SshCommandExecutor {
 
 	/**
 	 * Returns a file from the remote machine.<br>
-	 * Code extracted from
-	 * http://www.jcraft.com/jsch/examples/ScpFrom.java.html.
+	 * Code based on http://www.jcraft.com/jsch/examples/ScpFrom.java.html.
 	 * 
 	 * @param filePath
 	 * @return
@@ -169,7 +169,7 @@ public class SshCommandExecutor {
 				tempDir.getPath() + File.separator + randomFileName + ".stl");
 
 		try {
-			connect();
+			connectSession();
 			// exec 'scp -f rfile' remotely
 			String command = "scp -f " + filePath;
 
@@ -253,7 +253,6 @@ public class SshCommandExecutor {
 				out.flush();
 
 			}
-			session.disconnect();
 			return Files.readAllBytes(tmpFilePath);
 		} catch (Exception e) {
 			GitgameshLogger.errorMessage(this.getClass().getName(), e);
@@ -287,5 +286,72 @@ public class SshCommandExecutor {
 			}
 		}
 		return b;
+	}
+
+	/**
+	 * Uploads a file to the remote machine.<br>
+	 * Code based on http://www.jcraft.com/jsch/examples/ScpTo.java.html
+	 * 
+	 * @param filePath
+	 * @return
+	 * @throws IOException
+	 */
+	public void setRemoteFile(String filePath, File file, String fileName) throws IOException {
+		FileInputStream fis = null;
+		try {
+			connectSession();
+			// exec 'scp -t rfile' remotely
+			String command = "scp -t " + filePath;
+			Channel channel = session.openChannel("exec");
+			((ChannelExec) channel).setCommand(command);
+
+			// get I/O streams for remote scp
+			OutputStream out = channel.getOutputStream();
+			InputStream in = channel.getInputStream();
+
+			channel.connect();
+
+			if (checkAck(in) != 0) {
+				System.exit(0);
+			}
+
+			// send "C0644 filesize filename", where filename should not include
+			// '/'
+			long filesize = file.length();
+			command = "C0644 " + filesize + " ";
+			command += fileName + "\n";
+			out.write(command.getBytes());
+			out.flush();
+			if (checkAck(in) != 0) {
+				System.exit(0);
+			}
+
+			// send a content of the file
+			fis = new FileInputStream(file);
+			byte[] buf = new byte[1024];
+			while (true) {
+				int len = fis.read(buf, 0, buf.length);
+				if (len <= 0)
+					break;
+				out.write(buf, 0, len);
+			}
+			fis.close();
+			fis = null;
+			// send '\0'
+			buf[0] = 0;
+			out.write(buf, 0, 1);
+			out.flush();
+			if (checkAck(in) != 0) {
+				System.exit(0);
+			}
+			out.close();
+		} catch (Exception e) {
+			GitgameshLogger.errorMessage(this.getClass().getName(), e);
+			try {
+				if (fis != null)
+					fis.close();
+			} catch (Exception ee) {
+			}
+		}
 	}
 }

@@ -33,6 +33,22 @@
 		</init-param>
 		<async-supported>true</async-supported>
 	</servlet>
+	
+	<!-- binds a JPA EntityManager to the thread for the entire processing of 
+		the request -->
+	<filter>
+		<filter-name>OpenEntityManagerInViewFilterUsmo</filter-name>
+		<filter-class>org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter</filter-class>
+		<init-param>
+			<param-name>entityManagerFactoryBeanName</param-name>
+			<param-value>gitgameshProjectManagerFactory</param-value>
+		</init-param>
+	</filter>
+	<!-- Map the EntityManager Filter to all Request -->
+	<filter-mapping>
+		<filter-name>OpenEntityManagerInViewFilterUsmo</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
 
 	<servlet-mapping>
 		<servlet-name>Vaadin Application Servlet</servlet-name>

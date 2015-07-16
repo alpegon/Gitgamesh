@@ -10,7 +10,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "ProjectFiles")
+@Table(name = "projectfiles")
 public class ProjectFile extends BaseStorableObject {
 	private static final long serialVersionUID = -1633999193588469899L;
 
@@ -54,5 +54,15 @@ public class ProjectFile extends BaseStorableObject {
 
 	public void setFileName(String fileName) {
 		this.fileName = fileName;
+	}
+
+	@Override
+	public void copyData(BaseStorableObject object) {
+		if (object instanceof ProjectFile) {
+			super.copyData(object);
+			setFileName(((ProjectFile) object).getFileName());
+			setFile(((ProjectFile) object).getFile().clone());
+			setPrinterProject(((ProjectFile) object).getPrinterProject());
+		}
 	}
 }

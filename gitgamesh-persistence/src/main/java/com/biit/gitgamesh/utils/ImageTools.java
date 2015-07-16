@@ -17,6 +17,8 @@ import java.nio.file.Paths;
 
 import javax.imageio.ImageIO;
 
+import com.biit.gitgamesh.utils.exceptions.InvalidImageExtensionException;
+
 public class ImageTools {
 
 	/**
@@ -87,7 +89,7 @@ public class ImageTools {
 	 * @throws IOException
 	 */
 	public static void saveInFile(BufferedImage image, String format, String path) throws IOException {
-		ImageIO.write(image, "jpg", new File(path));
+		ImageIO.write(image, format, new File(path));
 	}
 
 	/**
@@ -100,22 +102,8 @@ public class ImageTools {
 	 *            height in pixels.
 	 * @return
 	 */
-	public static BufferedImage resizeImage(Image originalImage, int scaledWidth, int scaledHeigh) {
-		return resizeImage(toBufferedImage(originalImage), scaledWidth, scaledHeigh, true);
-	}
-
-	/**
-	 * Resizes an image to the specified width and height. The relation between high and width will be preserved.
-	 * 
-	 * @param originalImage
-	 * @param scaledWidth
-	 *            width in pixels.
-	 * @param scaledHeigh
-	 *            height in pixels.
-	 * @return
-	 */
-	public static BufferedImage resizeImage(BufferedImage originalImage, int scaledWidth, int scaledHeigh) {
-		return resizeImage(originalImage, scaledWidth, scaledHeigh, true);
+	public static BufferedImage resizeImage(Image originalImage, int scaledWidth, int scaledHeigh, boolean preserveAlpha) {
+		return resizeImage(toBufferedImage(originalImage), scaledWidth, scaledHeigh, preserveAlpha);
 	}
 
 	/**
@@ -184,8 +172,9 @@ public class ImageTools {
 	 * 
 	 * @param path
 	 * @return
+	 * @throws InvalidImageExtensionException
 	 */
-	public static String getExtension(String path) {
+	public static String getExtension(String path) throws InvalidImageExtensionException {
 		String extension = "";
 
 		int i = path.lastIndexOf('.');
@@ -194,7 +183,50 @@ public class ImageTools {
 		if (i > p) {
 			extension = path.substring(i + 1);
 		}
+
+		if (extension == null || extension.length() == 0) {
+			throw new InvalidImageExtensionException("No extension found!");
+		}
+
+		if (extension.toLowerCase().equals("jpeg")) {
+			extension = "jpg";
+		}
+		if (!isValidImageExtension(extension)) {
+			throw new InvalidImageExtensionException("Invalid extension '" + extension + "'.");
+		}
 		return extension;
+	}
+
+	public static boolean isValidImageExtension(String extension) {
+		if (extension == null) {
+			return false;
+		}
+		switch (extension.toLowerCase()) {
+		case "png":
+		case "bmp":
+		case "jpg":
+		case "gif":
+		case "wbmp":
+			return true;
+		default:
+			return false;
+		}
+	}
+
+	public static boolean preserveAlpha(String format) {
+		if (format == null) {
+			return false;
+		}
+		switch (format.toLowerCase()) {
+		case "png":
+		case "gif":
+			return true;
+		case "bmp":
+		case "jpg":
+		case "wbmp":
+		default:
+			return false;
+		}
 	}
 
 }

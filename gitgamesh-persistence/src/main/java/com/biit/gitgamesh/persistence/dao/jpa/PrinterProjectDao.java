@@ -77,7 +77,7 @@ public class PrinterProjectDao extends AnnotatedGenericDao<PrinterProject, Long>
 				criteriaQuery.orderBy(criteriaBuilder.asc(printerProjectRoot.get("name")));
 				break;
 			case RECENT:
-				criteriaQuery.orderBy(criteriaBuilder.asc(printerProjectRoot.get("updateTime")));
+				criteriaQuery.orderBy(criteriaBuilder.desc(printerProjectRoot.get("updateTime")));
 				break;
 			}
 		}
