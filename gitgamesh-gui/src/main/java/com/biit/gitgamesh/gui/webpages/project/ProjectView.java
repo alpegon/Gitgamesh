@@ -170,8 +170,6 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 					MessageManager.showInfo(LanguageCodes.FILE_UPLOAD_SUCCESS.translation(file.getName()));
 				} catch (IOException e) {
 					MessageManager.showError(LanguageCodes.FILE_UPLOAD_ERROR.translation(file.getName()));
-				} catch (InvalidImageExtensionException e) {
-					MessageManager.showError(LanguageCodes.FILE_INVALID);
 				}
 			}
 		});
