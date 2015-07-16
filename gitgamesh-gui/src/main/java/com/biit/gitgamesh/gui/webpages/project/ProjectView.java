@@ -10,6 +10,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import pl.exsio.plupload.Plupload;
+import pl.exsio.plupload.PluploadError;
 import pl.exsio.plupload.PluploadFile;
 
 import com.biit.gitgamesh.core.git.ssh.GitClient;
@@ -157,9 +158,7 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 
 		filesMenu = new FilesMenu();
 		filesMenu.getUploadFileButton().addFileUploadedListener(new Plupload.FileUploadedListener() {
-
 			private static final long serialVersionUID = 7155048020018422919L;
-
 			@Override
 			public void onFileUploaded(PluploadFile file) {
 				try {
@@ -174,6 +173,27 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 				} catch (IOException e) {
 					MessageManager.showError(LanguageCodes.FILE_UPLOAD_ERROR.translation(file.getName()));
 				}
+			}
+		});
+
+		// update upload progress
+		filesMenu.getUploadFileButton().addUploadProgressListener(new Plupload.UploadProgressListener() {
+			private static final long serialVersionUID = 789395573657513698L;
+
+			@Override
+			public void onUploadProgress(PluploadFile file) {
+				GitgameshLogger.debug(this.getClass().getName(), "I'm uploading " + file.getName() + "and I'm at "
+						+ file.getPercent() + "%");
+			}
+		});
+
+		// handle errors
+		filesMenu.getUploadFileButton().addErrorListener(new Plupload.ErrorListener() {
+			private static final long serialVersionUID = -5287634756244623514L;
+
+			@Override
+			public void onError(PluploadError error) {
+				GitgameshLogger.errorMessage(this.getClass().getName(), "There was an error: " + error.getMessage());
 			}
 		});
 
@@ -192,6 +212,7 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 		try {
 			List<ProjectFile> projectFiles = GitClient.getRepositoryFilesInformation(project);
 			if (filesTable != null) {
+				filesTable.removeAllItems();
 				for (ProjectFile projectFile : projectFiles) {
 					filesTable.addRow(projectFile);
 				}
