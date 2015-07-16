@@ -151,14 +151,20 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 		verticalLayout.setStyleName(CSS_TABLE_LAYOUT);
 
 		filesMenu = new FilesMenu();
-
-		filesMenu.getUploadFileButton().addClickListener(new ClickListener() {
-			private static final long serialVersionUID = 733613708764235115L;
+		filesMenu.getUploadFileButton().addFileUploadedListener(new Plupload.FileUploadedListener() {
+			private static final long serialVersionUID = 7155048020018422919L;
 
 			@Override
-			public void buttonClick(ClickEvent event) {
-				// TODO Auto-generated method stub
+			public void onFileUploaded(PluploadFile file) {
+				try {
+					ProjectFile updatedImage = getCastedPresenter().storeImage(project,
+							file.getUploadedFile().toString());
+					carouselLayout.addImageToCarousel(updatedImage);
 
+					MessageManager.showInfo(LanguageCodes.FILE_UPLOAD_SUCCESS.translation(file.getName()));
+				} catch (IOException e) {
+					MessageManager.showInfo(LanguageCodes.FILE_UPLOAD_SUCCESS.translation(file.getName()));
+				}
 			}
 		});
 

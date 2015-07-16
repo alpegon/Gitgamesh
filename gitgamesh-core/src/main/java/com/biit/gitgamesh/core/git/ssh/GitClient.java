@@ -154,27 +154,32 @@ public class GitClient {
 	public static List<ProjectFile> getRepositoryFilesInformation(PrinterProject project) throws JSchException {
 		String userName = project.getCreatedBy();
 		String repositoryName = project.getName();
-
-		List<String> commands = setGitFolder();
-		commands.add("cd " + getFilesFolderPath(userName, repositoryName));
-		commands.add("ls -l --time-style=\"+%d-%m-%y %H:%M:%S\" | awk '/^-/ {printf \"%s::%s %s\\n\",$NF,$6,$7}'");
-		String commandOutput = executeCommands(commands);
-		String[] outputs = commandOutput.split("\n");
 		List<ProjectFile> projectFiles = new ArrayList<>();
-		for (String output : outputs) {
-			String[] parsedOutput = output.split("::");
-			ProjectFile projectFile = new ProjectFile();
-			projectFile.setFileName(parsedOutput[0]);
-			try {
-				SimpleDateFormat format = new SimpleDateFormat("dd-MM-yy hh:mm:ss");
-				Date dateCreated = format.parse(parsedOutput[1]);
-				Timestamp time = new Timestamp(dateCreated.getTime());
-				projectFile.setCreationTime(time);
-				projectFile.setUpdateTime(time);
-				projectFiles.add(projectFile);
-			} catch (ParseException e) {
-				GitgameshLogger.errorMessage(GitClient.class.getName(), e);
+
+		try {
+			List<String> commands = setGitFolder();
+			commands.add("cd " + getFilesFolderPath(userName, repositoryName));
+			commands.add("ls -l --time-style=\"+%d-%m-%y %H:%M:%S\" | awk '/^-/ {printf \"%s::%s %s\\n\",$NF,$6,$7}'");
+			String commandOutput = executeCommands(commands);
+			String[] outputs = commandOutput.split("\n");
+
+			for (String output : outputs) {
+				String[] parsedOutput = output.split("::");
+				ProjectFile projectFile = new ProjectFile();
+				projectFile.setFileName(parsedOutput[0]);
+				try {
+					SimpleDateFormat format = new SimpleDateFormat("dd-MM-yy hh:mm:ss");
+					Date dateCreated = format.parse(parsedOutput[1]);
+					Timestamp time = new Timestamp(dateCreated.getTime());
+					projectFile.setCreationTime(time);
+					projectFile.setUpdateTime(time);
+					projectFiles.add(projectFile);
+				} catch (ParseException e) {
+					GitgameshLogger.errorMessage(GitClient.class.getName(), e);
+				}
 			}
+		} catch (NullPointerException e) {
+			GitgameshLogger.errorMessage(GitClient.class.getName(), e);
 		}
 		return projectFiles;
 	}
