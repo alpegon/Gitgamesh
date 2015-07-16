@@ -32,12 +32,15 @@ import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.BrowserFrame;
+import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Component;
+import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Layout;
+import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.VerticalLayout;
 
 @UIScope
@@ -46,6 +49,12 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 	private static final long serialVersionUID = 8364085061299494663L;
 
 	private static final String CSS_TABLE_LAYOUT = "gitgamesh-table-layout";
+	private static final String CSS_TABSHEET_STYLE = "gitgamesh-tabsheet";
+	private static final String CSS_PROJECT_TAB_STYLE = "project-tab";
+	private static final String CSS_COMPONENT_TAB_STYLE = "component-tab";
+	private static final String CSS_PROJECT_RIGHT_LAYOUT = "project-tab-right-layout";
+
+	private static final String CSS_CAROUSEL_LAYOUT = "carousel-layout";
 
 	private PrinterProject project;
 	private Label title, description;
@@ -53,8 +62,15 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 	private FilesTable filesTable;
 	private CarouselLayout carouselLayout;
 
-	public ProjectView() {
+	private final TabSheet tabsheet;
+	private final CssLayout componentTab;
+	
+	Button projectButton;
+	Button componentsButton;
 
+	public ProjectView() {
+		this.tabsheet = new TabSheet();
+		componentTab = new CssLayout();
 	}
 
 	@Autowired
@@ -62,24 +78,100 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 
 	@Override
 	public void init() {
+		getContentLayout().setSizeFull();
 		getContentLayout().addComponent(createTitleWithMenuLayout());
 
 		description = new Label();
 		description.setStyleName(CSS_PAGE_DESCRIPTION);
+		description.setHeight("143px");
 		getContentLayout().addComponent(description);
 
-		getContentLayout().addComponent(createMiddleLayout());
+		initTabSheet();
+		// getContentLayout().addComponent(tabsheet);
 
-		VerticalLayout verticalLayout = createFilesRootLayout();
+		// VerticalLayout verticalLayout = createFilesRootLayout();
+		//
+		// try {
+		// getContentLayout().addComponent(createWebpage());
+		// } catch (IOException e) {
+		// // Insert other thing.
+		// e.printStackTrace();
+		// GitgameshLogger.errorMessage(this.getClass().getName(), e);
+		// }
+		// getContentLayout().addComponent(verticalLayout);
+	}
 
-		try {
-			getContentLayout().addComponent(createWebpage());
-		} catch (IOException e) {
-			// Insert other thing.
-			e.printStackTrace();
-			GitgameshLogger.errorMessage(this.getClass().getName(), e);
-		}
-		getContentLayout().addComponent(verticalLayout);
+	private void initTabSheet() {
+		// tabsheet.addStyleName(CSS_TABSHEET_STYLE);
+		// tabsheet.setSizeUndefined();
+
+		carouselLayout = new CarouselLayout(project, projectImageDao);
+		carouselLayout.addStyleName(CSS_CAROUSEL_LAYOUT);
+		carouselLayout.setSizeFull();
+
+		getContentLayout().addComponent(generateSelectComponent());
+		getContentLayout().addComponent(carouselLayout);
+
+		// componentTab.addStyleName(CSS_COMPONENT_TAB_STYLE);
+		// componentTab.setSizeFull();
+		//
+		// tabsheet.addTab(carouselLayout, "Project");
+		// tabsheet.addTab(componentTab, "Components");
+	}
+
+	private Component generateSelectComponent() {
+		CssLayout buttonLayout = new CssLayout();
+		buttonLayout.setWidth(FULL);
+		buttonLayout.setHeight("36px");
+		buttonLayout.addStyleName("select-component-button-layout");
+		
+		CssLayout innerButtonLayout = new CssLayout();
+		innerButtonLayout.setWidth(FULL);
+		innerButtonLayout.setHeight("36px");
+		innerButtonLayout.addStyleName("select-component-inner-button-layout");
+
+		projectButton = new Button("Project");
+		componentsButton = new Button("Components");
+		innerButtonLayout.addComponent(projectButton);
+		innerButtonLayout.addComponent(componentsButton);
+		buttonLayout.addComponent(innerButtonLayout);
+
+		projectButton.setWidth("150px");
+		projectButton.addStyleName("select-component-button");
+		projectButton.addClickListener(new ClickListener() {
+			private static final long serialVersionUID = -766610953224879216L;
+
+			@Override
+			public void buttonClick(ClickEvent event) {
+
+				projectButton.removeStyleName("selected");
+				componentsButton.removeStyleName("selected");
+				getContentLayout().removeComponent(componentTab);
+				getContentLayout().removeComponent(carouselLayout);
+
+				projectButton.addStyleName("selected");
+				getContentLayout().addComponent(carouselLayout);
+			}
+		});
+
+		componentsButton.setWidth("150px");
+		componentsButton.addStyleName("select-component-button");
+		componentsButton.addClickListener(new ClickListener() {
+			private static final long serialVersionUID = 6680358683031320521L;
+
+			@Override
+			public void buttonClick(ClickEvent event) {
+
+				projectButton.removeStyleName("selected");
+				componentsButton.removeStyleName("selected");
+				getContentLayout().removeComponent(componentTab);
+				getContentLayout().removeComponent(carouselLayout);
+
+				componentsButton.addStyleName("selected");
+				getContentLayout().addComponent(componentTab);
+			}
+		});
+		return buttonLayout;
 	}
 
 	private HorizontalLayout createTitleWithMenuLayout() {
@@ -127,8 +219,7 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 		String viewerHtml = FileReader.getResource("viewer.html", Charset.forName("UTF-8"));
 		viewerHtml = viewerHtml.replace("%%FILE_URL%%", "/" + fileName);
 
-		StreamResource resource = new StreamResource(new ViewerStreamSource(viewerHtml), UUID.randomUUID().toString()
-				+ ".html");
+		StreamResource resource = new StreamResource(new ViewerStreamSource(viewerHtml), UUID.randomUUID().toString() + ".html");
 		BrowserFrame frame = new BrowserFrame(null, resource);
 		frame.setWidth("500px");
 		frame.setHeight("500px");
@@ -179,8 +270,7 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 			@Override
 			public void onFileUploaded(PluploadFile file) {
 				try {
-					ProjectFile updatedImage = getCastedPresenter().storeImage(project,
-							file.getUploadedFile().toString());
+					ProjectFile updatedImage = getCastedPresenter().storeImage(project, file.getUploadedFile().toString());
 					carouselLayout.addImageToCarousel(updatedImage);
 
 					MessageManager.showInfo(LanguageCodes.FILE_UPLOAD_SUCCESS.translation(file.getName()));
@@ -212,8 +302,16 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 	private void updateUi() {
 		title.setValue(LanguageCodes.PROJECT_CAPTION.translation() + " " + project.getName());
 		description.setValue(project.getDescription() != null ? project.getDescription() : "");
-		carouselLayout.refreshCarousel();
-		updateFilesTable();
+		// carouselLayout.refreshCarousel();
+		// updateFilesTable();
+		
+		projectButton.removeStyleName("selected");
+		componentsButton.removeStyleName("selected");
+		getContentLayout().removeComponent(componentTab);
+		getContentLayout().removeComponent(carouselLayout);
+		projectButton.addStyleName("selected");
+		getContentLayout().addComponent(carouselLayout);
+		
 	}
 
 }
