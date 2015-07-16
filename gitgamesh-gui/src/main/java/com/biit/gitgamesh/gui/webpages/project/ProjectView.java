@@ -115,7 +115,8 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 			@Override
 			public void onFileUploaded(PluploadFile file) {
 				try {
-					ProjectFile updatedImage = getCastedPresenter().storeImage(project, file.getUploadedFile().toString());
+					ProjectFile updatedImage = getCastedPresenter().storeImage(project,
+							file.getUploadedFile().toString());
 					carouselLayout.addImageToCarousel(updatedImage);
 
 					MessageManager.showInfo(LanguageCodes.FILE_UPLOAD_SUCCESS.translation(file.getName()));
@@ -279,7 +280,8 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 		String viewerHtml = FileReader.getResource("viewer.html", Charset.forName("UTF-8"));
 		viewerHtml = viewerHtml.replace("%%FILE_URL%%", "/" + fileName);
 
-		StreamResource resource = new StreamResource(new ViewerStreamSource(viewerHtml), UUID.randomUUID().toString() + ".html");
+		StreamResource resource = new StreamResource(new ViewerStreamSource(viewerHtml), UUID.randomUUID().toString()
+				+ ".html");
 		BrowserFrame frame = new BrowserFrame(null, resource);
 		frame.setSizeFull();
 
@@ -312,29 +314,32 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 		// update upload progress
 		filesMenu.getUploadFileButton().addUploadProgressListener(new Plupload.UploadProgressListener() {
 			private static final long serialVersionUID = 789395573657513698L;
+
 			@Override
 			public void onUploadProgress(PluploadFile file) {
-				GitgameshLogger.debug(this.getClass().getName(), "I'm uploading " + file.getName() + "and I'm at " + file.getPercent()
-						+ "%");
+				GitgameshLogger.debug(this.getClass().getName(), "I'm uploading " + file.getName() + "and I'm at "
+						+ file.getPercent() + "%");
 			}
 		});
-		
+
 		filesMenu.getDownloadFileButton().addClickListener(new ClickListener() {
 			private static final long serialVersionUID = 512397526203911459L;
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				ProjectFile projectFile = (ProjectFile)filesTable.getValue();
+				ProjectFile projectFile = (ProjectFile) filesTable.getValue();
 				try {
 					byte[] stlFile = GitClient.getRepositoryFile(projectFile);
 					filesMenu.setDownloaderDataSource(stlFile);
+					filesMenu.setFileName(projectFile.getFileName());
 				} catch (JSchException e) {
 					GitgameshLogger.errorMessage(this.getClass().getName(), e);
-					MessageManager.showError(LanguageCodes.GIT_FILE_DOWNLOAD_ERROR.translation(projectFile.getFileName()));
+					MessageManager.showError(LanguageCodes.GIT_FILE_DOWNLOAD_ERROR.translation(projectFile
+							.getFileName()));
 				} catch (IOException e) {
 					MessageManager.showError(LanguageCodes.FILE_DOWNLOAD_ERROR.translation(projectFile.getFileName()));
 				}
-				
+
 			}
 		});
 		return filesMenu;
@@ -378,7 +383,8 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 	private void updateUi() {
 		getTitleLabel().setValue(LanguageCodes.PROJECT_CAPTION.translation() + " " + project.getName());
 		if (project.getClonnedFromProject() == null) {
-			getAuthorLabel().setValue(LanguageCodes.PROJECT_AUTHOR_CAPTION.translation() + " " + project.getCreatedBy());
+			getAuthorLabel()
+					.setValue(LanguageCodes.PROJECT_AUTHOR_CAPTION.translation() + " " + project.getCreatedBy());
 		} else {
 			getAuthorLabel().setValue(
 					LanguageCodes.PROJECT_AUTHOR_CAPTION.translation() + " " + project.getCreatedBy() + " ("

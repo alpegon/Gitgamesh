@@ -30,17 +30,9 @@ public class FilesMenu extends HorizontalButtonGroup {
 		downloadFile = new IconButton(LanguageCodes.PROJECT_DOWNLOAD_FILE_BUTTON, ThemeIcon.DOWNLOAD_FILE,
 				LanguageCodes.PROJECT_DOWNLOAD_FILE_BUTTON_TOOLTIP);
 
-		// uploadFile = new IconButton(LanguageCodes.PROJECT_NEW_FILE_BUTTON,
-		// ThemeIcon.UPLOAD_FILE,
-		// LanguageCodes.PROJECT_NEW_FILE_BUTTON_TOOLTIP);
-
 		uploadFile = new Plupload(LanguageCodes.PROJECT_NEW_FILE_BUTTON.translation(),
 				ThemeIcon.UPLOAD_FILE.getThemeResource());
 		uploadFile.setMaxFileSize(MAX_FILE_SIZE);
-
-		// updateFile = new IconButton(LanguageCodes.PROJECT_UPDATE_BUTTON,
-		// ThemeIcon.UPDATE_FILE,
-		// LanguageCodes.PROJECT_UPDATE_BUTTON_TOOLTIP);
 
 		updateFile = new Plupload(LanguageCodes.PROJECT_UPDATE_BUTTON.translation(),
 				ThemeIcon.UPDATE_FILE.getThemeResource());
@@ -105,6 +97,10 @@ public class FilesMenu extends HorizontalButtonGroup {
 	 */
 	public synchronized void setDownloaderDataSource(byte[] dataStreamSource) {
 		this.dataSource = dataStreamSource;
+	}
+	
+	public void setFileName(String filename) {
+		streamResource.setFilename(filename);
 	}
 
 	public IconButton getDownloadFileButton() {
