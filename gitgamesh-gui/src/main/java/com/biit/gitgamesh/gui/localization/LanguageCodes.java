@@ -43,6 +43,7 @@ public enum LanguageCodes implements ILanguageCode{
 	// Left buttons
 	USER_PROFILE_CAPTION("user.profile.caption"), 
 	USER_PROFILE_TOOLTIP("user.profile.tooltip"), 
+	GITGAMESH_CAPTION("gitgamesh.caption"), 
 	GALLERY_CAPTION("gallery.caption"), 
 	GALLERY_TOOLTIP("gallery.tooltip"), 
 	UPLOAD_CAPTION("upload.caption"), 

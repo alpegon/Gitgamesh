@@ -31,15 +31,22 @@
 
 @mixin gitgameshTheme {
   	@include valo;
+	
+	img.v-image.v-widget.gitgamesh-logo.v-image-gitgamesh-logo {
+		opacity: 0.9;
+		padding-left: 30px;
+		padding-top: 10px;
+		width: 150px;
+	}
   	
   	.v-button.v-widget.iconbutton-size-small.v-button-iconbutton-size-small .v-icon {
 	    width: 16px;
 	    height: 16px;
 	}
   	
-  	.v-label.v-widget.page-title.v-label-page-title.v-has-width {
+  	.v-label.v-widget.page-title.v-label-page-title.v-label-undef-w {
 	    font-size: 60px;
-	    padding-left: 40px;
+	    padding-left: 10px;
 	    padding-top: 10px;
 	}
 	
@@ -52,7 +59,7 @@
 	    padding-bottom: 30px;
 	}
   
-	 .inserted-gallery.v-customcomponent-inserted-gallery {
+	.inserted-gallery.v-customcomponent-inserted-gallery {
 	    padding-left: 40px;
 	    padding-right: 40px;
 	    padding-top: 40px;

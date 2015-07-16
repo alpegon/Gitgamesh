@@ -16,9 +16,13 @@ import com.biit.gitgamesh.persistence.dao.IPrinterProjectDao;
 import com.biit.gitgamesh.persistence.dao.jpa.GalleryOrder;
 import com.biit.gitgamesh.persistence.entity.PrinterProject;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
+import com.vaadin.server.Resource;
+import com.vaadin.server.ThemeResource;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.Component;
+import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
 
 @UIScope
@@ -40,10 +44,20 @@ public class GalleryView extends GitgameshCommonView<IGalleryView, IGalleryPrese
 
 	@Override
 	public void init() {
-		Label title = new Label(LanguageCodes.GALLERY_CAPTION.translation());
-		title.setStyleName(CSS_PAGE_TITLE);
+		HorizontalLayout titleLayout = new HorizontalLayout();
 
-		getContentLayout().addComponent(title);
+		// Add logo.
+		Resource res = new ThemeResource("gitgamesh.svg");
+		Image image = new Image(null, res);
+		image.setStyleName("gitgamesh-logo");
+		titleLayout.addComponent(image);
+
+		// Add title.
+		Label title = new Label(LanguageCodes.GITGAMESH_CAPTION.translation());
+		title.setStyleName(CSS_PAGE_TITLE);
+		titleLayout.addComponent(title);
+
+		getContentLayout().addComponent(titleLayout);
 		getContentLayout().setHeight(FULL);
 		getContentLayout().addStyleName(CSS_GALLEY_CONTENT_AREA);
 
@@ -55,9 +69,10 @@ public class GalleryView extends GitgameshCommonView<IGalleryView, IGalleryPrese
 			}
 
 			@Override
-			public List<Component> getElements(int startElement, int numberOfElements, GalleryOrder galleryOrder, String filterByName) {
-				List<PrinterProject> projects = projectDao.get(startElement, numberOfElements, galleryOrder, filterByName, filterByName,
-						filterByName, filterByName);
+			public List<Component> getElements(int startElement, int numberOfElements, GalleryOrder galleryOrder,
+					String filterByName) {
+				List<PrinterProject> projects = projectDao.get(startElement, numberOfElements, galleryOrder,
+						filterByName, filterByName, filterByName, filterByName);
 				List<Component> components = new ArrayList<>();
 				for (PrinterProject project : projects) {
 					PrinterProjectGalleryElement element = new PrinterProjectGalleryElement(project);

@@ -43,7 +43,11 @@ public class FileReader {
 	public static String convert2OsPath(URL string) {
 		try {
 			if (System.getProperty("os.name").toLowerCase().indexOf("win") >= 0) {
-				return (string.getPath()).substring(1);
+				if (string.getPath().startsWith("file:")) {
+					return (string.getPath()).replace("file:", "").substring(1);
+				} else {
+					return (string.getPath()).substring(1);
+				}
 			} else {
 				return (string.getPath());
 			}
