@@ -9,7 +9,6 @@ import com.biit.gitgamesh.gui.mvp.IMVPView;
 import com.biit.gitgamesh.gui.theme.ThemeIcon;
 import com.biit.gitgamesh.gui.utils.MessageManager;
 import com.biit.gitgamesh.gui.webpages.Gallery;
-import com.biit.gitgamesh.gui.webpages.Profile;
 import com.biit.gitgamesh.gui.webpages.Project;
 import com.biit.gitgamesh.gui.windows.AcceptActionListener;
 import com.biit.gitgamesh.gui.windows.IWindowAcceptCancel;

@@ -22,6 +22,8 @@ import com.biit.gitgamesh.gui.webpages.Gallery;
 import com.biit.gitgamesh.gui.webpages.Project;
 import com.biit.gitgamesh.gui.webpages.common.GitgameshCommonView;
 import com.biit.gitgamesh.logger.GitgameshLogger;
+import com.biit.gitgamesh.persistence.configuration.ConfigurationReader;
+import com.biit.gitgamesh.persistence.configuration.GitgameshConfigurationReader;
 import com.biit.gitgamesh.persistence.dao.IProjectFileDao;
 import com.biit.gitgamesh.persistence.entity.PrinterProject;
 import com.biit.gitgamesh.persistence.entity.ProjectFile;
@@ -137,7 +139,8 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 		});
 
 		String viewerHtml = FileReader.getResource("viewer.html", Charset.forName("UTF-8"));
-		viewerHtml = viewerHtml.replace("%%FILE_URL%%", "/" + fileName);
+		viewerHtml = viewerHtml.replace("%%FILE_URL%%", "/" + fileName).replace("%%JAVASCRIPT_HOME%%",
+				GitgameshConfigurationReader.getInstance().getJavascriptHome());
 
 		StreamResource resource = new StreamResource(new ViewerStreamSource(viewerHtml), UUID.randomUUID().toString()
 				+ ".html");
