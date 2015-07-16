@@ -43,6 +43,19 @@ public class PrinterProject extends BaseStorableObject {
 	@Basic(fetch = FetchType.LAZY)
 	private byte[] preview;
 
+	// Users that like this project.
+	private int likes = 0;
+	// Size of the project in bytes.
+	private float size = 0;
+	// Material composition of the project.
+	private int filamentsColors = 1;
+	// Cost in material (in grams).
+	private int filamentsQuatity = 1;
+	// Downloaded times.
+	private int downloaded = 0;
+	// Time needed to print this model (minutes).
+	private int timeToDo = 1;
+
 	public PrinterProject() {
 		super();
 		tags = new HashSet<>();
@@ -101,4 +114,69 @@ public class PrinterProject extends BaseStorableObject {
 		this.categories.addAll(categories);
 	}
 
+	public int getLikes() {
+		return likes;
+	}
+
+	public void setLikes(int likes) {
+		this.likes = likes;
+	}
+
+	public float getSize() {
+		return size;
+	}
+
+	public void setSize(float size) {
+		this.size = size;
+	}
+
+	public int getFilamentsColors() {
+		return filamentsColors;
+	}
+
+	public void setFilamentsColors(int filamentsColors) {
+		this.filamentsColors = filamentsColors;
+	}
+
+	public int getFilamentsQuatity() {
+		return filamentsQuatity;
+	}
+
+	public void setFilamentsQuatity(int filamentsQuatity) {
+		this.filamentsQuatity = filamentsQuatity;
+	}
+
+	public int getDownloaded() {
+		return downloaded;
+	}
+
+	public void setDownloaded(int downloaded) {
+		this.downloaded = downloaded;
+	}
+
+	public int getTimeToDo() {
+		return timeToDo;
+	}
+
+	public void setTimeToDo(int timetodo) {
+		this.timeToDo = timetodo;
+	}
+
+	@Override
+	public void copyData(BaseStorableObject object) {
+		if (object instanceof PrinterProject) {
+			super.copyData(object);
+			setName(((PrinterProject) object).getName());
+			setDescription(((PrinterProject) object).getDescription());
+			setTags(((PrinterProject) object).getTags());
+			setCategories(((PrinterProject) object).getCategories());
+			preview = ((PrinterProject) object).getPreview().clone();
+			setLikes(((PrinterProject) object).getLikes());
+			setSize(((PrinterProject) object).getSize());
+			setFilamentsColors(((PrinterProject) object).getFilamentsColors());
+			setFilamentsQuatity(((PrinterProject) object).getFilamentsQuatity());
+			setDownloaded(((PrinterProject) object).getDownloaded());
+			setTimeToDo(((PrinterProject) object).getTimeToDo());
+		}
+	}
 }

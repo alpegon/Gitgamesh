@@ -4,12 +4,16 @@ import java.io.IOException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.biit.gitgamesh.core.git.ssh.GitClient;
+import com.biit.gitgamesh.gui.authentication.IUser;
 import com.biit.gitgamesh.gui.webpages.common.GitgameshCommonPresenter;
+import com.biit.gitgamesh.persistence.dao.jpa.PrinterProjectDao;
 import com.biit.gitgamesh.persistence.dao.jpa.ProjectImageDao;
 import com.biit.gitgamesh.persistence.entity.PrinterProject;
 import com.biit.gitgamesh.persistence.entity.ProjectFile;
 import com.biit.gitgamesh.utils.IActivity;
 import com.biit.gitgamesh.utils.ImageTools;
+import com.jcraft.jsch.JSchException;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
 
@@ -20,6 +24,9 @@ public class ProjectPresenter extends GitgameshCommonPresenter<IProjectView, IPr
 
 	@Autowired
 	private ProjectImageDao projectImageDao;
+
+	@Autowired
+	private PrinterProjectDao printerProjectDao;
 
 	@Override
 	public void init() {
@@ -37,12 +44,20 @@ public class ProjectPresenter extends GitgameshCommonPresenter<IProjectView, IPr
 	 * 
 	 * @param project
 	 * @param user
+	 * @throws JSchException
 	 */
 	@Override
-	public void createForkProject(PrinterProject project, String user) {
-		if (!project.getCreatedBy().equals(user)) {
-			// GitClient.cloneRepository(user, project);
+	public PrinterProject createForkProject(PrinterProject project, IUser user) throws JSchException {
+		if (!project.getCreatedBy().equals(user.getScreenName())) {
+			GitClient.cloneRepository(user.getScreenName(), project);
+			PrinterProject newProject = new PrinterProject();
+			newProject.copyData(project);
+			newProject.setCreatedBy(user.getScreenName());
+
+			printerProjectDao.makePersistent(newProject);
+			return newProject;
 		}
+		return null;
 	}
 
 	@Override
