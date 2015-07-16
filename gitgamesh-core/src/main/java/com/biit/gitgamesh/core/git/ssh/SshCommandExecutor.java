@@ -302,6 +302,9 @@ public class SshCommandExecutor {
 			connectSession();
 			// exec 'scp -t rfile' remotely
 			String command = "scp -t " + filePath;
+
+			GitgameshLogger.debug(this.getClass().getName(), "Uploading file: " + filePath);
+
 			Channel channel = session.openChannel("exec");
 			((ChannelExec) channel).setCommand(command);
 

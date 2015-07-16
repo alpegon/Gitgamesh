@@ -99,7 +99,7 @@ public class ProjectPresenter extends GitgameshCommonPresenter<IProjectView, IPr
 		if (project.getPreview() == null) {
 			try {
 				project.setPreview(ImageTools.getBytes(ImageTools.resizeImage(imageBuffer,
-						GalleryElement.THUMBNAIL_WIDTH, GalleryElement.THUMBNAIL_HEIGHT, true), extension));
+						GalleryElement.THUMBNAIL_WIDTH, GalleryElement.THUMBNAIL_HEIGHT, ImageTools.preserveAlpha(extension)), extension));
 			} catch (PreviewTooLongException e) {
 				GitgameshLogger.errorMessage(this.getClass().getName(), e);
 			}
