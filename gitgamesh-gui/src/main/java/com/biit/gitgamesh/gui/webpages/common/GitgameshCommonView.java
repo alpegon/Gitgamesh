@@ -127,8 +127,8 @@ public abstract class GitgameshCommonView<IV extends IMVPView<IP>, IP extends IG
 
 					@Override
 					public void buttonClick(ClickEvent event) {
-						selectButton(userProfile);
-						GitgameshUi.navigateTo(Profile.NAME);
+						//selectButton(userProfile);
+						//GitgameshUi.navigateTo(Profile.NAME);
 					}
 				});
 		gallery = createButton(ThemeIcon.GALLERY, null, LanguageCodes.GALLERY_TOOLTIP, new ClickListener() {

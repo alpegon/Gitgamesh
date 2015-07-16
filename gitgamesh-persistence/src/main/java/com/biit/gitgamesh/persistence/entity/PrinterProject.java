@@ -4,10 +4,12 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Basic;
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -19,7 +21,7 @@ import com.biit.gitgamesh.persistence.entity.exceptions.PreviewTooLongException;
  * gallery.
  */
 @Entity
-@Table(name = "PrinterProject")
+@Table(name = "printerproject")
 public class PrinterProject extends BaseStorableObject {
 	private static final long serialVersionUID = -9076295271241701369L;
 
@@ -34,9 +36,11 @@ public class PrinterProject extends BaseStorableObject {
 	private String description;
 
 	@ElementCollection
+	@CollectionTable(name="printerproject_tags")
 	private Set<String> tags;
 
 	@ElementCollection
+	@CollectionTable(name="printerproject_categories")
 	private Set<String> categories;
 
 	@Lob
