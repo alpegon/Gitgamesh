@@ -45,7 +45,7 @@ public abstract class GitgameshCommonView<IV extends IMVPView<IP>, IP extends IG
 	private Button gallery;
 	private Button selectedButton;
 	private Button createProject;
-	
+
 	private Label titleLabel;
 
 	public GitgameshCommonView() {
@@ -88,8 +88,12 @@ public abstract class GitgameshCommonView<IV extends IMVPView<IP>, IP extends IG
 	private Button createButton(ThemeIcon icon, LanguageCodes caption, LanguageCodes description,
 			ClickListener clickListener) {
 		Button button = new Button(icon.getThemeResource());
-		button.setCaption(caption.translation());
-		button.setDescription(description.translation());
+		if (caption != null) {
+			button.setCaption(caption.translation());
+		}
+		if (description != null) {
+			button.setDescription(description.translation());
+		}
 		button.addClickListener(clickListener);
 
 		return button;
@@ -100,8 +104,8 @@ public abstract class GitgameshCommonView<IV extends IMVPView<IP>, IP extends IG
 		buttonLayout.setWidth(FULL);
 		buttonLayout.setStyleName(CSS_BUTTON_LAYOUT);
 
-		userProfile = createButton(ThemeIcon.USER_PROFILE, LanguageCodes.USER_PROFILE_CAPTION,
-				LanguageCodes.USER_PROFILE_TOOLTIP, new ClickListener() {
+		userProfile = createButton(ThemeIcon.USER_PROFILE, null, LanguageCodes.USER_PROFILE_TOOLTIP,
+				new ClickListener() {
 					private static final long serialVersionUID = 7333928077624084354L;
 
 					@Override
@@ -110,18 +114,17 @@ public abstract class GitgameshCommonView<IV extends IMVPView<IP>, IP extends IG
 						GitgameshUi.navigateTo(Profile.NAME);
 					}
 				});
-		gallery = createButton(ThemeIcon.GALLERY, LanguageCodes.GALLERY_CAPTION, LanguageCodes.GALLERY_TOOLTIP,
-				new ClickListener() {
-					private static final long serialVersionUID = -1909704965160360694L;
+		gallery = createButton(ThemeIcon.GALLERY, null, LanguageCodes.GALLERY_TOOLTIP, new ClickListener() {
+			private static final long serialVersionUID = -1909704965160360694L;
 
-					@Override
-					public void buttonClick(ClickEvent event) {
-						selectButton(gallery);
-						GitgameshUi.navigateTo(Gallery.NAME);
-					}
-				});
-		createProject = createButton(ThemeIcon.CREATE_PROJECT, LanguageCodes.CREATE_PROJECT_CAPTION,
-				LanguageCodes.CREATE_PROJECT_TOOLTIP, new ClickListener() {
+			@Override
+			public void buttonClick(ClickEvent event) {
+				selectButton(gallery);
+				GitgameshUi.navigateTo(Gallery.NAME);
+			}
+		});
+		createProject = createButton(ThemeIcon.CREATE_PROJECT, null, LanguageCodes.CREATE_PROJECT_TOOLTIP,
+				new ClickListener() {
 					private static final long serialVersionUID = -8701022950995423972L;
 
 					@Override
