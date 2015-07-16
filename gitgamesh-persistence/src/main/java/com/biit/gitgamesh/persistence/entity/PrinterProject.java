@@ -35,11 +35,11 @@ public class PrinterProject extends BaseStorableObject {
 	private String description;
 
 	@ElementCollection
-	@CollectionTable(name="printerproject_tags")
+	@CollectionTable(name = "printerproject_tags")
 	private Set<String> tags;
 
 	@ElementCollection
-	@CollectionTable(name="printerproject_categories")
+	@CollectionTable(name = "printerproject_categories")
 	private Set<String> categories;
 
 	@Lob
@@ -177,7 +177,9 @@ public class PrinterProject extends BaseStorableObject {
 			setDescription(((PrinterProject) object).getDescription());
 			setTags(((PrinterProject) object).getTags());
 			setCategories(((PrinterProject) object).getCategories());
-			preview = ((PrinterProject) object).getPreview().clone();
+			if (((PrinterProject) object).getPreview() != null) {
+				preview = ((PrinterProject) object).getPreview().clone();
+			}
 			setLikes(((PrinterProject) object).getLikes());
 			setSize(((PrinterProject) object).getSize());
 			setFilamentsColors(((PrinterProject) object).getFilamentsColors());
