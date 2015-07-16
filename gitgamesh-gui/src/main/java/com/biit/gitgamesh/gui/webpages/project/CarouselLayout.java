@@ -281,8 +281,7 @@ public class CarouselLayout extends HorizontalLayout {
 	}
 
 	private Image getImage(String resourceName) {
-		StreamSource imageSource = new DatabaseImageResource(resourceName, (int) carousel.getWidth(),
-				(int) carousel.getHeight());
+		StreamSource imageSource = new DatabaseImageResource(resourceName, 1200, 600);
 
 		// Create a resource that uses the stream source
 		StreamResource resource = new StreamResource(imageSource, IdGenerator.createId());
@@ -294,8 +293,7 @@ public class CarouselLayout extends HorizontalLayout {
 
 	private Image getImage(ProjectFile image) {
 		// Create an instance of our stream source.
-		StreamSource imageSource = new DatabaseImageResource(image, (int) carousel.getWidth(),
-				(int) carousel.getHeight());
+		StreamSource imageSource = new DatabaseImageResource(image, 1200, 600);
 
 		// Create a resource that uses the stream source
 		StreamResource resource = new StreamResource(imageSource, IdGenerator.createId());
