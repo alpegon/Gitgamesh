@@ -3,7 +3,6 @@ package com.biit.gitgamesh.gui.webpages.project;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.nio.file.Files;
 import java.util.List;
 import java.util.UUID;
 
@@ -22,12 +21,15 @@ import com.biit.gitgamesh.gui.webpages.Gallery;
 import com.biit.gitgamesh.gui.webpages.Project;
 import com.biit.gitgamesh.gui.webpages.common.GitgameshCommonView;
 import com.biit.gitgamesh.logger.GitgameshLogger;
+import com.biit.gitgamesh.persistence.configuration.GitgameshConfigurationReader;
 import com.biit.gitgamesh.persistence.dao.IProjectFileDao;
 import com.biit.gitgamesh.persistence.entity.PrinterProject;
 import com.biit.gitgamesh.persistence.entity.ProjectFile;
 import com.biit.gitgamesh.utils.FileReader;
 import com.biit.gitgamesh.utils.exceptions.InvalidImageExtensionException;
 import com.jcraft.jsch.JSchException;
+import com.vaadin.data.Property.ValueChangeEvent;
+import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.StreamResource;
 import com.vaadin.server.VaadinResponse;
@@ -44,7 +46,6 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Layout;
 import com.vaadin.ui.Panel;
-import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.VerticalLayout;
 
 @UIScope
@@ -52,11 +53,7 @@ import com.vaadin.ui.VerticalLayout;
 public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPresenter> implements IProjectView {
 	private static final long serialVersionUID = 8364085061299494663L;
 
-	private static final String CSS_TABLE_LAYOUT = "gitgamesh-table-layout";
-	private static final String CSS_TABSHEET_STYLE = "gitgamesh-tabsheet";
-	private static final String CSS_PROJECT_TAB_STYLE = "project-tab";
 	private static final String CSS_COMPONENT_TAB_STYLE = "component-tab";
-	private static final String CSS_PROJECT_RIGHT_LAYOUT = "project-tab-right-layout";
 	private static final String CSS_ROOT_PANEL_LAYOUT_PROJECT_PROPERTIES = "root-panel-layout-project-properties";
 	private static final String CSS_CAROUSEL_LAYOUT = "carousel-layout";
 
@@ -66,16 +63,14 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 	private FilesTable filesTable;
 	private CarouselLayout carouselLayout;
 
-	private final TabSheet tabsheet;
 	private final HorizontalLayout componentTab;
-	private Component webpage;
+	private Component renderer = null;
 
 	private Button projectButton;
 	private Button componentsButton;
 	private CssLayout fixedSizeLayout;
 
 	public ProjectView() {
-		this.tabsheet = new TabSheet();
 		componentTab = new HorizontalLayout();
 	}
 
@@ -142,8 +137,7 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 		componentTab.addComponent(filesTable);
 
 		try {
-			webpage = createWebpage();
-			componentTab.addComponent(webpage);
+			createRenderer(null);
 		} catch (IOException e) {
 			// DO NOTHING
 		}
@@ -170,6 +164,23 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 		rootPanelLayout.setComponentAlignment(filesMenu, Alignment.BOTTOM_CENTER);
 		propertiesPanel.setContent(rootPanelLayout);
 
+	}
+
+	/**
+	 * Override the renderer with a new one with the selected file.
+	 * 
+	 * @param file
+	 * @throws IOException
+	 */
+	private void createRenderer(ProjectFile file) throws IOException {
+		Component newRenderer = createWebpage(file);
+		if (renderer != null) {
+			componentTab.addComponent(newRenderer, componentTab.getComponentIndex(renderer));
+			componentTab.removeComponent(renderer);
+		} else {
+			componentTab.addComponent(newRenderer);
+		}
+		renderer = newRenderer;
 	}
 
 	private Component generateSelectComponent() {
@@ -262,23 +273,31 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 		return titleLayout;
 	}
 
-	private Component createWebpage() throws IOException {
+	private Component createWebpage(final ProjectFile file) throws IOException {
+
 		String fileName = UUID.randomUUID() + ".stl";
 		((GitgameshUi) GitgameshUi.getCurrent()).addDynamicFiles(fileName, new IServeDynamicFile() {
 			@Override
 			public void serveFileWithResponse(VaadinResponse response) {
-				response.setContentType("text/plain");
-				File fileStl = FileReader.getResource("slotted_disk.stl");
-				try {
-					response.getOutputStream().write(Files.readAllBytes(fileStl.toPath()));
-				} catch (IOException e) {
-					e.printStackTrace();
-					GitgameshLogger.errorMessage(this.getClass().getName(), e);
+				if (file != null) {
+					try {
+						byte[] content = GitClient.getRepositoryFile(file);
+						// File now has the bytes of git.
+						response.setContentType("text/plain");
+						try {
+							response.getOutputStream().write(content);
+						} catch (IOException e) {
+							GitgameshLogger.errorMessage(this.getClass().getName(), e);
+						}
+					} catch (JSchException | IOException e) {
+						GitgameshLogger.errorMessage(this.getClass().getName(), e);
+					}
 				}
 			}
 		});
 		String viewerHtml = FileReader.getResource("viewer.html", Charset.forName("UTF-8"));
-		viewerHtml = viewerHtml.replace("%%FILE_URL%%", "/" + fileName);
+		viewerHtml = viewerHtml.replace("%%FILE_URL%%", "/" + fileName).replace("%%JAVASCRIPT_HOME%%",
+				GitgameshConfigurationReader.getInstance().getJavascriptHome());
 
 		StreamResource resource = new StreamResource(new ViewerStreamSource(viewerHtml), UUID.randomUUID().toString()
 				+ ".html");
@@ -347,6 +366,20 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 
 	private FilesTable createFilesTable() {
 		filesTable = new FilesTable();
+		filesTable.addValueChangeListener(new ValueChangeListener() {
+			private static final long serialVersionUID = 440435700490165193L;
+
+			@Override
+			public void valueChange(ValueChangeEvent event) {
+				// Update 3D render when selecting an element.
+				try {
+					createRenderer((ProjectFile) filesTable.getValue());
+				} catch (IOException e) {
+					GitgameshLogger.errorMessage(this.getClass().getName(), e);
+				}
+			}
+
+		});
 		return filesTable;
 	}
 
@@ -356,7 +389,9 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 			if (filesTable != null) {
 				filesTable.removeAllItems();
 				for (ProjectFile projectFile : projectFiles) {
-					filesTable.addRow(projectFile);
+					if (projectFile.getFileName().endsWith(".stl")) {
+						filesTable.addRow(projectFile);
+					}
 				}
 			}
 		} catch (JSchException e) {
@@ -394,7 +429,7 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 		description.setValue(project.getDescription() != null ? project.getDescription() : "");
 		carouselLayout.setProject(project);
 		carouselLayout.refreshCarousel();
-		// updateFilesTable();
+		updateFilesTable();
 
 		// Update tab status.
 		projectButton.removeStyleName("selected");

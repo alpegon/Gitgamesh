@@ -10,14 +10,16 @@ public class GitgameshConfigurationReader extends ConfigurationReader {
 	private static final String CONFIG_FILE = "settings.conf";
 	private static final String SYSTEM_VARIABLE_CONFIG = "GITGAMESH_CONFIG";
 
-
 	// Tags
 	private static final String GIT_URL = "git.url";
 	private static final String GIT_USER = "git.user";
 	private static final String GIT_KEY_FILE = "git.key.file";
 	private static final String GIT_FOLDER = "git.folder";
 	private static final String GIT_TEST_FOLDER = "git.test.folder";
-	
+
+	// Render
+	private static final String JAVASCRIPT_HOME = "javascript.home";
+
 	private static GitgameshConfigurationReader instance;
 
 	private GitgameshConfigurationReader() {
@@ -28,6 +30,7 @@ public class GitgameshConfigurationReader extends ConfigurationReader {
 		addProperty(GIT_KEY_FILE, "");
 		addProperty(GIT_FOLDER, "");
 		addProperty(GIT_TEST_FOLDER, "");
+		addProperty(JAVASCRIPT_HOME, "/VAADIN/js");
 
 		addPropertiesSource(new PropertiesSourceFile(CONFIG_FILE));
 		addPropertiesSource(new SystemVariablePropertiesSourceFile(SYSTEM_VARIABLE_CONFIG, CONFIG_FILE));
@@ -71,8 +74,12 @@ public class GitgameshConfigurationReader extends ConfigurationReader {
 	public String getGitFolder() {
 		return getPropertyLogException(GIT_FOLDER);
 	}
-	
+
 	public String getGitTestFolder() {
 		return getPropertyLogException(GIT_TEST_FOLDER);
+	}
+
+	public String getJavascriptHome() {
+		return getPropertyLogException(JAVASCRIPT_HOME);
 	}
 }

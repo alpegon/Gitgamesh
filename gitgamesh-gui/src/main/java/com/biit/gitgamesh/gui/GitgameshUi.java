@@ -33,19 +33,19 @@ import com.vaadin.ui.UI;
 @Theme("gitgameshTheme")
 @Widgetset("com.biit.gitgamesh.gui.AppWidgetSet")
 @SpringUI
-public class GitgameshUi extends UI{
+public class GitgameshUi extends UI {
 	private static final long serialVersionUID = 131764568338199964L;
-	
+
 	private CustomNavigator navigator;
-	
+
 	@Autowired
 	private SpringViewProvider viewProvider;
-	
+
 	@Autowired
 	private LocalizationManager localization;
-	
+
 	private HashMap<String, IServeDynamicFile> dinamicFiles;
-	
+
 	public GitgameshUi() {
 		dinamicFiles = new HashMap<>();
 	}
@@ -55,41 +55,43 @@ public class GitgameshUi extends UI{
 		getPage().setTitle("");
 		defineNavigation();
 		setErrorHandler(new CustomErrorHandler(LanguageCodes.ERROR_UNEXPECTED_ERROR));
-		
+
 		VaadinSession.getCurrent().addRequestHandler(new RequestHandler() {
 			private static final long serialVersionUID = -3272419412231462706L;
 
 			@Override
-			public boolean handleRequest(VaadinSession session, VaadinRequest request, VaadinResponse response) throws IOException {
+			public boolean handleRequest(VaadinSession session, VaadinRequest request, VaadinResponse response)
+					throws IOException {
 				IServeDynamicFile dynamicFile = getDinamicFile(request);
-				if(dynamicFile==null){
+				if (dynamicFile == null) {
 					return false;
-				}else{
+				} else {
 					dynamicFile.serveFileWithResponse(response);
 					return true;
 				}
 			}
 		});
-		
+
 	}
-	
-	public synchronized void addDynamicFiles(String name, IServeDynamicFile serveFile){
+
+	public synchronized void addDynamicFiles(String name, IServeDynamicFile serveFile) {
 		dinamicFiles.put(name, serveFile);
 	}
-	
+
 	/**
-	 * Restuns null if the file can't be served.
+	 * Returns null if the file can't be served.
+	 * 
 	 * @param name
 	 * @return
 	 */
-	public synchronized IServeDynamicFile getDinamicFile(VaadinRequest request){
+	public synchronized IServeDynamicFile getDinamicFile(VaadinRequest request) {
 		return dinamicFiles.get(request.getPathInfo().substring(1, request.getPathInfo().length()));
 	}
 
 	public String translate(ILanguageCode languageCode, String... args) {
 		return localization.translate(languageCode, args);
 	}
-	
+
 	/**
 	 * Initialize Spring injected navigator with the views of application.
 	 */
@@ -103,7 +105,7 @@ public class GitgameshUi extends UI{
 		viewProvider.setAccessDeniedViewClass(AuthorizationError.class);
 		setChangeViewEvents();
 	}
-	
+
 	/**
 	 * Set change view events to store information of current view
 	 */
