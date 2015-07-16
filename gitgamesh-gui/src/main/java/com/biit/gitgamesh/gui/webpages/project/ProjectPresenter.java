@@ -53,6 +53,7 @@ public class ProjectPresenter extends GitgameshCommonPresenter<IProjectView, IPr
 			PrinterProject newProject = new PrinterProject();
 			newProject.copyData(project);
 			newProject.setCreatedBy(user.getScreenName());
+			newProject.resetIds();
 
 			printerProjectDao.makePersistent(newProject);
 			return newProject;

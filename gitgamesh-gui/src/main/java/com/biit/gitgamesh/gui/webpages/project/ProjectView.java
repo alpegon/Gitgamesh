@@ -105,6 +105,7 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 						GitgameshUi.navigateTo(Project.NAME + "/" + projectClonned.getId());
 					}
 				} catch (JSchException e) {
+					e.printStackTrace();
 					MessageManager.showError(LanguageCodes.FORK_FAILED);
 					GitgameshLogger.errorMessage(this.getClass().getName(), e);
 				}
