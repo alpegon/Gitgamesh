@@ -10,7 +10,6 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import pl.exsio.plupload.Plupload;
-import pl.exsio.plupload.PluploadError;
 import pl.exsio.plupload.PluploadFile;
 
 import com.biit.gitgamesh.core.git.ssh.GitClient;
@@ -136,7 +135,6 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 				}
 			}
 		});
-
 		String viewerHtml = FileReader.getResource("viewer.html", Charset.forName("UTF-8"));
 		viewerHtml = viewerHtml.replace("%%FILE_URL%%", "/" + fileName);
 
@@ -162,6 +160,7 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 					File fileUploaded = new File(file.getUploadedFile().toString());
 					try {
 						GitClient.uploadRepositoryFile(project, file.getName(), fileUploaded);
+						updateFilesTable();
 					} catch (JSchException e) {
 						GitgameshLogger.errorMessage(this.getClass().getName(), e);
 						MessageManager.showError(LanguageCodes.GIT_FILE_UPLOAD_ERROR.translation(file.getName()));
@@ -176,27 +175,34 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 		// update upload progress
 		filesMenu.getUploadFileButton().addUploadProgressListener(new Plupload.UploadProgressListener() {
 			private static final long serialVersionUID = 789395573657513698L;
-
 			@Override
 			public void onUploadProgress(PluploadFile file) {
 				GitgameshLogger.debug(this.getClass().getName(), "I'm uploading " + file.getName() + "and I'm at "
 						+ file.getPercent() + "%");
 			}
 		});
-
-		// handle errors
-		filesMenu.getUploadFileButton().addErrorListener(new Plupload.ErrorListener() {
-			private static final long serialVersionUID = -5287634756244623514L;
+		
+		filesMenu.getDownloadFileButton().addClickListener(new ClickListener() {
+			private static final long serialVersionUID = 512397526203911459L;
 
 			@Override
-			public void onError(PluploadError error) {
-				GitgameshLogger.errorMessage(this.getClass().getName(), "There was an error: " + error.getMessage());
+			public void buttonClick(ClickEvent event) {
+				ProjectFile projectFile = (ProjectFile)filesTable.getValue();
+				try {
+					byte[] stlFile = GitClient.getRepositoryFile(projectFile);
+					filesMenu.setDownloaderDataSource(stlFile);
+				} catch (JSchException e) {
+					GitgameshLogger.errorMessage(this.getClass().getName(), e);
+					MessageManager.showError(LanguageCodes.GIT_FILE_DOWNLOAD_ERROR.translation(projectFile.getFileName()));
+				} catch (IOException e) {
+					MessageManager.showError(LanguageCodes.FILE_DOWNLOAD_ERROR.translation(projectFile.getFileName()));
+				}
+				
 			}
 		});
 
 		verticalLayout.addComponent(filesMenu);
 		verticalLayout.addComponent(createFilesTable());
-
 		return verticalLayout;
 	}
 
