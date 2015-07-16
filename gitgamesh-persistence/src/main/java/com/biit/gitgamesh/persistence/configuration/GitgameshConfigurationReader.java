@@ -8,7 +8,9 @@ import com.biit.gitgamesh.persistence.configuration.exception.PropertyNotFoundEx
 public class GitgameshConfigurationReader extends ConfigurationReader {
 
 	private static final String CONFIG_FILE = "settings.conf";
-	
+	private static final String SYSTEM_VARIABLE_CONFIG = "GITGAMESH_CONFIG";
+
+
 	// Tags
 	private static final String GIT_URL = "git.url";
 	private static final String GIT_USER = "git.user";
@@ -28,6 +30,7 @@ public class GitgameshConfigurationReader extends ConfigurationReader {
 		addProperty(GIT_TEST_FOLDER, "");
 
 		addPropertiesSource(new PropertiesSourceFile(CONFIG_FILE));
+		addPropertiesSource(new SystemVariablePropertiesSourceFile(SYSTEM_VARIABLE_CONFIG, CONFIG_FILE));
 
 		readConfigurations();
 	}
