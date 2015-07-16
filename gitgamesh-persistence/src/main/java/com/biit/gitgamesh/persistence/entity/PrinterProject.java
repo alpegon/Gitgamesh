@@ -39,7 +39,7 @@ public class PrinterProject extends BaseStorableObject {
 	private Set<String> categories;
 
 	@Lob
-	@Column(length = MAX_PREVIEW_FILE_SIZE, nullable = false)
+	@Column(length = MAX_PREVIEW_FILE_SIZE)
 	@Basic(fetch = FetchType.LAZY)
 	private byte[] preview;
 

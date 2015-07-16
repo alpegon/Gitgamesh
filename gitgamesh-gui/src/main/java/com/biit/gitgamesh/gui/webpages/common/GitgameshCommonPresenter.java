@@ -38,13 +38,6 @@ public abstract class GitgameshCommonPresenter<IV extends IMVPView<IP>, IP exten
 		project.setName(name);
 		project.setDescription(description);
 
-		try {
-			project.setPreview(ImageTools.loadImageFromResource("default.image.png"));
-		} catch (PreviewTooLongException | IOException e1) {
-			// This should not happen.
-			GitgameshLogger.errorMessage(this.getClass().getName(), e1);
-		}
-
 		project.setCreationTime();
 		project.setUpdateTime();
 

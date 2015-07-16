@@ -26,6 +26,7 @@ import com.biit.gitgamesh.persistence.dao.IProjectFileDao;
 import com.biit.gitgamesh.persistence.entity.PrinterProject;
 import com.biit.gitgamesh.persistence.entity.ProjectFile;
 import com.biit.gitgamesh.utils.FileReader;
+import com.biit.gitgamesh.utils.exceptions.InvalidImageExtensionException;
 import com.jcraft.jsch.JSchException;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.StreamResource;
@@ -164,7 +165,9 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 
 					MessageManager.showInfo(LanguageCodes.FILE_UPLOAD_SUCCESS.translation(file.getName()));
 				} catch (IOException e) {
-					MessageManager.showInfo(LanguageCodes.FILE_UPLOAD_SUCCESS.translation(file.getName()));
+					MessageManager.showError(LanguageCodes.FILE_UPLOAD_ERROR.translation(file.getName()));
+				} catch (InvalidImageExtensionException e) {
+					MessageManager.showError(LanguageCodes.FILE_INVALID);
 				}
 			}
 		});
@@ -213,7 +216,9 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 
 					MessageManager.showInfo(LanguageCodes.FILE_UPLOAD_SUCCESS.translation(file.getName()));
 				} catch (IOException e) {
-					MessageManager.showInfo(LanguageCodes.FILE_UPLOAD_SUCCESS.translation(file.getName()));
+					MessageManager.showError(LanguageCodes.FILE_UPLOAD_ERROR.translation(file.getName()));
+				} catch (InvalidImageExtensionException e) {
+					MessageManager.showError(LanguageCodes.FILE_INVALID);
 				}
 			}
 		});
