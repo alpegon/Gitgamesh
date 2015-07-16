@@ -16,14 +16,9 @@ import com.biit.gitgamesh.persistence.dao.IPrinterProjectDao;
 import com.biit.gitgamesh.persistence.dao.jpa.GalleryOrder;
 import com.biit.gitgamesh.persistence.entity.PrinterProject;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
-import com.vaadin.server.Resource;
-import com.vaadin.server.ThemeResource;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.Component;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Image;
-import com.vaadin.ui.Label;
 
 @UIScope
 @SpringComponent
@@ -44,20 +39,7 @@ public class GalleryView extends GitgameshCommonView<IGalleryView, IGalleryPrese
 
 	@Override
 	public void init() {
-		HorizontalLayout titleLayout = new HorizontalLayout();
-
-		// Add logo.
-		Resource res = new ThemeResource("gitgamesh.svg");
-		Image image = new Image(null, res);
-		image.setStyleName("gitgamesh-logo");
-		titleLayout.addComponent(image);
-
-		// Add title.
-		Label title = new Label(LanguageCodes.GITGAMESH_CAPTION.translation());
-		title.setStyleName(CSS_PAGE_TITLE);
-		titleLayout.addComponent(title);
-
-		getContentLayout().addComponent(titleLayout);
+		getContentLayout().addComponent(createTitle(LanguageCodes.GITGAMESH_CAPTION.translation()));
 		getContentLayout().setHeight(FULL);
 		getContentLayout().addStyleName(CSS_GALLEY_CONTENT_AREA);
 

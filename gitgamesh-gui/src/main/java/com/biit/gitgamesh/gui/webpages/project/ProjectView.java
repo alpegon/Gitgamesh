@@ -86,8 +86,7 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 		HorizontalLayout titleLayout = new HorizontalLayout();
 		titleLayout.setMargin(false);
 		titleLayout.setWidth("100%");
-		title = new Label(LanguageCodes.PROJECT_CAPTION.translation());
-		title.setStyleName(CSS_PAGE_TITLE);
+		Layout title = createTitle(LanguageCodes.PROJECT_CAPTION.translation());
 		titleLayout.addComponent(title);
 		titleLayout.setExpandRatio(title, 10f);
 
@@ -210,7 +209,7 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 	}
 
 	private void updateUi() {
-		title.setValue(LanguageCodes.PROJECT_CAPTION.translation() + " " + project.getName());
+		getTitleLabel().setValue(LanguageCodes.PROJECT_CAPTION.translation() + " " + project.getName());
 		description.setValue(project.getDescription() != null ? project.getDescription() : "");
 		carouselLayout.refreshCarousel();
 		updateFilesTable();

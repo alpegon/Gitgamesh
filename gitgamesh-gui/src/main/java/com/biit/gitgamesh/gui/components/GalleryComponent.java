@@ -2,6 +2,7 @@ package com.biit.gitgamesh.gui.components;
 
 import java.util.List;
 
+import com.biit.gitgamesh.gui.localization.LanguageCodes;
 import com.biit.gitgamesh.gui.theme.ThemeIcon;
 import com.biit.gitgamesh.persistence.dao.jpa.GalleryOrder;
 import com.vaadin.event.FieldEvents.TextChangeEvent;
@@ -75,7 +76,7 @@ public class GalleryComponent extends CustomComponent {
 
 		filterField = new TextField();
 		filterField.setWidth("100%");
-		filterField.setInputPrompt("Search for projects...");
+		filterField.setInputPrompt(LanguageCodes.SEARCH_PROJECT_CAPTION.translation());
 		filterField.setStyleName(CSS_GALLERY_FILTER_NAME_FIELD);
 		filterField.setTextChangeTimeout(300);
 		filterField.setTextChangeEventMode(TextChangeEventMode.TIMEOUT);
@@ -185,7 +186,8 @@ public class GalleryComponent extends CustomComponent {
 
 	protected void actionLoad(int startElement) {
 		// We ask to load one element more than needed
-		List<Component> elements = provider.getElements(startElement, numberOfElementsToLoad + 1, getOrderType(), nameFilter);
+		List<Component> elements = provider.getElements(startElement, numberOfElementsToLoad + 1, getOrderType(),
+				nameFilter);
 		for (int i = 0; i < elements.size() && i < numberOfElementsToLoad; i++) {
 			galleryLayout.addComponent(elements.get(i));
 		}

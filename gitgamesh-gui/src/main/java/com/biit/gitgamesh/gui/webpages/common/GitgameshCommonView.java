@@ -14,11 +14,17 @@ import com.biit.gitgamesh.gui.windows.AcceptActionListener;
 import com.biit.gitgamesh.gui.windows.IWindowAcceptCancel;
 import com.biit.gitgamesh.gui.windows.WindowNewProject;
 import com.biit.gitgamesh.persistence.entity.PrinterProject;
+import com.vaadin.server.Resource;
 import com.vaadin.server.Responsive;
+import com.vaadin.server.ThemeResource;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.CssLayout;
+import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Image;
+import com.vaadin.ui.Label;
+import com.vaadin.ui.Layout;
 
 public abstract class GitgameshCommonView<IV extends IMVPView<IP>, IP extends IGitgameshCommonPresenter<IV>> extends
 		WebPageComponent<CssLayout, IV, IP> {
@@ -39,6 +45,8 @@ public abstract class GitgameshCommonView<IV extends IMVPView<IP>, IP extends IG
 	private Button gallery;
 	private Button selectedButton;
 	private Button createProject;
+	
+	private Label titleLabel;
 
 	public GitgameshCommonView() {
 		super(CssLayout.class);
@@ -62,7 +70,23 @@ public abstract class GitgameshCommonView<IV extends IMVPView<IP>, IP extends IG
 		getRootLayout().addComponent(contentLayout);
 	}
 
-	private Button createButton(ThemeIcon icon, LanguageCodes caption, LanguageCodes description, ClickListener clickListener) {
+	protected Layout createTitle(String title) {
+		HorizontalLayout titleLayout = new HorizontalLayout();
+		// Add logo.
+		Resource res = new ThemeResource("gitgamesh.svg");
+		Image image = new Image(null, res);
+		image.setStyleName("gitgamesh-logo");
+		titleLayout.addComponent(image);
+
+		// Add title.
+		titleLabel = new Label(title);
+		titleLabel.setStyleName(CSS_PAGE_TITLE);
+		titleLayout.addComponent(titleLabel);
+		return titleLayout;
+	}
+
+	private Button createButton(ThemeIcon icon, LanguageCodes caption, LanguageCodes description,
+			ClickListener clickListener) {
 		Button button = new Button(icon.getThemeResource());
 		button.setCaption(caption.translation());
 		button.setDescription(description.translation());
@@ -76,8 +100,8 @@ public abstract class GitgameshCommonView<IV extends IMVPView<IP>, IP extends IG
 		buttonLayout.setWidth(FULL);
 		buttonLayout.setStyleName(CSS_BUTTON_LAYOUT);
 
-		userProfile = createButton(ThemeIcon.USER_PROFILE, LanguageCodes.USER_PROFILE_CAPTION, LanguageCodes.USER_PROFILE_TOOLTIP,
-				new ClickListener() {
+		userProfile = createButton(ThemeIcon.USER_PROFILE, LanguageCodes.USER_PROFILE_CAPTION,
+				LanguageCodes.USER_PROFILE_TOOLTIP, new ClickListener() {
 					private static final long serialVersionUID = 7333928077624084354L;
 
 					@Override
@@ -86,17 +110,18 @@ public abstract class GitgameshCommonView<IV extends IMVPView<IP>, IP extends IG
 						GitgameshUi.navigateTo(Profile.NAME);
 					}
 				});
-		gallery = createButton(ThemeIcon.GALLERY, LanguageCodes.GALLERY_CAPTION, LanguageCodes.GALLERY_TOOLTIP, new ClickListener() {
-			private static final long serialVersionUID = -1909704965160360694L;
-
-			@Override
-			public void buttonClick(ClickEvent event) {
-				selectButton(gallery);
-				GitgameshUi.navigateTo(Gallery.NAME);
-			}
-		});
-		createProject = createButton(ThemeIcon.CREATE_PROJECT, LanguageCodes.CREATE_PROJECT_CAPTION, LanguageCodes.CREATE_PROJECT_TOOLTIP,
+		gallery = createButton(ThemeIcon.GALLERY, LanguageCodes.GALLERY_CAPTION, LanguageCodes.GALLERY_TOOLTIP,
 				new ClickListener() {
+					private static final long serialVersionUID = -1909704965160360694L;
+
+					@Override
+					public void buttonClick(ClickEvent event) {
+						selectButton(gallery);
+						GitgameshUi.navigateTo(Gallery.NAME);
+					}
+				});
+		createProject = createButton(ThemeIcon.CREATE_PROJECT, LanguageCodes.CREATE_PROJECT_CAPTION,
+				LanguageCodes.CREATE_PROJECT_TOOLTIP, new ClickListener() {
 					private static final long serialVersionUID = -8701022950995423972L;
 
 					@Override
@@ -110,9 +135,10 @@ public abstract class GitgameshCommonView<IV extends IMVPView<IP>, IP extends IG
 							public void acceptAction(IWindowAcceptCancel window) {
 								WindowNewProject newProjectWindow = (WindowNewProject) window;
 								try {
-									PrinterProject project = getCastedPresenter().createNewProject(newProjectWindow.getName(), newProjectWindow.getProjectDescription());
+									PrinterProject project = getCastedPresenter().createNewProject(
+											newProjectWindow.getName(), newProjectWindow.getProjectDescription());
 									window.close();
-									GitgameshUi.navigateTo(Project.NAME + "/" + project.getId());									
+									GitgameshUi.navigateTo(Project.NAME + "/" + project.getId());
 								} catch (ProjectAlreadyExists e) {
 									System.out.println("kiwi5");
 									MessageManager.showError(LanguageCodes.ERROR_PROJECT_ALREADY_EXISTS);
@@ -164,5 +190,9 @@ public abstract class GitgameshCommonView<IV extends IMVPView<IP>, IP extends IG
 
 	public CssLayout getContentLayout() {
 		return contentLayout;
+	}
+
+	public Label getTitleLabel() {
+		return titleLabel;
 	}
 }
