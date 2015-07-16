@@ -248,11 +248,18 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 
 	private void updateUi() {
 		getTitleLabel().setValue(LanguageCodes.PROJECT_CAPTION.translation() + " " + project.getName());
-		getAuthorLabel().setValue(LanguageCodes.PROJECT_AUTHOR_CAPTION.translation() + " " + project.getCreatedBy());
+		if (project.getClonnedFromProject() == null) {
+			getAuthorLabel()
+					.setValue(LanguageCodes.PROJECT_AUTHOR_CAPTION.translation() + " " + project.getCreatedBy());
+		} else {
+			getAuthorLabel().setValue(
+					LanguageCodes.PROJECT_AUTHOR_CAPTION.translation() + " " + project.getCreatedBy() + " ("
+							+ LanguageCodes.PROJECT_AUTHOR_SOURCE_CAPTION.translation() + " "
+							+ project.getClonnedFromProject().getCreatedBy() + ")");
+		}
 		description.setValue(project.getDescription() != null ? project.getDescription() : "");
 		carouselLayout.setProject(project);
 		carouselLayout.refreshCarousel();
 		updateFilesTable();
 	}
-
 }

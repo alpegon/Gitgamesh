@@ -9,6 +9,7 @@ import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.biit.gitgamesh.persistence.entity.exceptions.PreviewTooLongException;
@@ -56,7 +57,8 @@ public class PrinterProject extends BaseStorableObject {
 	// Time needed to print this model (minutes).
 	private int timeToDo = 1;
 
-	private Long clonnedFromProject;
+	@ManyToOne(fetch = FetchType.LAZY)
+	private PrinterProject clonnedFromProject = null;
 
 	public PrinterProject() {
 		super();
@@ -183,11 +185,11 @@ public class PrinterProject extends BaseStorableObject {
 		}
 	}
 
-	public Long getClonnedFromProject() {
+	public PrinterProject getClonnedFromProject() {
 		return clonnedFromProject;
 	}
 
-	public void setClonnedFromProject(Long clonnedFromProject) {
+	public void setClonnedFromProject(PrinterProject clonnedFromProject) {
 		this.clonnedFromProject = clonnedFromProject;
 	}
 }
