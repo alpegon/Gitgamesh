@@ -170,7 +170,6 @@ public class CarouselLayout extends HorizontalLayout {
 		// Add images of the project.
 		List<ProjectFile> images = projectImageDao.getAll(project);
 		for (ProjectFile image : images) {
-			System.out.println("----------------> " + image);
 			addImageToCarousel(image);
 		}
 

@@ -65,7 +65,7 @@ public class ProjectPresenter extends GitgameshCommonPresenter<IProjectView, IPr
 			newProject.resetIds();
 			newProject.setCreationTime();
 			newProject.setUpdateTime();
-			newProject.setClonnedFromProject(project.getId());
+			newProject.setClonnedFromProject(project);
 
 			printerProjectDao.makePersistent(newProject);
 
