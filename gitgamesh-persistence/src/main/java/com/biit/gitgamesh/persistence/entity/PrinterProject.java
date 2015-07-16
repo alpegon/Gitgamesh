@@ -19,7 +19,7 @@ import com.biit.gitgamesh.persistence.entity.exceptions.PreviewTooLongException;
  * gallery.
  */
 @Entity
-@Table(name = "PrinterProject")
+@Table(name = "printerproject")
 public class PrinterProject extends BaseStorableObject {
 	private static final long serialVersionUID = -9076295271241701369L;
 

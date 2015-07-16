@@ -10,7 +10,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "ProjectFiles")
+@Table(name = "projectfiles")
 public class ProjectFile extends BaseStorableObject {
 	private static final long serialVersionUID = -1633999193588469899L;
 
