@@ -15,9 +15,11 @@ import pl.exsio.plupload.PluploadFile;
 import com.biit.gitgamesh.core.git.ssh.GitClient;
 import com.biit.gitgamesh.gui.GitgameshUi;
 import com.biit.gitgamesh.gui.IServeDynamicFile;
+import com.biit.gitgamesh.gui.authentication.UserSessionHandler;
 import com.biit.gitgamesh.gui.localization.LanguageCodes;
 import com.biit.gitgamesh.gui.utils.MessageManager;
 import com.biit.gitgamesh.gui.webpages.Gallery;
+import com.biit.gitgamesh.gui.webpages.Project;
 import com.biit.gitgamesh.gui.webpages.common.GitgameshCommonView;
 import com.biit.gitgamesh.logger.GitgameshLogger;
 import com.biit.gitgamesh.persistence.dao.IProjectImageDao;
@@ -48,7 +50,7 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 	private static final String CSS_TABLE_LAYOUT = "gitgamesh-table-layout";
 
 	private PrinterProject project;
-	private Label title, description;
+	private Label description;
 	private FilesMenu filesMenu;
 	private FilesTable filesTable;
 	private CarouselLayout carouselLayout;
@@ -86,7 +88,7 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 		HorizontalLayout titleLayout = new HorizontalLayout();
 		titleLayout.setMargin(false);
 		titleLayout.setWidth("100%");
-		Layout title = createTitle(LanguageCodes.PROJECT_CAPTION.translation());
+		Layout title = createHeader(LanguageCodes.PROJECT_CAPTION.translation(), null);
 		titleLayout.addComponent(title);
 		titleLayout.setExpandRatio(title, 10f);
 
@@ -96,7 +98,16 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-
+				try {
+					PrinterProject projectClonned = getCastedPresenter().createForkProject(project,
+							UserSessionHandler.getCurrent().getUser());
+					if (projectClonned != null) {
+						GitgameshUi.navigateTo(Project.NAME + "/" + projectClonned.getId());
+					}
+				} catch (JSchException e) {
+					MessageManager.showError(LanguageCodes.FORK_FAILED);
+					GitgameshLogger.errorMessage(this.getClass().getName(), e);
+				}
 			}
 		});
 
@@ -210,6 +221,7 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 
 	private void updateUi() {
 		getTitleLabel().setValue(LanguageCodes.PROJECT_CAPTION.translation() + " " + project.getName());
+		getAuthorLabel().setValue(LanguageCodes.PROJECT_AUTHOR_CAPTION.translation() + " " + project.getCreatedBy());
 		description.setValue(project.getDescription() != null ? project.getDescription() : "");
 		carouselLayout.refreshCarousel();
 		updateFilesTable();

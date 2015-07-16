@@ -163,7 +163,7 @@ public class PrinterProject extends BaseStorableObject {
 	}
 
 	@Override
-	protected void copyData(BaseStorableObject object) {
+	public void copyData(BaseStorableObject object) {
 		if (object instanceof PrinterProject) {
 			super.copyData(object);
 			setName(((PrinterProject) object).getName());

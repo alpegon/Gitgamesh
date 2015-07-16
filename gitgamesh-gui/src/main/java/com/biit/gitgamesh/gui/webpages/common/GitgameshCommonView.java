@@ -25,6 +25,7 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Layout;
+import com.vaadin.ui.VerticalLayout;
 
 public abstract class GitgameshCommonView<IV extends IMVPView<IP>, IP extends IGitgameshCommonPresenter<IV>> extends
 		WebPageComponent<CssLayout, IV, IP> {
@@ -35,6 +36,7 @@ public abstract class GitgameshCommonView<IV extends IMVPView<IP>, IP extends IG
 	private static final String CSS_BUTTON_LAYOUT = "gitgamesh-button-layout";
 	private static final String CSS_BUTTON_SELECTED = "menu-button-selected";
 	protected static final String CSS_PAGE_TITLE = "page-title";
+	protected static final String CSS_PAGE_AUTHOR = "project-author-title";
 	protected static final String CSS_PAGE_DESCRIPTION = "page-description";
 
 	private final CssLayout menuLayout;
@@ -46,7 +48,7 @@ public abstract class GitgameshCommonView<IV extends IMVPView<IP>, IP extends IG
 	private Button selectedButton;
 	private Button createProject;
 
-	private Label titleLabel;
+	private Label titleLabel, authorLabel;
 
 	public GitgameshCommonView() {
 		super(CssLayout.class);
@@ -70,7 +72,7 @@ public abstract class GitgameshCommonView<IV extends IMVPView<IP>, IP extends IG
 		getRootLayout().addComponent(contentLayout);
 	}
 
-	protected Layout createTitle(String title) {
+	protected Layout createHeader(String title, String author) {
 		HorizontalLayout titleLayout = new HorizontalLayout();
 		// Add logo.
 		Resource res = new ThemeResource("gitgamesh.svg");
@@ -78,10 +80,22 @@ public abstract class GitgameshCommonView<IV extends IMVPView<IP>, IP extends IG
 		image.setStyleName("gitgamesh-logo");
 		titleLayout.addComponent(image);
 
+		// Add title and author.
+		VerticalLayout titleAndAuthor = new VerticalLayout();
+
 		// Add title.
 		titleLabel = new Label(title);
 		titleLabel.setStyleName(CSS_PAGE_TITLE);
-		titleLayout.addComponent(titleLabel);
+		titleAndAuthor.addComponent(titleLabel);
+
+		if (author != null) {
+			authorLabel = new Label(author);
+		}
+		authorLabel = new Label();
+		authorLabel.setStyleName(CSS_PAGE_AUTHOR);
+		titleAndAuthor.addComponent(authorLabel);
+
+		titleLayout.addComponent(titleAndAuthor);
 		return titleLayout;
 	}
 
@@ -197,5 +211,9 @@ public abstract class GitgameshCommonView<IV extends IMVPView<IP>, IP extends IG
 
 	public Label getTitleLabel() {
 		return titleLabel;
+	}
+
+	public Label getAuthorLabel() {
+		return authorLabel;
 	}
 }

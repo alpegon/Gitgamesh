@@ -17,7 +17,7 @@ public class ProfileView extends GitgameshCommonView<IProfileView, IProfilePrese
 
 	@Override
 	public void init() {
-		getContentLayout().addComponent(createTitle(LanguageCodes.USER_PROFILE_CAPTION.translation()));
+		getContentLayout().addComponent(createHeader(LanguageCodes.USER_PROFILE_CAPTION.translation(), null));
 	}
 
 	@Override

@@ -6,13 +6,13 @@ public interface IUser {
 
 	/**
 	 * Returns the string based username
+	 * 
 	 * @return
 	 */
 	String getUserName();
-	
+
 	/**
-	 * Returns user locale preference. If no preference exists must return a
-	 * valid locale.
+	 * Returns user locale preference. If no preference exists must return a valid locale.
 	 * 
 	 * @return
 	 */
@@ -24,5 +24,12 @@ public interface IUser {
 	 * @return
 	 */
 	String getEmailAddress();
+
+	/**
+	 * Return the screen name of the user. Must be unique.
+	 * 
+	 * @return
+	 */
+	String getScreenName();
 
 }

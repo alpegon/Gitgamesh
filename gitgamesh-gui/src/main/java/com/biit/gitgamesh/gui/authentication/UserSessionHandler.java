@@ -2,6 +2,7 @@ package com.biit.gitgamesh.gui.authentication;
 
 import com.biit.gitgamesh.gui.GitgameshUi;
 import com.biit.gitgamesh.gui.webpages.Gallery;
+import com.biit.gitgamesh.utils.IdGenerator;
 import com.vaadin.ui.UI;
 
 public class UserSessionHandler {
@@ -9,7 +10,8 @@ public class UserSessionHandler {
 	private IUser user;
 
 	public UserSessionHandler(UI ui) {
-		setUser(null);
+		// TODO only for demo!!! must be null.
+		setUser(createDefaultUser());
 
 		if (ui == null) {
 			throw new IllegalArgumentException("Application Ui can't be null");
@@ -44,6 +46,13 @@ public class UserSessionHandler {
 
 	public static String getUserMainViewName() {
 		return Gallery.NAME;
+	}
+
+	private User createDefaultUser() {
+		return new User(new java.sql.Timestamp(new java.util.Date().getTime()), true, "izdubar@biit.com", 0, "Izdubar",
+				"en_EN", null, new java.sql.Timestamp(new java.util.Date().getTime()), "127.0.0.1", "Ninsum", false,
+				null, new java.sql.Timestamp(new java.util.Date().getTime()), "127.0.0.1", "L.", null, "asd123", false,
+				null, false, 1l, "izdubar", "ES", 1l, IdGenerator.createId());
 	}
 
 }

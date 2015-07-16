@@ -16,8 +16,8 @@ import com.biit.gitgamesh.persistence.entity.PrinterProject;
 import com.biit.gitgamesh.persistence.entity.exceptions.PreviewTooLongException;
 import com.biit.gitgamesh.utils.ImageTools;
 
-public abstract class GitgameshCommonPresenter<IV extends IMVPView<IP>, IP extends IGitgameshCommonPresenter<IV>> extends
-		MVPPresenter<IV, IP> implements IGitgameshCommonPresenter<IV> {
+public abstract class GitgameshCommonPresenter<IV extends IMVPView<IP>, IP extends IGitgameshCommonPresenter<IV>>
+		extends MVPPresenter<IV, IP> implements IGitgameshCommonPresenter<IV> {
 
 	@Autowired
 	private IPrinterProjectDao printerProjectDao;
@@ -28,7 +28,8 @@ public abstract class GitgameshCommonPresenter<IV extends IMVPView<IP>, IP exten
 	}
 
 	@Override
-	public PrinterProject createNewProject(String name, String description) throws ProjectAlreadyExists, ProjectNameInvalid {
+	public PrinterProject createNewProject(String name, String description) throws ProjectAlreadyExists,
+			ProjectNameInvalid {
 		if (name == null || name.isEmpty()) {
 			throw new ProjectNameInvalid();
 		}
@@ -48,7 +49,7 @@ public abstract class GitgameshCommonPresenter<IV extends IMVPView<IP>, IP exten
 		project.setUpdateTime();
 
 		if (UserSessionHandler.getCurrent().getUser() != null) {
-			project.setCreatedBy(UserSessionHandler.getCurrent().getUser().getUserName());
+			project.setCreatedBy(UserSessionHandler.getCurrent().getUser().getScreenName());
 		}
 
 		try {

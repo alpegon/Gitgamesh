@@ -39,7 +39,7 @@ public class GalleryView extends GitgameshCommonView<IGalleryView, IGalleryPrese
 
 	@Override
 	public void init() {
-		getContentLayout().addComponent(createTitle(LanguageCodes.GITGAMESH_CAPTION.translation()));
+		getContentLayout().addComponent(createHeader(LanguageCodes.GITGAMESH_CAPTION.translation(), null));
 		getContentLayout().setHeight(FULL);
 		getContentLayout().addStyleName(CSS_GALLEY_CONTENT_AREA);
 

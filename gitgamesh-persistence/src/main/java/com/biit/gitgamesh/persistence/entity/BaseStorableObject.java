@@ -42,6 +42,7 @@ public abstract class BaseStorableObject implements Serializable {
 	@Column(nullable = false)
 	private Timestamp creationTime = null;
 
+	// The ScreenName of the user.
 	protected String createdBy = null;
 
 	private Timestamp updateTime = null;
