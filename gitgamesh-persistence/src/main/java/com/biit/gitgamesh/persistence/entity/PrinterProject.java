@@ -39,7 +39,7 @@ public class PrinterProject extends BaseStorableObject {
 	private Set<String> categories;
 
 	@Lob
-	@Column(length = MAX_PREVIEW_FILE_SIZE, nullable = false)
+	@Column(length = MAX_PREVIEW_FILE_SIZE)
 	@Basic(fetch = FetchType.LAZY)
 	private byte[] preview;
 
@@ -55,6 +55,8 @@ public class PrinterProject extends BaseStorableObject {
 	private int downloaded = 0;
 	// Time needed to print this model (minutes).
 	private int timeToDo = 1;
+
+	private Long clonnedFromProject;
 
 	public PrinterProject() {
 		super();
@@ -177,6 +179,15 @@ public class PrinterProject extends BaseStorableObject {
 			setFilamentsQuatity(((PrinterProject) object).getFilamentsQuatity());
 			setDownloaded(((PrinterProject) object).getDownloaded());
 			setTimeToDo(((PrinterProject) object).getTimeToDo());
+			setClonnedFromProject(((PrinterProject) object).getClonnedFromProject());
 		}
+	}
+
+	public Long getClonnedFromProject() {
+		return clonnedFromProject;
+	}
+
+	public void setClonnedFromProject(Long clonnedFromProject) {
+		this.clonnedFromProject = clonnedFromProject;
 	}
 }

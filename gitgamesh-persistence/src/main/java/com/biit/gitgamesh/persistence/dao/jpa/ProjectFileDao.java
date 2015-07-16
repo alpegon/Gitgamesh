@@ -11,14 +11,14 @@ import javax.persistence.criteria.Root;
 
 import org.springframework.stereotype.Repository;
 
-import com.biit.gitgamesh.persistence.dao.IProjectImageDao;
+import com.biit.gitgamesh.persistence.dao.IProjectFileDao;
 import com.biit.gitgamesh.persistence.entity.PrinterProject;
 import com.biit.gitgamesh.persistence.entity.ProjectFile;
 
 @Repository
-public class ProjectImageDao extends AnnotatedGenericDao<ProjectFile, Long> implements IProjectImageDao {
+public class ProjectFileDao extends AnnotatedGenericDao<ProjectFile, Long> implements IProjectFileDao {
 
-	public ProjectImageDao() {
+	public ProjectFileDao() {
 		super(ProjectFile.class);
 	}
 

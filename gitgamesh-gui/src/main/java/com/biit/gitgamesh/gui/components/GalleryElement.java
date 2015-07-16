@@ -25,8 +25,8 @@ public abstract class GalleryElement<T> extends CustomComponent {
 	private static final String CSS_GALLERY_ELEMENT_RIGHT_CONTENT = "gallery-element-right-content";
 
 	private static final String FULL = "100%";
-	private static final String THUMBNAIL_WIDTH = "120px";
-	private static final String THUMBNAIL_HEIGHT = "120px";
+	public static final int THUMBNAIL_WIDTH = 120;
+	public static final int THUMBNAIL_HEIGHT = 120;
 
 	private final CssLayout rootLayout;
 	private final CssLayout contentLayout;
@@ -77,8 +77,8 @@ public abstract class GalleryElement<T> extends CustomComponent {
 
 		Resource resource = getPreviewResource();
 		Image thumbnail = new Image(null, resource);
-		thumbnail.setWidth(THUMBNAIL_WIDTH);
-		thumbnail.setWidth(THUMBNAIL_HEIGHT);
+		thumbnail.setWidth(THUMBNAIL_WIDTH + "px");
+		thumbnail.setWidth(THUMBNAIL_HEIGHT + "px");
 
 		leftContent.addComponent(thumbnail);
 
@@ -121,7 +121,7 @@ public abstract class GalleryElement<T> extends CustomComponent {
 	public void addElementClickListener(IGalleryElementClickListener listener) {
 		listeners.add(listener);
 	}
-	
+
 	public void removeElementClickListener(IGalleryElementClickListener listener) {
 		listeners.remove(listener);
 	}
