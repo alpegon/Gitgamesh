@@ -43,11 +43,18 @@
 	    width: 16px;
 	    height: 16px;
 	}
+	
+	.v-label.v-widget.page-title.v-label-page-title {
+	    font-size: 60px;
+	    padding-top: 10px;
+	}
   	
   	.v-label.v-widget.page-title.v-label-page-title.v-label-undef-w {
-	    font-size: 60px;
 	    padding-left: 10px;
-	    padding-top: 10px;
+	}
+	
+	.v-label.v-widget.page-title.v-label-page-title.v-has-width {
+	    padding-left: 40px;
 	}
 	
 	.v-label.v-widget.page-description.v-label-page-description.v-has-width {
