@@ -159,4 +159,12 @@ public abstract class BaseStorableObject implements Serializable {
 		return comparationId;
 	}
 
+	protected void copyData(BaseStorableObject object) {
+		setCreatedBy(object.getCreatedBy());
+		setId(object.getId());
+		setComparationId(object.getComparationId());
+		setCreationTime(object.getCreationTime());
+		setUpdateTime(object.getUpdateTime());
+	}
+
 }
