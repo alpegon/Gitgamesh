@@ -8,6 +8,7 @@ import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -34,9 +35,11 @@ public class PrinterProject extends BaseStorableObject {
 	private String description;
 
 	@ElementCollection
+	@JoinColumn(name="printerproject_tags")
 	private Set<String> tags;
 
 	@ElementCollection
+	@JoinColumn(name="printerproject_categories")
 	private Set<String> categories;
 
 	@Lob
