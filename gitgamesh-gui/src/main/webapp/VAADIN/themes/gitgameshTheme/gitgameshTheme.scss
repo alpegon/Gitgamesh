@@ -376,6 +376,15 @@
 	    height: 100%;
 	}
 	
+	.component-tab {
+	    height: calc(100% - 292px) !important;
+	    padding-bottom: 40px;
+	    padding-left: 40px;
+	    padding-right: 40px;
+        padding-top: 10px;
+	    height: 100%;
+	}
+	
 	.gitgamesh-image-button-layout img.v-icon {
 	    width: 23px;
 	}
@@ -431,5 +440,9 @@
 	
 	.v-button-select-component-button.selected {
 	    border-bottom: 2px solid #197de1 !important;
+	}
+	
+	.v-table {
+	    background: #FFFFED !important;
 	}
 }

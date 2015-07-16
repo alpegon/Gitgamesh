@@ -43,6 +43,7 @@ import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Layout;
+import com.vaadin.ui.Panel;
 import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.VerticalLayout;
 
@@ -66,14 +67,15 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 	private CarouselLayout carouselLayout;
 
 	private final TabSheet tabsheet;
-	private final CssLayout componentTab;
-	
+	private final HorizontalLayout componentTab;
+	private Component webpage;
+
 	Button projectButton;
 	Button componentsButton;
 
 	public ProjectView() {
 		this.tabsheet = new TabSheet();
-		componentTab = new CssLayout();
+		componentTab = new HorizontalLayout();
 	}
 
 	@Autowired
@@ -105,21 +107,49 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 	}
 
 	private void initTabSheet() {
-		// tabsheet.addStyleName(CSS_TABSHEET_STYLE);
-		// tabsheet.setSizeUndefined();
-
 		carouselLayout = new CarouselLayout(project, projectImageDao);
+		carouselLayout.getUploaderButton().addFileUploadedListener(new Plupload.FileUploadedListener() {
+			private static final long serialVersionUID = -2689306679308543054L;
+
+			@Override
+			public void onFileUploaded(PluploadFile file) {
+				try {
+					ProjectFile updatedImage = getCastedPresenter().storeImage(project, file.getUploadedFile().toString());
+					carouselLayout.addImageToCarousel(updatedImage);
+
+					MessageManager.showInfo(LanguageCodes.FILE_UPLOAD_SUCCESS.translation(file.getName()));
+				} catch (IOException e) {
+					MessageManager.showError(LanguageCodes.FILE_UPLOAD_ERROR.translation(file.getName()));
+				} catch (InvalidImageExtensionException e) {
+					MessageManager.showError(LanguageCodes.FILE_INVALID);
+				}
+			}
+		});
 		carouselLayout.addStyleName(CSS_CAROUSEL_LAYOUT);
 		carouselLayout.setSizeFull();
 
 		getContentLayout().addComponent(generateSelectComponent());
 		getContentLayout().addComponent(carouselLayout);
 
-		// componentTab.addStyleName(CSS_COMPONENT_TAB_STYLE);
-		// componentTab.setSizeFull();
-		//
-		// tabsheet.addTab(carouselLayout, "Project");
-		// tabsheet.addTab(componentTab, "Components");
+		componentTab.addStyleName(CSS_COMPONENT_TAB_STYLE);
+		componentTab.setSpacing(true);
+		componentTab.setSizeFull();
+
+		filesTable = createFilesTable();
+		filesTable.setSizeFull();
+		componentTab.addComponent(filesTable);
+
+		try {
+			webpage = createWebpage();
+			componentTab.addComponent(webpage);
+		} catch (IOException e) {
+			// DO NOTHING
+		}
+
+		Panel propertiesPanel = new Panel();
+		propertiesPanel.setSizeFull();
+		componentTab.addComponent(propertiesPanel);
+
 	}
 
 	private Component generateSelectComponent() {
@@ -127,7 +157,7 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 		buttonLayout.setWidth(FULL);
 		buttonLayout.setHeight("36px");
 		buttonLayout.addStyleName("select-component-button-layout");
-		
+
 		CssLayout innerButtonLayout = new CssLayout();
 		innerButtonLayout.setWidth(FULL);
 		innerButtonLayout.setHeight("36px");
@@ -233,8 +263,7 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 
 		StreamResource resource = new StreamResource(new ViewerStreamSource(viewerHtml), UUID.randomUUID().toString() + ".html");
 		BrowserFrame frame = new BrowserFrame(null, resource);
-		frame.setWidth("500px");
-		frame.setHeight("500px");
+		frame.setSizeFull();
 
 		return frame;
 	}
@@ -289,35 +318,6 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 		}
 	}
 
-	/**
-	 * Layout between header and file table.
-	 * 
-	 * @return
-	 */
-	private Layout createMiddleLayout() {
-		HorizontalLayout middleLayout = new HorizontalLayout();
-		carouselLayout = new CarouselLayout(project, projectImageDao);
-		carouselLayout.getUploaderButton().addFileUploadedListener(new Plupload.FileUploadedListener() {
-			private static final long serialVersionUID = -2689306679308543054L;
-
-			@Override
-			public void onFileUploaded(PluploadFile file) {
-				try {
-					ProjectFile updatedImage = getCastedPresenter().storeImage(project, file.getUploadedFile().toString());
-					carouselLayout.addImageToCarousel(updatedImage);
-
-					MessageManager.showInfo(LanguageCodes.FILE_UPLOAD_SUCCESS.translation(file.getName()));
-				} catch (IOException e) {
-					MessageManager.showError(LanguageCodes.FILE_UPLOAD_ERROR.translation(file.getName()));
-				} catch (InvalidImageExtensionException e) {
-					MessageManager.showError(LanguageCodes.FILE_INVALID);
-				}
-			}
-		});
-		middleLayout.addComponent(carouselLayout);
-		return middleLayout;
-	}
-
 	@Override
 	public void enter(ViewChangeEvent event) {
 		String[] parameters = event.getParameters().split("/");
@@ -337,8 +337,7 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 	private void updateUi() {
 		getTitleLabel().setValue(LanguageCodes.PROJECT_CAPTION.translation() + " " + project.getName());
 		if (project.getClonnedFromProject() == null) {
-			getAuthorLabel()
-					.setValue(LanguageCodes.PROJECT_AUTHOR_CAPTION.translation() + " " + project.getCreatedBy());
+			getAuthorLabel().setValue(LanguageCodes.PROJECT_AUTHOR_CAPTION.translation() + " " + project.getCreatedBy());
 		} else {
 			getAuthorLabel().setValue(
 					LanguageCodes.PROJECT_AUTHOR_CAPTION.translation() + " " + project.getCreatedBy() + " ("
@@ -347,15 +346,16 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 		}
 		description.setValue(project.getDescription() != null ? project.getDescription() : "");
 		carouselLayout.setProject(project);
-		// carouselLayout.refreshCarousel();
+		carouselLayout.refreshCarousel();
 		// updateFilesTable();
-		
+
+		// Update tab status.
 		projectButton.removeStyleName("selected");
 		componentsButton.removeStyleName("selected");
 		getContentLayout().removeComponent(componentTab);
 		getContentLayout().removeComponent(carouselLayout);
 		projectButton.addStyleName("selected");
 		getContentLayout().addComponent(carouselLayout);
-		
+
 	}
 }
