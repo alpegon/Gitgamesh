@@ -141,6 +141,17 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 		verticalLayout.setStyleName(CSS_TABLE_LAYOUT);
 
 		filesMenu = new FilesMenu();
+
+		filesMenu.getUploadFileButton().addClickListener(new ClickListener() {
+			private static final long serialVersionUID = 733613708764235115L;
+
+			@Override
+			public void buttonClick(ClickEvent event) {
+				// TODO Auto-generated method stub
+
+			}
+		});
+
 		verticalLayout.addComponent(filesMenu);
 		verticalLayout.addComponent(createFilesTable());
 

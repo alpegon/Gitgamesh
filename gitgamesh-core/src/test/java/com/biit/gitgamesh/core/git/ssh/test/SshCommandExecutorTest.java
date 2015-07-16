@@ -1,17 +1,10 @@
 package com.biit.gitgamesh.core.git.ssh.test;
 
-import java.io.IOException;
-
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.testng.annotations.Test;
-
-import com.biit.gitgamesh.core.git.ssh.GitClient;
-import com.biit.gitgamesh.persistence.entity.PrinterProject;
-import com.biit.gitgamesh.persistence.entity.ProjectFile;
-import com.jcraft.jsch.JSchException;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:applicationContextTest.xml" })
@@ -78,17 +71,28 @@ public class SshCommandExecutorTest extends AbstractTestNGSpringContextTests {
 //			System.out.println(file.getCreationTime());
 //		}
 //	}
-	
-	@Test
-	public void testGitClient() throws JSchException, IOException {
-		PrinterProject project = new PrinterProject();
-		project.setCreatedBy("brickify");
-		project.setName("polytopes");
-		
-		ProjectFile projectFile = new ProjectFile();
-		projectFile.setFileName("cube.ascii.stl");
-		projectFile.setPrinterProject(project);
-		
-		GitClient.getRepositoryFile(projectFile);
-	}
+//	
+//	@Test
+//	public void testGitClient() throws JSchException, IOException {
+//		PrinterProject project = new PrinterProject();
+//		project.setCreatedBy("brickify");
+//		project.setName("polytopes");
+//		
+//		ProjectFile projectFile = new ProjectFile();
+//		projectFile.setFileName("cube.ascii.stl");
+//		projectFile.setPrinterProject(project);
+//		GitClient.getRepositoryFile(projectFile);
+//		
+//	}
+//	
+//	@Test
+//	public void testGitClient2() throws JSchException, IOException {
+//		PrinterProject project = new PrinterProject();
+//		project.setCreatedBy("brickify");
+//		project.setName("broken");
+//		
+//		File testFile = FileReader.getResource("test.stl");
+//		GitClient.uploadRepositoryFile(project, "test.stl", testFile);
+//		GitClient.commitNewFiles(project);
+//	}
 }
