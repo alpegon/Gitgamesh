@@ -450,4 +450,11 @@
 	    width: 16px;
 	    height: 16px;
 	}
+	
+	.v-browserframe.v-widget.v-has-width.v-has-height {
+	    border-radius: 4px;
+	    border: 1px solid #d5d5d5;
+	    -webkit-box-shadow: 0 2px 3px rgba(0, 0, 0, 0.05);
+	    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.05);
+	}
 }
