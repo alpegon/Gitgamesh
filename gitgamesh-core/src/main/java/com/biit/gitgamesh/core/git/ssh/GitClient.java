@@ -117,38 +117,6 @@ public class GitClient {
 		return executeCommands(commands);
 	}
 
-	// /**
-	// * Return a file from the repository based on a commit id.<br>
-	// * This method allows to retrieve files from older commits.
-	// *
-	// * @param userName
-	// * @param repositoryName
-	// * @param commitId
-	// * @return
-	// * @throws JSchException
-	// */
-	// public static byte[] getRepositoryFile(ProjectFile file, String commitId)
-	// throws JSchException {
-	// String fileName = file.getFileName();
-	// String userName = file.getPrinterProject().getCreatedBy();
-	// String repositoryName = file.getPrinterProject().getName();
-	//
-	// Path outFilePath = FileSystems.getDefault().getPath("/tmp/", commitId +
-	// file.getFileName());
-	//
-	// List<String> commands = setGitFolder();
-	// commands.add("cd " + getFilesFolderPath(userName, repositoryName));
-	// commands.add("git show " + commitId + ":" + fileName + " > " +
-	// outFilePath.toString());
-	//
-	// try {
-	// return Files.readAllBytes(outFilePath);
-	// } catch (IOException e) {
-	// GitgameshLogger.errorMessage(GitClient.class.getName(), e);
-	// return null;
-	// }
-	// }
-
 	/**
 	 * Returns a list of the repository files.<br>
 	 * Only returns name and creation time, not the file itself.

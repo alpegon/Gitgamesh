@@ -32,10 +32,12 @@ import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CssLayout;
+import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Image;
 import com.vaadin.ui.Layout;
 import com.vaadin.ui.Panel;
+import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
 public class CarouselLayout extends HorizontalLayout {
@@ -87,6 +89,9 @@ public class CarouselLayout extends HorizontalLayout {
 		rootPanelLayout.addComponent(fixedSizeLayout);
 		rootPanelLayout.setExpandRatio(fixedSizeLayout, 1.0f);
 
+		// Add the properties menu
+		fixedSizeLayout.addComponent(createPropertiesLayout(project));
+
 		rootPanelLayout.addComponent(createImageMenu());
 		rootPanelLayout.setExpandRatio(buttonLayout, 0.0f);
 		rootPanelLayout.setComponentAlignment(buttonLayout, Alignment.BOTTOM_CENTER);
@@ -99,7 +104,8 @@ public class CarouselLayout extends HorizontalLayout {
 		buttonLayout.setWidthUndefined();
 		buttonLayout.setStyleName(CSS_BUTTON_LAYOUT);
 
-		uploaderButton = new Plupload(LanguageCodes.IMAGE_UPLOAD.translation(), ThemeIcon.IMAGE_UPLOAD.getThemeResource());
+		uploaderButton = new Plupload(LanguageCodes.IMAGE_UPLOAD.translation(),
+				ThemeIcon.IMAGE_UPLOAD.getThemeResource());
 		uploaderButton.setMaxFileSize(MAX_FILE_SIZE);
 
 		// update upload progress
@@ -139,18 +145,20 @@ public class CarouselLayout extends HorizontalLayout {
 
 			@Override
 			public void onError(PluploadError error) {
-				MessageManager.showInfo(LanguageCodes.FILE_UPLOAD_ERROR.translation(error.getMessage() + " (" + error.getType() + ")"));
+				MessageManager.showInfo(LanguageCodes.FILE_UPLOAD_ERROR.translation(error.getMessage() + " ("
+						+ error.getType() + ")"));
 			}
 		});
 
-		removeButton = createButton(ThemeIcon.IMAGE_DELETE, LanguageCodes.IMAGE_DELETE, LanguageCodes.IMAGE_DELETE, new ClickListener() {
-			private static final long serialVersionUID = -3163207753297454630L;
+		removeButton = createButton(ThemeIcon.IMAGE_DELETE, LanguageCodes.IMAGE_DELETE, LanguageCodes.IMAGE_DELETE,
+				new ClickListener() {
+					private static final long serialVersionUID = -3163207753297454630L;
 
-			@Override
-			public void buttonClick(ClickEvent event) {
-				removeSelectedImage();
-			}
-		});
+					@Override
+					public void buttonClick(ClickEvent event) {
+						removeSelectedImage();
+					}
+				});
 
 		buttonLayout.addComponent(uploaderButton);
 		buttonLayout.addComponent(removeButton);
@@ -174,6 +182,45 @@ public class CarouselLayout extends HorizontalLayout {
 			}
 		}
 		refreshCarousel();
+	}
+
+	private FormLayout createPropertiesLayout(PrinterProject project) {
+		FormLayout layout = new FormLayout();
+		if (project != null) {
+			layout.setSizeFull();
+			layout.setSpacing(true);
+
+			TextField field = new TextField("Downloads", String.valueOf(project.getDownloaded()));
+			field.setWidth(100.0f, Unit.PERCENTAGE);
+			field.setEnabled(false);
+			layout.addComponent(field);
+
+			field = new TextField("Likes", String.valueOf(project.getLikes()));
+			field.setWidth(100.0f, Unit.PERCENTAGE);
+			field.setEnabled(false);
+			layout.addComponent(field);
+
+			field = new TextField("File size", String.valueOf(project.getSize()) + " kB");
+			field.setWidth(100.0f, Unit.PERCENTAGE);
+			field.setEnabled(false);
+			layout.addComponent(field);
+
+			field = new TextField("Materials", String.valueOf(project.getFilamentsColors()));
+			field.setWidth(100.0f, Unit.PERCENTAGE);
+			field.setEnabled(false);
+			layout.addComponent(field);
+
+			field = new TextField("Printing time", String.valueOf(project.getTimeToDo()) + " min");
+			field.setWidth(100.0f, Unit.PERCENTAGE);
+			field.setEnabled(false);
+			layout.addComponent(field);
+
+			field = new TextField("Filament Quantity", String.valueOf(project.getFilamentsQuantity()) + " g");
+			field.setWidth(100.0f, Unit.PERCENTAGE);
+			field.setEnabled(false);
+			layout.addComponent(field);
+		}
+		return layout;
 	}
 
 	private AbstractComponentContainer createCarousel() {
@@ -234,7 +281,7 @@ public class CarouselLayout extends HorizontalLayout {
 	}
 
 	private Image getImage(String resourceName) {
-		StreamSource imageSource = new DatabaseImageResource(resourceName, (int) carousel.getWidth(), (int) carousel.getHeight());
+		StreamSource imageSource = new DatabaseImageResource(resourceName, 1200, 600);
 
 		// Create a resource that uses the stream source
 		StreamResource resource = new StreamResource(imageSource, IdGenerator.createId());
@@ -246,7 +293,7 @@ public class CarouselLayout extends HorizontalLayout {
 
 	private Image getImage(ProjectFile image) {
 		// Create an instance of our stream source.
-		StreamSource imageSource = new DatabaseImageResource(image, (int) carousel.getWidth(), (int) carousel.getHeight());
+		StreamSource imageSource = new DatabaseImageResource(image, 1200, 600);
 
 		// Create a resource that uses the stream source
 		StreamResource resource = new StreamResource(imageSource, IdGenerator.createId());
@@ -256,7 +303,8 @@ public class CarouselLayout extends HorizontalLayout {
 		return new Image(null, resource);
 	}
 
-	private Button createButton(ThemeIcon icon, LanguageCodes caption, LanguageCodes description, ClickListener clickListener) {
+	private Button createButton(ThemeIcon icon, LanguageCodes caption, LanguageCodes description,
+			ClickListener clickListener) {
 		Button button = new Button(icon.getThemeResource());
 		button.setCaption(caption.translation());
 		button.setDescription(description.translation());

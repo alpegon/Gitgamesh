@@ -296,8 +296,8 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 			}
 		});
 		String viewerHtml = FileReader.getResource("viewer.html", Charset.forName("UTF-8"));
-		viewerHtml = viewerHtml.replace("%%FILE_URL%%", "/" + fileName).replace("%%JAVASCRIPT_HOME%%",
-				GitgameshConfigurationReader.getInstance().getJavascriptHome());
+		viewerHtml = viewerHtml.replace("%%FILE_URL%%", GitgameshConfigurationReader.getInstance().getJavascriptHome() + "/" + fileName).replace("%%JAVASCRIPT_HOME%%",
+				GitgameshConfigurationReader.getInstance().getJavascriptHome() + "/VAADIN/js");
 
 		StreamResource resource = new StreamResource(new ViewerStreamSource(viewerHtml), UUID.randomUUID().toString()
 				+ ".html");
@@ -350,6 +350,7 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 				try {
 					byte[] stlFile = GitClient.getRepositoryFile(projectFile);
 					filesMenu.setDownloaderDataSource(stlFile);
+					filesMenu.setFileName(projectFile.getFileName());
 				} catch (JSchException e) {
 					GitgameshLogger.errorMessage(this.getClass().getName(), e);
 					MessageManager.showError(LanguageCodes.GIT_FILE_DOWNLOAD_ERROR.translation(projectFile
