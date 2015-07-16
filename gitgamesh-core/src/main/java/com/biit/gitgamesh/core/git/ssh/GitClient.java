@@ -81,6 +81,7 @@ public class GitClient {
 	public static void cloneRepository(String userName, PrinterProject project) throws JSchException {
 		String repositoryPath = GIT_FOLDER + project.getCreatedBy() + "/" + project.getName();
 		List<String> commands = setGitFolder();
+		commands.add("mkdir -p " + userName);
 		commands.add("cd " + userName + "/");
 		// Clone the repository in the user folder
 		commands.add("git clone " + repositoryPath);
