@@ -58,7 +58,7 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 	private static final String CSS_PROJECT_TAB_STYLE = "project-tab";
 	private static final String CSS_COMPONENT_TAB_STYLE = "component-tab";
 	private static final String CSS_PROJECT_RIGHT_LAYOUT = "project-tab-right-layout";
-
+	private static final String CSS_ROOT_PANEL_LAYOUT_PROJECT_PROPERTIES = "root-panel-layout-project-properties";
 	private static final String CSS_CAROUSEL_LAYOUT = "carousel-layout";
 
 	private PrinterProject project;
@@ -71,8 +71,9 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 	private final HorizontalLayout componentTab;
 	private Component webpage;
 
-	Button projectButton;
-	Button componentsButton;
+	private Button projectButton;
+	private Button componentsButton;
+	private CssLayout fixedSizeLayout;
 
 	public ProjectView() {
 		this.tabsheet = new TabSheet();
@@ -150,6 +151,24 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 		Panel propertiesPanel = new Panel();
 		propertiesPanel.setSizeFull();
 		componentTab.addComponent(propertiesPanel);
+
+		VerticalLayout rootPanelLayout = new VerticalLayout();
+		rootPanelLayout.setSizeFull();
+		rootPanelLayout.setSpacing(true);
+		rootPanelLayout.setMargin(true);
+		rootPanelLayout.setStyleName(CSS_ROOT_PANEL_LAYOUT_PROJECT_PROPERTIES);
+
+		fixedSizeLayout = new CssLayout();
+		fixedSizeLayout.setSizeFull();
+		rootPanelLayout.addComponent(fixedSizeLayout);
+		rootPanelLayout.setExpandRatio(fixedSizeLayout, 1.0f);
+
+		rootPanelLayout.addComponent(createFilesMenuLayout());
+		filesMenu.setWidth("100%");
+		filesMenu.setHeight("32px");
+		rootPanelLayout.setExpandRatio(filesMenu, 0.0f);
+		rootPanelLayout.setComponentAlignment(filesMenu, Alignment.BOTTOM_CENTER);
+		propertiesPanel.setContent(rootPanelLayout);
 
 	}
 
@@ -269,13 +288,11 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 		return frame;
 	}
 
-	private VerticalLayout createFilesRootLayout() {
-		VerticalLayout verticalLayout = new VerticalLayout();
-		verticalLayout.setStyleName(CSS_TABLE_LAYOUT);
-
+	private FilesMenu createFilesMenuLayout() {
 		filesMenu = new FilesMenu();
 		filesMenu.getUploadFileButton().addFileUploadedListener(new Plupload.FileUploadedListener() {
 			private static final long serialVersionUID = 7155048020018422919L;
+
 			@Override
 			public void onFileUploaded(PluploadFile file) {
 				try {
@@ -299,8 +316,8 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 
 			@Override
 			public void onUploadProgress(PluploadFile file) {
-				GitgameshLogger.debug(this.getClass().getName(), "I'm uploading " + file.getName() + "and I'm at "
-						+ file.getPercent() + "%");
+				GitgameshLogger.debug(this.getClass().getName(), "I'm uploading " + file.getName() + "and I'm at " + file.getPercent()
+						+ "%");
 			}
 		});
 
@@ -313,11 +330,7 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 				GitgameshLogger.errorMessage(this.getClass().getName(), "There was an error: " + error.getMessage());
 			}
 		});
-
-		verticalLayout.addComponent(filesMenu);
-		verticalLayout.addComponent(createFilesTable());
-
-		return verticalLayout;
+		return filesMenu;
 	}
 
 	private FilesTable createFilesTable() {

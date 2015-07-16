@@ -42,6 +42,8 @@ public class FilesTable extends Table {
 		setColumnExpandRatio(TableColumn.FILE_NAME, 1.0f);
 		setColumnExpandRatio(TableColumn.FILE_CREATION_TIME, 1.0f);
 		setColumnExpandRatio(TableColumn.FILE_UPDATE_TIME, 1.0f);
+		
+		setVisibleColumns(new Object[]{TableColumn.FILE_NAME});
 
 		setSortContainerPropertyId(TableColumn.FILE_NAME);
 	}
