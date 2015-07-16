@@ -155,9 +155,7 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 
 		filesMenu = new FilesMenu();
 		filesMenu.getUploadFileButton().addFileUploadedListener(new Plupload.FileUploadedListener() {
-
 			private static final long serialVersionUID = 7155048020018422919L;
-
 			@Override
 			public void onFileUploaded(PluploadFile file) {
 				try {
@@ -211,6 +209,7 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 		try {
 			List<ProjectFile> projectFiles = GitClient.getRepositoryFilesInformation(project);
 			if (filesTable != null) {
+				filesTable.removeAllItems();
 				for (ProjectFile projectFile : projectFiles) {
 					filesTable.addRow(projectFile);
 				}
