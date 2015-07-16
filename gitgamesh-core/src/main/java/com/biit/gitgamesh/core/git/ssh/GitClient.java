@@ -180,6 +180,7 @@ public class GitClient {
 						Timestamp time = new Timestamp(dateCreated.getTime());
 						projectFile.setCreationTime(time);
 						projectFile.setUpdateTime(time);
+						projectFile.setPrinterProject(project);
 						projectFiles.add(projectFile);
 					} catch (ParseException e) {
 						GitgameshLogger.errorMessage(GitClient.class.getName(), e);
@@ -209,11 +210,10 @@ public class GitClient {
 
 		SshCommandExecutor commandExecutor = new SshCommandExecutor(GIT_USER, GIT_KEY_FILE, GIT_URL, SSH_PORT);
 		commandExecutor.connectSession();
-		try {
-			return commandExecutor.getRemoteFile(GIT_FOLDER + getFilesFolderPath(userName, repositoryName) + fileName);
-		} finally {
-			commandExecutor.disconnect();
-		}
+		byte[] stlFile = commandExecutor.getRemoteFile(GIT_FOLDER + getFilesFolderPath(userName, repositoryName)
+				+ fileName);
+		commandExecutor.disconnect();
+		return stlFile;
 	}
 
 	/**
@@ -226,10 +226,7 @@ public class GitClient {
 	 */
 	public static void uploadRepositoryFile(PrinterProject project, String fileName, File file) throws JSchException,
 			IOException {
-
-		System.out.println("UPLOADING FILE");
-
-		String userName = project.getCreatedBy();
+				String userName = project.getCreatedBy();
 		String repositoryName = project.getName();
 		SshCommandExecutor commandExecutor = new SshCommandExecutor(GIT_USER, GIT_KEY_FILE, GIT_URL, SSH_PORT);
 		commandExecutor.connectSession();

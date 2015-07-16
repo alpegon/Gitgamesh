@@ -79,7 +79,6 @@ public class SshCommandExecutor {
 		for (String command : commands) {
 			concatenatedCommands += command + "; ";
 		}
-		GitgameshLogger.debug(this.getClass().getName(), "Executing commands: " + concatenatedCommands);
 		return runCommand(concatenatedCommands);
 	}
 
@@ -90,9 +89,7 @@ public class SshCommandExecutor {
 	 * @return The command output
 	 */
 	public String runCommand(String command) {
-
 		GitgameshLogger.debug(this.getClass().getName(), "Executing command: " + command);
-
 		try {
 			channel = session.openChannel("exec");
 			((ChannelExec) channel).setCommand(command);
@@ -168,6 +165,8 @@ public class SshCommandExecutor {
 		Path tmpFilePath = FileSystems.getDefault().getPath(
 				tempDir.getPath() + File.separator + randomFileName + ".stl");
 
+		GitgameshLogger.debug(this.getClass().getName(), "Downloading file: " + filePath);
+		
 		try {
 			connectSession();
 			// exec 'scp -f rfile' remotely
@@ -354,6 +353,7 @@ public class SshCommandExecutor {
 				if (fis != null)
 					fis.close();
 			} catch (Exception ee) {
+				GitgameshLogger.errorMessage(this.getClass().getName(), ee);
 			}
 		}
 	}

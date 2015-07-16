@@ -35,6 +35,7 @@ import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Image;
 import com.vaadin.ui.Layout;
+import com.vaadin.ui.Panel;
 import com.vaadin.ui.VerticalLayout;
 
 public class CarouselLayout extends HorizontalLayout {
@@ -42,8 +43,14 @@ public class CarouselLayout extends HorizontalLayout {
 	private static final String CSS_IMAGE_IN_CAROUSEL = "image-in-carousel";
 	private static final String CSS_BUTTON_LAYOUT = "gitgamesh-image-button-layout";
 	private static final String MAX_FILE_SIZE = "5mb";
+	private static final String PANEL_WIDTH = "480px";
+	private static final String CSS_ROOT_PANEL_LAYOUT_PROJECT_PROPERTIES = "root-panel-layout-project-properties";
 
 	private HorizontalCarousel carousel;
+	// private final VerticalLayout propertiesLayout;
+	private final CssLayout fixedSizeLayout;
+	private CssLayout buttonLayout;
+
 	private Component carouselSelected;
 	private Map<Layout, ProjectFile> carouselImages;
 
@@ -58,16 +65,41 @@ public class CarouselLayout extends HorizontalLayout {
 		this.projectImageDao = projectImageDao;
 		carouselImages = new HashMap<>();
 		this.addComponent(createCarousel());
-		this.addComponent(createImageMenu());
+		this.setExpandRatio(carousel, 1.0f);
+
+		Panel rightPanel = new Panel();
+		rightPanel.setWidth(PANEL_WIDTH);
+		rightPanel.setHeight("100%");
+
+		this.addComponent(rightPanel);
+		this.setExpandRatio(rightPanel, 0.0f);
+		this.setComponentAlignment(rightPanel, Alignment.MIDDLE_RIGHT);
+		this.setSpacing(true);
+
+		VerticalLayout rootPanelLayout = new VerticalLayout();
+		rootPanelLayout.setSizeFull();
+		rootPanelLayout.setSpacing(true);
+		rootPanelLayout.setMargin(true);
+		rootPanelLayout.setStyleName(CSS_ROOT_PANEL_LAYOUT_PROJECT_PROPERTIES);
+
+		fixedSizeLayout = new CssLayout();
+		fixedSizeLayout.setSizeFull();
+		rootPanelLayout.addComponent(fixedSizeLayout);
+		rootPanelLayout.setExpandRatio(fixedSizeLayout, 1.0f);
+
+		rootPanelLayout.addComponent(createImageMenu());
+		rootPanelLayout.setExpandRatio(buttonLayout, 0.0f);
+		rootPanelLayout.setComponentAlignment(buttonLayout, Alignment.BOTTOM_CENTER);
+
+		rightPanel.setContent(rootPanelLayout);
 	}
 
 	private AbstractLayout createImageMenu() {
-		CssLayout buttonLayout = new CssLayout();
-		buttonLayout.setWidth("100%");
+		buttonLayout = new CssLayout();
+		buttonLayout.setWidthUndefined();
 		buttonLayout.setStyleName(CSS_BUTTON_LAYOUT);
 
-		uploaderButton = new Plupload(LanguageCodes.IMAGE_UPLOAD.translation(),
-				ThemeIcon.IMAGE_UPLOAD.getThemeResource());
+		uploaderButton = new Plupload(LanguageCodes.IMAGE_UPLOAD.translation(), ThemeIcon.IMAGE_UPLOAD.getThemeResource());
 		uploaderButton.setMaxFileSize(MAX_FILE_SIZE);
 
 		// update upload progress
@@ -76,7 +108,8 @@ public class CarouselLayout extends HorizontalLayout {
 
 			@Override
 			public void onUploadProgress(PluploadFile file) {
-				// info.setValue("I'm uploading " + file.getName() + "and I'm at " + file.getPercent() + "%");
+				// info.setValue("I'm uploading " + file.getName() +
+				// "and I'm at " + file.getPercent() + "%");
 			}
 		});
 
@@ -106,20 +139,18 @@ public class CarouselLayout extends HorizontalLayout {
 
 			@Override
 			public void onError(PluploadError error) {
-				MessageManager.showInfo(LanguageCodes.FILE_UPLOAD_ERROR.translation(error.getMessage() + " ("
-						+ error.getType() + ")"));
+				MessageManager.showInfo(LanguageCodes.FILE_UPLOAD_ERROR.translation(error.getMessage() + " (" + error.getType() + ")"));
 			}
 		});
 
-		removeButton = createButton(ThemeIcon.IMAGE_DELETE, LanguageCodes.IMAGE_DELETE, LanguageCodes.IMAGE_DELETE,
-				new ClickListener() {
-					private static final long serialVersionUID = -3163207753297454630L;
+		removeButton = createButton(ThemeIcon.IMAGE_DELETE, LanguageCodes.IMAGE_DELETE, LanguageCodes.IMAGE_DELETE, new ClickListener() {
+			private static final long serialVersionUID = -3163207753297454630L;
 
-					@Override
-					public void buttonClick(ClickEvent event) {
-						removeSelectedImage();
-					}
-				});
+			@Override
+			public void buttonClick(ClickEvent event) {
+				removeSelectedImage();
+			}
+		});
 
 		buttonLayout.addComponent(uploaderButton);
 		buttonLayout.addComponent(removeButton);
@@ -160,6 +191,7 @@ public class CarouselLayout extends HorizontalLayout {
 				carouselSelected = component;
 			}
 		});
+		carousel.setSizeFull();
 		// Add the Carousel to a parent layout
 		return carousel;
 	}
@@ -202,8 +234,7 @@ public class CarouselLayout extends HorizontalLayout {
 	}
 
 	private Image getImage(String resourceName) {
-		StreamSource imageSource = new DatabaseImageResource(resourceName, (int) carousel.getWidth(),
-				(int) carousel.getHeight());
+		StreamSource imageSource = new DatabaseImageResource(resourceName, (int) carousel.getWidth(), (int) carousel.getHeight());
 
 		// Create a resource that uses the stream source
 		StreamResource resource = new StreamResource(imageSource, IdGenerator.createId());
@@ -215,8 +246,7 @@ public class CarouselLayout extends HorizontalLayout {
 
 	private Image getImage(ProjectFile image) {
 		// Create an instance of our stream source.
-		StreamSource imageSource = new DatabaseImageResource(image, (int) carousel.getWidth(),
-				(int) carousel.getHeight());
+		StreamSource imageSource = new DatabaseImageResource(image, (int) carousel.getWidth(), (int) carousel.getHeight());
 
 		// Create a resource that uses the stream source
 		StreamResource resource = new StreamResource(imageSource, IdGenerator.createId());
@@ -226,8 +256,7 @@ public class CarouselLayout extends HorizontalLayout {
 		return new Image(null, resource);
 	}
 
-	private Button createButton(ThemeIcon icon, LanguageCodes caption, LanguageCodes description,
-			ClickListener clickListener) {
+	private Button createButton(ThemeIcon icon, LanguageCodes caption, LanguageCodes description, ClickListener clickListener) {
 		Button button = new Button(icon.getThemeResource());
 		button.setCaption(caption.translation());
 		button.setDescription(description.translation());

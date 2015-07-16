@@ -164,7 +164,6 @@ public abstract class GitgameshCommonView<IV extends IMVPView<IP>, IP extends IG
 								}
 								try {
 									if (project != null) {
-										System.out.println("CREATING REPOSITORY");
 										GitClient.createNewRepository(project);
 									}
 								} catch (JSchException e) {

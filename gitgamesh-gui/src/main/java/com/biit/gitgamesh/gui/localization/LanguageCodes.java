@@ -83,7 +83,9 @@ public enum LanguageCodes implements ILanguageCode{
 	FILE_UPLOAD_ERROR("file.upload.error"),
 	FILE_DELETE_SUCCESS("file.delete.success"),
 	FILE_INVALID("file.invalid"),
+	FILE_DOWNLOAD_ERROR("file.download.error"),
 	GIT_FILE_UPLOAD_ERROR("git.file.upload.error"),
+	GIT_FILE_DOWNLOAD_ERROR("git.file.download.error"),
 	
 	PROJECT_FORK_BUTTON("project.fork.button"),
 	PROJECT_FORK_BUTTON_TOOLTIP("project.fork.button.tooltip"),
