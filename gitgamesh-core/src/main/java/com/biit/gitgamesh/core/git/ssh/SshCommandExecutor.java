@@ -91,7 +91,7 @@ public class SshCommandExecutor {
 	 */
 	public String runCommand(String command) {
 
-		System.out.println("COMMAND RUNNING: " + command);
+		GitgameshLogger.debug(this.getClass().getName(), "Executing command: " + command);
 
 		try {
 			channel = session.openChannel("exec");
