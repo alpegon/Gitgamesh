@@ -55,13 +55,14 @@ public class GitClient {
 			String repositoryName = project.getName();
 
 			List<String> commands = setGitFolder();
-			// Creates the main git repo folder for the user
+			// Creates user folder
 			commands.add("mkdir -p " + userName);
 			commands.add("cd " + userName + "/");
-
+			// Creates the git repo for the user
 			commands.add("mkdir -p " + repositoryName);
 			commands.add("cd " + repositoryName + "/");
-
+			// Creates the folder where the files are going to be
+			commands.add("mkdir -p files");
 			// Initilizes the empty git repo
 			commands.add("git init");
 			executeCommands(commands);
@@ -224,6 +225,9 @@ public class GitClient {
 	 */
 	public static void uploadRepositoryFile(PrinterProject project, String fileName, File file) throws JSchException,
 			IOException {
+		
+		System.out.println("UPLOADING FILE");
+		
 		String userName = project.getCreatedBy();
 		String repositoryName = project.getName();
 		SshCommandExecutor commandExecutor = new SshCommandExecutor(GIT_USER, GIT_KEY_FILE, GIT_URL, SSH_PORT);

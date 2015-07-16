@@ -10,6 +10,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import pl.exsio.plupload.Plupload;
+import pl.exsio.plupload.PluploadError;
 import pl.exsio.plupload.PluploadFile;
 
 import com.biit.gitgamesh.core.git.ssh.GitClient;
@@ -170,9 +171,28 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 					MessageManager.showInfo(LanguageCodes.FILE_UPLOAD_SUCCESS.translation(file.getName()));
 				} catch (IOException e) {
 					MessageManager.showError(LanguageCodes.FILE_UPLOAD_ERROR.translation(file.getName()));
-				} catch (InvalidImageExtensionException e) {
-					MessageManager.showError(LanguageCodes.FILE_INVALID);
 				}
+			}
+		});
+
+		// update upload progress
+		filesMenu.getUploadFileButton().addUploadProgressListener(new Plupload.UploadProgressListener() {
+			private static final long serialVersionUID = 789395573657513698L;
+
+			@Override
+			public void onUploadProgress(PluploadFile file) {
+				GitgameshLogger.debug(this.getClass().getName(), "I'm uploading " + file.getName() + "and I'm at "
+						+ file.getPercent() + "%");
+			}
+		});
+
+		// handle errors
+		filesMenu.getUploadFileButton().addErrorListener(new Plupload.ErrorListener() {
+			private static final long serialVersionUID = -5287634756244623514L;
+
+			@Override
+			public void onError(PluploadError error) {
+				GitgameshLogger.errorMessage(this.getClass().getName(), "There was an error: " + error.getMessage());
 			}
 		});
 
