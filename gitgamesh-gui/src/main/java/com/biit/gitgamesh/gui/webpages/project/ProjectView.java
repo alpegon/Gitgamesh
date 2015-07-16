@@ -22,7 +22,7 @@ import com.biit.gitgamesh.gui.webpages.Gallery;
 import com.biit.gitgamesh.gui.webpages.Project;
 import com.biit.gitgamesh.gui.webpages.common.GitgameshCommonView;
 import com.biit.gitgamesh.logger.GitgameshLogger;
-import com.biit.gitgamesh.persistence.dao.IProjectImageDao;
+import com.biit.gitgamesh.persistence.dao.IProjectFileDao;
 import com.biit.gitgamesh.persistence.entity.PrinterProject;
 import com.biit.gitgamesh.persistence.entity.ProjectFile;
 import com.biit.gitgamesh.utils.FileReader;
@@ -60,7 +60,7 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 	}
 
 	@Autowired
-	private IProjectImageDao projectImageDao;
+	private IProjectFileDao projectImageDao;
 
 	@Override
 	public void init() {
@@ -235,6 +235,7 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 		getTitleLabel().setValue(LanguageCodes.PROJECT_CAPTION.translation() + " " + project.getName());
 		getAuthorLabel().setValue(LanguageCodes.PROJECT_AUTHOR_CAPTION.translation() + " " + project.getCreatedBy());
 		description.setValue(project.getDescription() != null ? project.getDescription() : "");
+		carouselLayout.setProject(project);
 		carouselLayout.refreshCarousel();
 		updateFilesTable();
 	}

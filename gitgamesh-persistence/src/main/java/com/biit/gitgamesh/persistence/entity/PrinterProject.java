@@ -56,6 +56,8 @@ public class PrinterProject extends BaseStorableObject {
 	// Time needed to print this model (minutes).
 	private int timeToDo = 1;
 
+	private Long clonnedFromProject;
+
 	public PrinterProject() {
 		super();
 		tags = new HashSet<>();
@@ -177,6 +179,15 @@ public class PrinterProject extends BaseStorableObject {
 			setFilamentsQuatity(((PrinterProject) object).getFilamentsQuatity());
 			setDownloaded(((PrinterProject) object).getDownloaded());
 			setTimeToDo(((PrinterProject) object).getTimeToDo());
+			setClonnedFromProject(((PrinterProject) object).getClonnedFromProject());
 		}
+	}
+
+	public Long getClonnedFromProject() {
+		return clonnedFromProject;
+	}
+
+	public void setClonnedFromProject(Long clonnedFromProject) {
+		this.clonnedFromProject = clonnedFromProject;
 	}
 }

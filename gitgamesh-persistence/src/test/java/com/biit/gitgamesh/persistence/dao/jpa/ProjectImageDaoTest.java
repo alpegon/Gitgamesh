@@ -19,7 +19,7 @@ import org.testng.annotations.AfterGroups;
 import org.testng.annotations.Test;
 
 import com.biit.gitgamesh.persistence.dao.IPrinterProjectDao;
-import com.biit.gitgamesh.persistence.dao.IProjectImageDao;
+import com.biit.gitgamesh.persistence.dao.IProjectFileDao;
 import com.biit.gitgamesh.persistence.dao.exceptions.ElementCannotBeRemovedException;
 import com.biit.gitgamesh.persistence.entity.PrinterProject;
 import com.biit.gitgamesh.persistence.entity.ProjectFile;
@@ -49,7 +49,7 @@ public class ProjectImageDaoTest extends AbstractTransactionalTestNGSpringContex
 	private final static String PROJECT_1_IMAGE_2 = "Image2.png";
 
 	@Autowired
-	private IProjectImageDao projectImageDao;
+	private IProjectFileDao projectImageDao;
 
 	@Autowired
 	private IPrinterProjectDao printerProjectDao;
