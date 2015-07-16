@@ -54,7 +54,7 @@ public class PrinterProject extends BaseStorableObject {
 	// Material composition of the project.
 	private int filamentsColors = 1;
 	// Cost in material (in grams).
-	private int filamentsQuatity = 1;
+	private int filamentsQuantity = 1;
 	// Downloaded times.
 	private int downloaded = 0;
 	// Time needed to print this model (minutes).
@@ -145,12 +145,12 @@ public class PrinterProject extends BaseStorableObject {
 		this.filamentsColors = filamentsColors;
 	}
 
-	public int getFilamentsQuatity() {
-		return filamentsQuatity;
+	public int getFilamentsQuantity() {
+		return filamentsQuantity;
 	}
 
-	public void setFilamentsQuatity(int filamentsQuatity) {
-		this.filamentsQuatity = filamentsQuatity;
+	public void setFilamentsQuantity(int filamentsQuatity) {
+		this.filamentsQuantity = filamentsQuatity;
 	}
 
 	public int getDownloaded() {
@@ -181,7 +181,7 @@ public class PrinterProject extends BaseStorableObject {
 			setLikes(((PrinterProject) object).getLikes());
 			setSize(((PrinterProject) object).getSize());
 			setFilamentsColors(((PrinterProject) object).getFilamentsColors());
-			setFilamentsQuatity(((PrinterProject) object).getFilamentsQuatity());
+			setFilamentsQuantity(((PrinterProject) object).getFilamentsQuantity());
 			setDownloaded(((PrinterProject) object).getDownloaded());
 			setTimeToDo(((PrinterProject) object).getTimeToDo());
 			setClonnedFromProject(((PrinterProject) object).getClonnedFromProject());
