@@ -50,14 +50,22 @@ public class GitClient {
 	}
 
 	public static void createNewRepository(PrinterProject project) throws JSchException {
-		String userName = project.getCreatedBy();
-		List<String> commands = setGitFolder();
-		// Creates the main git repo folder for the user
-		commands.add("mkdir " + userName);
-		// Initilizes the git repo
-		commands.add("cd " + userName + "/");
-		commands.add("git init");
-		executeCommands(commands);
+		if (project != null) {
+			String userName = project.getCreatedBy();
+			String repositoryName = project.getName();
+
+			List<String> commands = setGitFolder();
+			// Creates the main git repo folder for the user
+			commands.add("mkdir -p " + userName);
+			commands.add("cd " + userName + "/");
+
+			commands.add("mkdir -p " + repositoryName);
+			commands.add("cd " + repositoryName + "/");
+
+			// Initilizes the empty git repo
+			commands.add("git init");
+			executeCommands(commands);
+		}
 	}
 
 	public static void commitNewFiles(PrinterProject project) throws JSchException {
@@ -161,21 +169,22 @@ public class GitClient {
 			commands.add("cd " + getFilesFolderPath(userName, repositoryName));
 			commands.add("ls -l --time-style=\"+%d-%m-%y %H:%M:%S\" | awk '/^-/ {printf \"%s::%s %s\\n\",$NF,$6,$7}'");
 			String commandOutput = executeCommands(commands);
-			String[] outputs = commandOutput.split("\n");
-
-			for (String output : outputs) {
-				String[] parsedOutput = output.split("::");
-				ProjectFile projectFile = new ProjectFile();
-				projectFile.setFileName(parsedOutput[0]);
-				try {
-					SimpleDateFormat format = new SimpleDateFormat("dd-MM-yy hh:mm:ss");
-					Date dateCreated = format.parse(parsedOutput[1]);
-					Timestamp time = new Timestamp(dateCreated.getTime());
-					projectFile.setCreationTime(time);
-					projectFile.setUpdateTime(time);
-					projectFiles.add(projectFile);
-				} catch (ParseException e) {
-					GitgameshLogger.errorMessage(GitClient.class.getName(), e);
+			if (commandOutput != null && commandOutput.length() > 1) {
+				String[] outputs = commandOutput.split("\n");
+				for (String output : outputs) {
+					String[] parsedOutput = output.split("::");
+					ProjectFile projectFile = new ProjectFile();
+					projectFile.setFileName(parsedOutput[0]);
+					try {
+						SimpleDateFormat format = new SimpleDateFormat("dd-MM-yy hh:mm:ss");
+						Date dateCreated = format.parse(parsedOutput[1]);
+						Timestamp time = new Timestamp(dateCreated.getTime());
+						projectFile.setCreationTime(time);
+						projectFile.setUpdateTime(time);
+						projectFiles.add(projectFile);
+					} catch (ParseException e) {
+						GitgameshLogger.errorMessage(GitClient.class.getName(), e);
+					}
 				}
 			}
 		} catch (NullPointerException e) {

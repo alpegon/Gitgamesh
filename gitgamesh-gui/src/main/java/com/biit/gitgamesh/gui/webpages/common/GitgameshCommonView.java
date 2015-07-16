@@ -1,5 +1,6 @@
 package com.biit.gitgamesh.gui.webpages.common;
 
+import com.biit.gitgamesh.core.git.ssh.GitClient;
 import com.biit.gitgamesh.gui.GitgameshUi;
 import com.biit.gitgamesh.gui.authentication.exceptions.ProjectAlreadyExists;
 import com.biit.gitgamesh.gui.authentication.exceptions.ProjectNameInvalid;
@@ -13,7 +14,9 @@ import com.biit.gitgamesh.gui.webpages.Project;
 import com.biit.gitgamesh.gui.windows.AcceptActionListener;
 import com.biit.gitgamesh.gui.windows.IWindowAcceptCancel;
 import com.biit.gitgamesh.gui.windows.WindowNewProject;
+import com.biit.gitgamesh.logger.GitgameshLogger;
 import com.biit.gitgamesh.persistence.entity.PrinterProject;
+import com.jcraft.jsch.JSchException;
 import com.vaadin.server.Resource;
 import com.vaadin.server.Responsive;
 import com.vaadin.server.ThemeResource;
@@ -151,18 +154,26 @@ public abstract class GitgameshCommonView<IV extends IMVPView<IP>, IP extends IG
 							@Override
 							public void acceptAction(IWindowAcceptCancel window) {
 								WindowNewProject newProjectWindow = (WindowNewProject) window;
+								PrinterProject project = null;
 								try {
-									PrinterProject project = getCastedPresenter().createNewProject(
-											newProjectWindow.getName(), newProjectWindow.getProjectDescription());
-									window.close();
-									GitgameshUi.navigateTo(Project.NAME + "/" + project.getId());
+									project = getCastedPresenter().createNewProject(newProjectWindow.getName(),
+											newProjectWindow.getProjectDescription());
 								} catch (ProjectAlreadyExists e) {
-									System.out.println("kiwi5");
 									MessageManager.showError(LanguageCodes.ERROR_PROJECT_ALREADY_EXISTS);
 								} catch (ProjectNameInvalid e) {
-									System.out.println("kiwi6");
 									MessageManager.showError(LanguageCodes.INVALID_NAME);
 								}
+								try {
+									if (project != null) {
+										System.out.println("CREATING REPOSITORY");
+										GitClient.createNewRepository(project);
+									}
+								} catch (JSchException e) {
+									GitgameshLogger.errorMessage(this.getClass().getName(), e);
+									MessageManager.showError(LanguageCodes.ERROR_CREATING_GIT_PROJECT);
+								}
+								window.close();
+								GitgameshUi.navigateTo(Project.NAME + "/" + project.getId());
 							}
 						});
 						window.showCentered();

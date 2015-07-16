@@ -39,6 +39,7 @@ public enum LanguageCodes implements ILanguageCode{
 	AUTHORIZATION_ERROR("authorization.error"), 
 	ERROR_PROJECT_ALREADY_EXISTS("error.project.already.exists"),
 	INVALID_NAME("invalid.name"),
+	ERROR_CREATING_GIT_PROJECT("error.creating.git.project"),
 	
 	// Left buttons
 	USER_PROFILE_CAPTION("user.profile.caption"), 
@@ -80,6 +81,7 @@ public enum LanguageCodes implements ILanguageCode{
 	FILE_UPLOAD_SUCCESS("file.upload.success"),
 	FILE_UPLOAD_ERROR("file.upload.error"),
 	FILE_DELETE_SUCCESS("file.delete.success"),
+	GIT_FILE_UPLOAD_ERROR("git.file.upload.error"),
 	
 	PROJECT_FORK_BUTTON("project.fork.button"),
 	PROJECT_FORK_BUTTON_TOOLTIP("project.fork.button.tooltip"),

@@ -152,18 +152,22 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 
 		filesMenu = new FilesMenu();
 		filesMenu.getUploadFileButton().addFileUploadedListener(new Plupload.FileUploadedListener() {
+
 			private static final long serialVersionUID = 7155048020018422919L;
 
 			@Override
 			public void onFileUploaded(PluploadFile file) {
 				try {
-					ProjectFile updatedImage = getCastedPresenter().storeImage(project,
-							file.getUploadedFile().toString());
-					carouselLayout.addImageToCarousel(updatedImage);
-
+					File fileUploaded = new File(file.getUploadedFile().toString());
+					try {
+						GitClient.uploadRepositoryFile(project, file.getName(), fileUploaded);
+					} catch (JSchException e) {
+						GitgameshLogger.errorMessage(this.getClass().getName(), e);
+						MessageManager.showError(LanguageCodes.GIT_FILE_UPLOAD_ERROR.translation(file.getName()));
+					}
 					MessageManager.showInfo(LanguageCodes.FILE_UPLOAD_SUCCESS.translation(file.getName()));
 				} catch (IOException e) {
-					MessageManager.showInfo(LanguageCodes.FILE_UPLOAD_SUCCESS.translation(file.getName()));
+					MessageManager.showError(LanguageCodes.FILE_UPLOAD_ERROR.translation(file.getName()));
 				}
 			}
 		});
@@ -212,7 +216,7 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 
 					MessageManager.showInfo(LanguageCodes.FILE_UPLOAD_SUCCESS.translation(file.getName()));
 				} catch (IOException e) {
-					MessageManager.showInfo(LanguageCodes.FILE_UPLOAD_SUCCESS.translation(file.getName()));
+					MessageManager.showError(LanguageCodes.FILE_UPLOAD_ERROR.translation(file.getName()));
 				}
 			}
 		});
