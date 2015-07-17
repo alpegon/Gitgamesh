@@ -109,30 +109,9 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 	}
 
 	private void initTabSheet() {
-		carouselLayout = new CarouselLayout(project, projectImageDao);
-		carouselLayout.getUploaderButton().addFileUploadedListener(new Plupload.FileUploadedListener() {
-			private static final long serialVersionUID = -2689306679308543054L;
-
-			@Override
-			public void onFileUploaded(PluploadFile file) {
-				try {
-					ProjectFile updatedImage = getCastedPresenter().storeImage(project,
-							file.getUploadedFile().toString());
-					carouselLayout.addImageToCarousel(updatedImage);
-
-					MessageManager.showInfo(LanguageCodes.FILE_UPLOAD_SUCCESS.translation(file.getName()));
-				} catch (IOException e) {
-					MessageManager.showError(LanguageCodes.FILE_UPLOAD_ERROR.translation(file.getName()));
-				} catch (InvalidImageExtensionException e) {
-					MessageManager.showError(LanguageCodes.FILE_INVALID);
-				}
-			}
-		});
-		carouselLayout.addStyleName(CSS_CAROUSEL_LAYOUT);
-		carouselLayout.setSizeFull();
-
 		getContentLayout().addComponent(generateSelectComponent());
-		getContentLayout().addComponent(carouselLayout);
+
+		createCarousel();
 
 		componentTab.addStyleName(CSS_COMPONENT_TAB_STYLE);
 		componentTab.setSpacing(true);
@@ -176,6 +155,38 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 		rootPanelLayout.setComponentAlignment(filesMenu, Alignment.BOTTOM_CENTER);
 		propertiesPanel.setContent(rootPanelLayout);
 
+	}
+
+	private void createCarousel() {
+		final CarouselLayout newCarouselLayout = new CarouselLayout(project, projectImageDao);
+		newCarouselLayout.getUploaderButton().addFileUploadedListener(new Plupload.FileUploadedListener() {
+			private static final long serialVersionUID = -2689306679308543054L;
+
+			@Override
+			public void onFileUploaded(PluploadFile file) {
+				try {
+					ProjectFile updatedImage = getCastedPresenter().storeImage(project,
+							file.getUploadedFile().toString());
+					newCarouselLayout.addImageToCarousel(updatedImage);
+
+					MessageManager.showInfo(LanguageCodes.FILE_UPLOAD_SUCCESS.translation(file.getName()));
+				} catch (IOException e) {
+					MessageManager.showError(LanguageCodes.FILE_UPLOAD_ERROR.translation(file.getName()));
+				} catch (InvalidImageExtensionException e) {
+					MessageManager.showError(LanguageCodes.FILE_INVALID);
+				}
+			}
+		});
+		newCarouselLayout.addStyleName(CSS_CAROUSEL_LAYOUT);
+		newCarouselLayout.setSizeFull();
+
+		if (carouselLayout != null) {
+			getContentLayout().addComponent(newCarouselLayout, getContentLayout().getComponentIndex(carouselLayout));
+			getContentLayout().removeComponent(carouselLayout);
+		} else {
+			getContentLayout().addComponent(newCarouselLayout);
+		}
+		carouselLayout = newCarouselLayout;
 	}
 
 	/**
@@ -448,6 +459,7 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 							+ project.getClonnedFromProject().getCreatedBy() + ")");
 		}
 		description.setValue(project.getDescription() != null ? project.getDescription() : "");
+		createCarousel();
 		carouselLayout.setProject(project);
 		carouselLayout.refreshCarousel();
 		updateFilesTable();
