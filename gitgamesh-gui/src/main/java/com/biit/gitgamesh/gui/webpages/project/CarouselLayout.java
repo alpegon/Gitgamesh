@@ -93,8 +93,8 @@ public class CarouselLayout extends HorizontalLayout {
 
 		// Add the properties menu
 		propertiesLayout = new FormLayout();
-		propertiesLayout.setSizeFull();
 		propertiesLayout.setSpacing(true);
+		propertiesLayout.setSizeUndefined();
 		fixedSizeLayout.addComponent(propertiesLayout);
 
 		rootPanelLayout.addComponent(createImageMenu());

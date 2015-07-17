@@ -457,4 +457,19 @@
 	    -webkit-box-shadow: 0 2px 3px rgba(0, 0, 0, 0.05);
 	    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.05);
 	}
+	
+	.root-panel-layout-project-properties .v-formlayout {
+	    margin: auto;
+	    display: table;
+	    width: 322px;
+	}
+	
+	.root-panel-layout-project-properties .v-textfield {
+	    text-align: right;
+	    opacity: 1.0 !important;
+	    background-color: rgba(240, 248, 255, 0);
+	    border-width: 0.0px;
+	    -webkit-box-shadow: none;
+	    box-shadow: none;
+	}
 }
