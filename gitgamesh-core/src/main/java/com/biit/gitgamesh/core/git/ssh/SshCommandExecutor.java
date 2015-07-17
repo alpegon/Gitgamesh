@@ -130,12 +130,16 @@ public class SshCommandExecutor {
 
 	public void disconnect() {
 		try {
-			channel.disconnect();
+			if (channel != null) {
+				channel.disconnect();
+			}
 		} catch (NullPointerException npe) {
 			GitgameshLogger.errorMessage(this.getClass().getName(), "Channel already disconnected:" + npe);
 		}
 		try {
-			session.disconnect();
+			if (session != null) {
+				session.disconnect();
+			}
 		} catch (NullPointerException npe) {
 			GitgameshLogger.errorMessage(this.getClass().getName(), "Session already disconnected:" + npe);
 		}
@@ -166,7 +170,7 @@ public class SshCommandExecutor {
 				tempDir.getPath() + File.separator + randomFileName + ".stl");
 
 		GitgameshLogger.debug(this.getClass().getName(), "Downloading file: " + filePath);
-		
+
 		try {
 			connectSession();
 			// exec 'scp -f rfile' remotely
@@ -211,7 +215,6 @@ public class SshCommandExecutor {
 				for (int i = 0;; i++) {
 					in.read(buf, i, 1);
 					if (buf[i] == (byte) 0x0a) {
-						String file = new String(buf, 0, i);
 						break;
 					}
 				}

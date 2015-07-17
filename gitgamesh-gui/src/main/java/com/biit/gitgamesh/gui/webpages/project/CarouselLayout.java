@@ -91,10 +91,10 @@ public class CarouselLayout extends HorizontalLayout {
 		rootPanelLayout.addComponent(fixedSizeLayout);
 		rootPanelLayout.setExpandRatio(fixedSizeLayout, 1.0f);
 
-		// Add the properties menu
+		// Add the properties layout
 		propertiesLayout = new FormLayout();
-		propertiesLayout.setSizeFull();
 		propertiesLayout.setSpacing(true);
+		propertiesLayout.setSizeUndefined();
 		fixedSizeLayout.addComponent(propertiesLayout);
 
 		rootPanelLayout.addComponent(createImageMenu());
@@ -190,11 +190,8 @@ public class CarouselLayout extends HorizontalLayout {
 	}
 
 	public void updatePropertiesLayout(PrinterProject project) {
-		System.out.println("ADDING PROJECT PROPERTIES");
-		System.out.println("DOWNLOAD: " + project.getDownloaded());
 		if (project != null) {
 			propertiesLayout.removeAllComponents();
-			System.out.println("Likes: " + project.getLikes());
 
 			TextField field = new TextField("Downloads", String.valueOf(project.getDownloaded()));
 			field.setWidth(80.0f, Unit.PERCENTAGE);

@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,7 @@ import com.jcraft.jsch.JSchException;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
+import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.server.StreamResource;
 import com.vaadin.server.VaadinResponse;
 import com.vaadin.spring.annotation.SpringComponent;
@@ -42,10 +44,12 @@ import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CssLayout;
+import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Layout;
 import com.vaadin.ui.Panel;
+import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
 @UIScope
@@ -69,6 +73,8 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 	private Button projectButton;
 	private Button componentsButton;
 	private CssLayout fixedSizeLayout;
+
+	private FormLayout propertiesLayout;
 
 	public ProjectView() {
 		componentTab = new HorizontalLayout();
@@ -135,6 +141,12 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 		fixedSizeLayout.setSizeFull();
 		rootPanelLayout.addComponent(fixedSizeLayout);
 		rootPanelLayout.setExpandRatio(fixedSizeLayout, 1.0f);
+
+		// Add the properties layout
+		propertiesLayout = new FormLayout();
+		propertiesLayout.setSizeFull();
+		propertiesLayout.setSpacing(true);
+		fixedSizeLayout.addComponent(propertiesLayout);
 
 		rootPanelLayout.addComponent(createFilesMenuLayout());
 		filesMenu.setWidth("100%");
@@ -285,7 +297,7 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 	}
 
 	private Component createWebpage(final ProjectFile file) throws IOException {
-		if(file ==null){
+		if (file == null) {
 			Panel panel = new Panel();
 			panel.setSizeFull();
 			return panel;
@@ -391,6 +403,9 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 				// Update 3D render when selecting an element.
 				try {
 					createRenderer((ProjectFile) filesTable.getValue());
+					if (filesTable.getValue() != null) {
+						updatePropertiesLayout();
+					}
 				} catch (IOException e) {
 					GitgameshLogger.errorMessage(this.getClass().getName(), e);
 				}
@@ -456,6 +471,46 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 		getContentLayout().removeComponent(carouselLayout);
 		projectButton.addStyleName("selected");
 		getContentLayout().addComponent(carouselLayout);
+	}
 
+	/**
+	 * File properties<br>
+	 * Random at the moment
+	 */
+	public void updatePropertiesLayout() {
+		if (project != null) {
+			Random rand = new Random();
+			propertiesLayout.removeAllComponents();
+
+			TextField field = new TextField("Downloads", String.valueOf(rand.nextInt(9999)));
+			field.setWidth(80.0f, Unit.PERCENTAGE);
+			field.setEnabled(false);
+			propertiesLayout.addComponent(field);
+
+			field = new TextField("Likes", String.valueOf(rand.nextInt(999)));
+			field.setWidth(80.0f, Unit.PERCENTAGE);
+			field.setEnabled(false);
+			propertiesLayout.addComponent(field);
+
+			field = new TextField("File size", String.valueOf(rand.nextInt(9999)) + " kB");
+			field.setWidth(80.0f, Unit.PERCENTAGE);
+			field.setEnabled(false);
+			propertiesLayout.addComponent(field);
+
+			field = new TextField("Materials", String.valueOf(rand.nextInt(3) + 1));
+			field.setWidth(80.0f, Unit.PERCENTAGE);
+			field.setEnabled(false);
+			propertiesLayout.addComponent(field);
+
+			field = new TextField("Printing time", String.valueOf(rand.nextInt(999)) + " min");
+			field.setWidth(80.0f, Unit.PERCENTAGE);
+			field.setEnabled(false);
+			propertiesLayout.addComponent(field);
+
+			field = new TextField("Filament Quantity", String.valueOf(rand.nextInt(999)) + " g");
+			field.setWidth(80.0f, Unit.PERCENTAGE);
+			field.setEnabled(false);
+			propertiesLayout.addComponent(field);
+		}
 	}
 }
