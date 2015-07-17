@@ -180,12 +180,6 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 		newCarouselLayout.addStyleName(CSS_CAROUSEL_LAYOUT);
 		newCarouselLayout.setSizeFull();
 
-		if (carouselLayout != null) {
-			getContentLayout().addComponent(newCarouselLayout, getContentLayout().getComponentIndex(carouselLayout));
-			getContentLayout().removeComponent(carouselLayout);
-		} else {
-			getContentLayout().addComponent(newCarouselLayout);
-		}
 		carouselLayout = newCarouselLayout;
 	}
 
@@ -448,6 +442,12 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 	}
 
 	private void updateUi() {
+		// Update tab status.
+		projectButton.removeStyleName("selected");
+		componentsButton.removeStyleName("selected");
+		getContentLayout().removeComponent(componentTab);
+		getContentLayout().removeComponent(carouselLayout);		
+		
 		getTitleLabel().setValue(LanguageCodes.PROJECT_CAPTION.translation() + " " + project.getName());
 		if (project.getClonnedFromProject() == null) {
 			getAuthorLabel()
@@ -464,11 +464,7 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 		carouselLayout.refreshCarousel();
 		updateFilesTable();
 
-		// Update tab status.
-		projectButton.removeStyleName("selected");
-		componentsButton.removeStyleName("selected");
-		getContentLayout().removeComponent(componentTab);
-		getContentLayout().removeComponent(carouselLayout);
+		//Select default tab.
 		projectButton.addStyleName("selected");
 		getContentLayout().addComponent(carouselLayout);
 	}
