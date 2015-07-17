@@ -33,6 +33,13 @@ It is not so bad for only 5 days of development!
 
 The tools is developed using Java (JDK7), Vaadin, Git as files repository and other tools or frameworks. 
 
+# Installation
+
+The result of the project is a WAR file that can be installed in any application server (as Tomcat or Jetty). Copy the WAR file inside the server must be enought to deploy it. Check the file 'database.properties' and 'settings.conf' for tunning up the database and application configuration. 
+
+# Compiling
+If you wish to compile the project, it includes all dependencies in the maven file. Running a "mvn clean install" must download all dependencies and compile the entire project. More information about Maven can be found here: https://maven.apache.org/
+
 # License
 
 This project is released under the GNU GPL v3 License. 
