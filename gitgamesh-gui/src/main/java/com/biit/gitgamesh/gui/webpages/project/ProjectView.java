@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,7 @@ import com.jcraft.jsch.JSchException;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
+import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.server.StreamResource;
 import com.vaadin.server.VaadinResponse;
 import com.vaadin.spring.annotation.SpringComponent;
@@ -42,10 +44,12 @@ import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CssLayout;
+import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Layout;
 import com.vaadin.ui.Panel;
+import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
 @UIScope
@@ -69,6 +73,8 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 	private Button projectButton;
 	private Button componentsButton;
 	private CssLayout fixedSizeLayout;
+
+	private FormLayout propertiesLayout;
 
 	public ProjectView() {
 		componentTab = new HorizontalLayout();
@@ -103,30 +109,9 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 	}
 
 	private void initTabSheet() {
-		carouselLayout = new CarouselLayout(project, projectImageDao);
-		carouselLayout.getUploaderButton().addFileUploadedListener(new Plupload.FileUploadedListener() {
-			private static final long serialVersionUID = -2689306679308543054L;
-
-			@Override
-			public void onFileUploaded(PluploadFile file) {
-				try {
-					ProjectFile updatedImage = getCastedPresenter().storeImage(project,
-							file.getUploadedFile().toString());
-					carouselLayout.addImageToCarousel(updatedImage);
-
-					MessageManager.showInfo(LanguageCodes.FILE_UPLOAD_SUCCESS.translation(file.getName()));
-				} catch (IOException e) {
-					MessageManager.showError(LanguageCodes.FILE_UPLOAD_ERROR.translation(file.getName()));
-				} catch (InvalidImageExtensionException e) {
-					MessageManager.showError(LanguageCodes.FILE_INVALID);
-				}
-			}
-		});
-		carouselLayout.addStyleName(CSS_CAROUSEL_LAYOUT);
-		carouselLayout.setSizeFull();
-
 		getContentLayout().addComponent(generateSelectComponent());
-		getContentLayout().addComponent(carouselLayout);
+
+		createCarousel();
 
 		componentTab.addStyleName(CSS_COMPONENT_TAB_STYLE);
 		componentTab.setSpacing(true);
@@ -157,6 +142,12 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 		rootPanelLayout.addComponent(fixedSizeLayout);
 		rootPanelLayout.setExpandRatio(fixedSizeLayout, 1.0f);
 
+		// Add the properties layout
+		propertiesLayout = new FormLayout();
+		propertiesLayout.setSizeFull();
+		propertiesLayout.setSpacing(true);
+		fixedSizeLayout.addComponent(propertiesLayout);
+
 		rootPanelLayout.addComponent(createFilesMenuLayout());
 		filesMenu.setWidth("100%");
 		filesMenu.setHeight("32px");
@@ -164,6 +155,38 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 		rootPanelLayout.setComponentAlignment(filesMenu, Alignment.BOTTOM_CENTER);
 		propertiesPanel.setContent(rootPanelLayout);
 
+	}
+
+	private void createCarousel() {
+		final CarouselLayout newCarouselLayout = new CarouselLayout(project, projectImageDao);
+		newCarouselLayout.getUploaderButton().addFileUploadedListener(new Plupload.FileUploadedListener() {
+			private static final long serialVersionUID = -2689306679308543054L;
+
+			@Override
+			public void onFileUploaded(PluploadFile file) {
+				try {
+					ProjectFile updatedImage = getCastedPresenter().storeImage(project,
+							file.getUploadedFile().toString());
+					newCarouselLayout.addImageToCarousel(updatedImage);
+
+					MessageManager.showInfo(LanguageCodes.FILE_UPLOAD_SUCCESS.translation(file.getName()));
+				} catch (IOException e) {
+					MessageManager.showError(LanguageCodes.FILE_UPLOAD_ERROR.translation(file.getName()));
+				} catch (InvalidImageExtensionException e) {
+					MessageManager.showError(LanguageCodes.FILE_INVALID);
+				}
+			}
+		});
+		newCarouselLayout.addStyleName(CSS_CAROUSEL_LAYOUT);
+		newCarouselLayout.setSizeFull();
+
+		if (carouselLayout != null) {
+			getContentLayout().addComponent(newCarouselLayout, getContentLayout().getComponentIndex(carouselLayout));
+			getContentLayout().removeComponent(carouselLayout);
+		} else {
+			getContentLayout().addComponent(newCarouselLayout);
+		}
+		carouselLayout = newCarouselLayout;
 	}
 
 	/**
@@ -274,7 +297,7 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 	}
 
 	private Component createWebpage(final ProjectFile file) throws IOException {
-		if(file ==null){
+		if (file == null) {
 			Panel panel = new Panel();
 			panel.setSizeFull();
 			return panel;
@@ -301,8 +324,9 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 			}
 		});
 		String viewerHtml = FileReader.getResource("viewer.html", Charset.forName("UTF-8"));
-		viewerHtml = viewerHtml.replace("%%FILE_URL%%", "/" + fileName).replace("%%JAVASCRIPT_HOME%%",
-				GitgameshConfigurationReader.getInstance().getJavascriptHome());
+		viewerHtml = viewerHtml.replace("%%FILE_URL%%",
+				GitgameshConfigurationReader.getInstance().getJavascriptHome() + "/" + fileName).replace(
+				"%%JAVASCRIPT_HOME%%", GitgameshConfigurationReader.getInstance().getJavascriptHome() + "/VAADIN/js");
 
 		StreamResource resource = new StreamResource(new ViewerStreamSource(viewerHtml), UUID.randomUUID().toString()
 				+ ".html");
@@ -379,6 +403,9 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 				// Update 3D render when selecting an element.
 				try {
 					createRenderer((ProjectFile) filesTable.getValue());
+					if (filesTable.getValue() != null) {
+						updatePropertiesLayout();
+					}
 				} catch (IOException e) {
 					GitgameshLogger.errorMessage(this.getClass().getName(), e);
 				}
@@ -432,6 +459,7 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 							+ project.getClonnedFromProject().getCreatedBy() + ")");
 		}
 		description.setValue(project.getDescription() != null ? project.getDescription() : "");
+		createCarousel();
 		carouselLayout.setProject(project);
 		carouselLayout.refreshCarousel();
 		updateFilesTable();
@@ -443,6 +471,46 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 		getContentLayout().removeComponent(carouselLayout);
 		projectButton.addStyleName("selected");
 		getContentLayout().addComponent(carouselLayout);
+	}
 
+	/**
+	 * File properties<br>
+	 * Random at the moment
+	 */
+	public void updatePropertiesLayout() {
+		if (project != null) {
+			Random rand = new Random();
+			propertiesLayout.removeAllComponents();
+
+			TextField field = new TextField("Downloads", String.valueOf(rand.nextInt(9999)));
+			field.setWidth(80.0f, Unit.PERCENTAGE);
+			field.setEnabled(false);
+			propertiesLayout.addComponent(field);
+
+			field = new TextField("Likes", String.valueOf(rand.nextInt(999)));
+			field.setWidth(80.0f, Unit.PERCENTAGE);
+			field.setEnabled(false);
+			propertiesLayout.addComponent(field);
+
+			field = new TextField("File size", String.valueOf(rand.nextInt(9999)) + " kB");
+			field.setWidth(80.0f, Unit.PERCENTAGE);
+			field.setEnabled(false);
+			propertiesLayout.addComponent(field);
+
+			field = new TextField("Materials", String.valueOf(rand.nextInt(3) + 1));
+			field.setWidth(80.0f, Unit.PERCENTAGE);
+			field.setEnabled(false);
+			propertiesLayout.addComponent(field);
+
+			field = new TextField("Printing time", String.valueOf(rand.nextInt(999)) + " min");
+			field.setWidth(80.0f, Unit.PERCENTAGE);
+			field.setEnabled(false);
+			propertiesLayout.addComponent(field);
+
+			field = new TextField("Filament Quantity", String.valueOf(rand.nextInt(999)) + " g");
+			field.setWidth(80.0f, Unit.PERCENTAGE);
+			field.setEnabled(false);
+			propertiesLayout.addComponent(field);
+		}
 	}
 }

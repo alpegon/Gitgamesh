@@ -180,6 +180,7 @@ public class GitClient {
 		commandExecutor.connectSession();
 		byte[] stlFile = commandExecutor.getRemoteFile(GIT_FOLDER + getFilesFolderPath(userName, repositoryName)
 				+ fileName);
+		GitgameshLogger.debug(GitClient.class.getName(), "File '"+fileName+"' downloaded correctly.");
 		commandExecutor.disconnect();
 		return stlFile;
 	}
