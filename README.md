@@ -1,7 +1,7 @@
 # Gitgamesh
 Web portal for sharing 3D printing models (STL files) focused in the open source community.
 
-![alt tag](https://github.com/a-perez/Gitgamesh/blob/master/gitgamesh-gui/src/logo/gitgamesh-logo.png)
+![Gitgamesh logo](https://github.com/a-perez/Gitgamesh/blob/master/gitgamesh-gui/src/logo/gitgamesh-logo.png)
 
 # Introduction
 
@@ -17,6 +17,17 @@ The objectives of this project are:
 * Fork of other user projects.
 * Upload and version control of new components.
 * 3D rendering of STL files.
+
+# Preview
+Here are some screenshots of the two main pages of the project at version 0.1.0. 
+
+This is the view of a gallery populated with some projects (obtained from Github):
+![Gallery Preview](https://github.com/a-perez/Gitgamesh/blob/master/gitgamesh-release/screenshots/Gallery.png)
+
+This is the view of a specific project with the render in action:
+![Project Preview](https://github.com/a-perez/Gitgamesh/blob/master/gitgamesh-release/screenshots/Project.png)
+
+It is not so bad for only 5 days of development!
 
 # Technologies
 
