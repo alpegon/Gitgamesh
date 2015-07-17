@@ -274,6 +274,11 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 	}
 
 	private Component createWebpage(final ProjectFile file) throws IOException {
+		if(file ==null){
+			Panel panel = new Panel();
+			panel.setSizeFull();
+			return panel;
+		}
 
 		String fileName = UUID.randomUUID() + ".stl";
 		((GitgameshUi) GitgameshUi.getCurrent()).addDynamicFiles(fileName, new IServeDynamicFile() {
