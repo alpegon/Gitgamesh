@@ -296,8 +296,8 @@ public class ProjectView extends GitgameshCommonView<IProjectView, IProjectPrese
 			}
 		});
 		String viewerHtml = FileReader.getResource("viewer.html", Charset.forName("UTF-8"));
-		viewerHtml = viewerHtml.replace("%%FILE_URL%%", GitgameshConfigurationReader.getInstance().getJavascriptHome() + "/" + fileName).replace("%%JAVASCRIPT_HOME%%",
-				GitgameshConfigurationReader.getInstance().getJavascriptHome() + "/VAADIN/js");
+		viewerHtml = viewerHtml.replace("%%FILE_URL%%", "/" + fileName).replace("%%JAVASCRIPT_HOME%%",
+				GitgameshConfigurationReader.getInstance().getJavascriptHome());
 
 		StreamResource resource = new StreamResource(new ViewerStreamSource(viewerHtml), UUID.randomUUID().toString()
 				+ ".html");

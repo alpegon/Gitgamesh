@@ -62,6 +62,8 @@ public class CarouselLayout extends HorizontalLayout {
 	private Plupload uploaderButton;
 	private Button removeButton;
 
+	private FormLayout propertiesLayout;
+
 	public CarouselLayout(PrinterProject project, IProjectFileDao projectImageDao) {
 		this.project = project;
 		this.projectImageDao = projectImageDao;
@@ -90,7 +92,10 @@ public class CarouselLayout extends HorizontalLayout {
 		rootPanelLayout.setExpandRatio(fixedSizeLayout, 1.0f);
 
 		// Add the properties menu
-		fixedSizeLayout.addComponent(createPropertiesLayout(project));
+		propertiesLayout = new FormLayout();
+		propertiesLayout.setSizeFull();
+		propertiesLayout.setSpacing(true);
+		fixedSizeLayout.addComponent(propertiesLayout);
 
 		rootPanelLayout.addComponent(createImageMenu());
 		rootPanelLayout.setExpandRatio(buttonLayout, 0.0f);
@@ -184,43 +189,43 @@ public class CarouselLayout extends HorizontalLayout {
 		refreshCarousel();
 	}
 
-	private FormLayout createPropertiesLayout(PrinterProject project) {
-		FormLayout layout = new FormLayout();
+	public void updatePropertiesLayout(PrinterProject project) {
+		System.out.println("ADDING PROJECT PROPERTIES");
+		System.out.println("DOWNLOAD: " + project.getDownloaded());
 		if (project != null) {
-			layout.setSizeFull();
-			layout.setSpacing(true);
+			propertiesLayout.removeAllComponents();
+			System.out.println("Likes: " + project.getLikes());
 
 			TextField field = new TextField("Downloads", String.valueOf(project.getDownloaded()));
-			field.setWidth(100.0f, Unit.PERCENTAGE);
+			field.setWidth(80.0f, Unit.PERCENTAGE);
 			field.setEnabled(false);
-			layout.addComponent(field);
+			propertiesLayout.addComponent(field);
 
 			field = new TextField("Likes", String.valueOf(project.getLikes()));
-			field.setWidth(100.0f, Unit.PERCENTAGE);
+			field.setWidth(80.0f, Unit.PERCENTAGE);
 			field.setEnabled(false);
-			layout.addComponent(field);
+			propertiesLayout.addComponent(field);
 
 			field = new TextField("File size", String.valueOf(project.getSize()) + " kB");
-			field.setWidth(100.0f, Unit.PERCENTAGE);
+			field.setWidth(80.0f, Unit.PERCENTAGE);
 			field.setEnabled(false);
-			layout.addComponent(field);
+			propertiesLayout.addComponent(field);
 
 			field = new TextField("Materials", String.valueOf(project.getFilamentsColors()));
-			field.setWidth(100.0f, Unit.PERCENTAGE);
+			field.setWidth(80.0f, Unit.PERCENTAGE);
 			field.setEnabled(false);
-			layout.addComponent(field);
+			propertiesLayout.addComponent(field);
 
 			field = new TextField("Printing time", String.valueOf(project.getTimeToDo()) + " min");
-			field.setWidth(100.0f, Unit.PERCENTAGE);
+			field.setWidth(80.0f, Unit.PERCENTAGE);
 			field.setEnabled(false);
-			layout.addComponent(field);
+			propertiesLayout.addComponent(field);
 
 			field = new TextField("Filament Quantity", String.valueOf(project.getFilamentsQuantity()) + " g");
-			field.setWidth(100.0f, Unit.PERCENTAGE);
+			field.setWidth(80.0f, Unit.PERCENTAGE);
 			field.setEnabled(false);
-			layout.addComponent(field);
+			propertiesLayout.addComponent(field);
 		}
-		return layout;
 	}
 
 	private AbstractComponentContainer createCarousel() {
@@ -251,7 +256,7 @@ public class CarouselLayout extends HorizontalLayout {
 		for (ProjectFile image : images) {
 			addImageToCarousel(image);
 		}
-
+		updatePropertiesLayout(project);
 		// Add default image if no images.
 		// if (images.isEmpty()) {
 		// carousel.addComponent(imageLayout(getImage("no.image.png")));
